@@ -5,18 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SHADE RADIO – Live</title>
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7a0000">
 
 <style>
-/* RESET */
 * {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* BACKGROUND */
 body {
   margin: 0;
   min-height: 100vh;
@@ -26,37 +23,35 @@ body {
   background: linear-gradient(160deg, #6b0000, #c40000);
 }
 
-/* CONTAINER */
-#sc-wrapper {
+/* WRAPPER MOBILE */
+#app {
   width: 100%;
-  max-width: 420px;
-  padding: 12px;
+  max-width: 360px;
+  padding: 16px;
+}
+
+/* CARTE PLAYER */
+.player-card {
+  background: rgba(0,0,0,0.2);
+  border-radius: 24px;
+  padding: 18px;
+  text-align: center;
   position: relative;
 }
 
-/* BADGE LIVE – FIX MOBILE */
-.live-badge {
+/* LIVE BUTTON */
+.live-btn {
   position: absolute;
   top: 14px;
   left: 14px;
-  z-index: 9999;
   background: #ff0000;
   color: #fff;
   font-size: 12px;
   font-weight: bold;
   padding: 6px 12px;
   border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
   animation: pulse 1.5s infinite;
-}
-
-.live-dot {
-  width: 8px;
-  height: 8px;
-  background: white;
-  border-radius: 50%;
+  z-index: 10;
 }
 
 @keyframes pulse {
@@ -65,66 +60,40 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
 }
 
-/* PLAYER CARD */
-#sc-player {
-  background: rgba(0,0,0,0.18);
-  border-radius: 22px;
-  padding: 14px;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.35);
-  overflow: visible;
-}
-
-/* 🔥 SUPPRESSION RÉELLE DU FOND GRIS */
-#sc-player .image,
-#sc-player .image *,
-#sc-player .cover,
-#sc-player .cover *,
-#sc-player .image-container,
-#sc-player .image-container * {
+/* POCHETTE – AUCUN CADRE */
+#sc-player img {
+  width: 100%;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
   background: transparent !important;
 }
 
-/* POCHETTE PRO */
-#sc-player img {
-  border-radius: 18px !important;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-  animation: coverFade .5s ease;
-}
-
-@keyframes coverFade {
-  from { opacity: 0; transform: scale(.96); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* CONTRÔLES BLANCS */
-#sc-player button,
-#sc-player svg,
-#sc-player path,
-#sc-player i {
-  color: #fff !important;
-  fill: #fff !important;
-  stroke: #fff !important;
-}
-
-#sc-player input[type="range"] {
-  accent-color: #ffffff;
-}
-
+/* FORCE TRANSPARENCE (clé contre le cadre gris) */
 #sc-player,
 #sc-player * {
-  color: #ffffff !important;
+  background: transparent !important;
 }
 
-/* MOBILE OPTIMISATION */
+/* RADIO INFO */
+.radio-name {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+/* PLAYER CONTROLS */
+#sc-player button,
+#sc-player svg,
+#sc-player path {
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+/* MOBILE SAFE */
 @media (max-width: 480px) {
-  #sc-wrapper {
-    padding: 8px;
-  }
-  .live-badge {
-    top: 10px;
-    left: 10px;
-    font-size: 11px;
-    padding: 5px 10px;
+  #app {
+    max-width: 100%;
   }
 }
 </style>
@@ -132,34 +101,33 @@ body {
 
 <body>
 
-<div id="sc-wrapper">
+<div id="app">
+  <div class="player-card">
 
-  <!-- BADGE LIVE -->
-  <div class="live-badge">
-    <div class="live-dot"></div> LIVE
+    <div class="live-btn">● LIVE</div>
+
+    <div id="sc-player"
+      is="player"
+      lang="fr"
+      api-url="https://manager11.streamradio.fr:1700/api/v2"
+      server-id="1"
+      station-name="SHADE RADIO"
+      imagecontainer="top"
+      controlscontainer="bottom"
+      :show-history="false"
+      :show-share="false"
+      :show-dj="false"
+      :show-image="true"
+      play-button-color="#ffffff"
+      visualizer-outline-color="#ffffff"
+      :progress-show="true"
+      progress-bar-color="#ffffff"
+      player-width="100%">
+    </div>
+
+    <div class="radio-name">SHADE RADIO</div>
+
   </div>
-
-  <div id="sc-player"
-    is="player"
-    lang="fr"
-    api-url="https://manager11.streamradio.fr:1700/api/v2"
-    server-id="1"
-    station-name="SHADE RADIO"
-    imagecontainer="top"
-    controlscontainer="bottom"
-    historycontainer="both"
-    :show-history="true"
-    history-limit="5"
-    :show-share="false"
-    :show-dj="true"
-    :show-image="true"
-    play-button-color="#ffffff"
-    visualizer-outline-color="#ffffff"
-    :progress-show="true"
-    progress-bar-color="#ffffff"
-    player-width="100%">
-  </div>
-
 </div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
