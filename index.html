@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SHADE RADIO – Live</title>
 
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7a0000">
 
 <style>
@@ -17,30 +16,40 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background: linear-gradient(160deg, #6b0000, #c40000);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(160deg, #6b0000, #c40000);
 }
 
-/* WRAPPER MOBILE */
+/* APP CONTAINER */
 #app {
   width: 100%;
   max-width: 360px;
   padding: 16px;
 }
 
-/* CARTE PLAYER */
+/* PLAYER CARD */
 .player-card {
-  background: rgba(0,0,0,0.2);
-  border-radius: 24px;
-  padding: 18px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 26px;
+  padding: 20px;
   text-align: center;
   position: relative;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35);
 }
 
-/* LIVE BUTTON */
-.live-btn {
+/* LOGO */
+.radio-logo {
+  width: 180px;
+  max-width: 85%;
+  margin: 0 auto 12px;
+  display: block;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6));
+}
+
+/* LIVE BADGE */
+.live-badge {
   position: absolute;
   top: 14px;
   left: 14px;
@@ -60,40 +69,31 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
 }
 
-/* POCHETTE – AUCUN CADRE */
-#sc-player img {
-  width: 100%;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-  background: transparent !important;
-}
-
-/* FORCE TRANSPARENCE (clé contre le cadre gris) */
+/* FORCE SUPPRESSION CADRE GRIS */
 #sc-player,
 #sc-player * {
   background: transparent !important;
 }
 
-/* RADIO INFO */
-.radio-name {
-  margin-top: 14px;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
+/* POCHETTE */
+#sc-player img {
+  width: 100%;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.5);
 }
 
-/* PLAYER CONTROLS */
+/* CONTROLES BLANCS */
 #sc-player button,
 #sc-player svg,
 #sc-player path {
-  color: #fff !important;
-  fill: #fff !important;
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
-/* MOBILE SAFE */
+/* MOBILE */
 @media (max-width: 480px) {
-  #app {
-    max-width: 100%;
+  .radio-logo {
+    width: 150px;
   }
 }
 </style>
@@ -104,8 +104,12 @@ body {
 <div id="app">
   <div class="player-card">
 
-    <div class="live-btn">● LIVE</div>
+    <div class="live-badge">● LIVE</div>
 
+    <!-- LOGO -->
+    <img src="logo.png" alt="SHADE RADIO" class="radio-logo">
+
+    <!-- PLAYER -->
     <div id="sc-player"
       is="player"
       lang="fr"
@@ -119,24 +123,15 @@ body {
       :show-dj="false"
       :show-image="true"
       play-button-color="#ffffff"
-      visualizer-outline-color="#ffffff"
       :progress-show="true"
       progress-bar-color="#ffffff"
       player-width="100%">
     </div>
 
-    <div class="radio-name">SHADE RADIO</div>
-
   </div>
 </div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-</script>
 
 </body>
 </html>
