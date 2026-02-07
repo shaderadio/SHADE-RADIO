@@ -1,37 +1,102 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SHADE RADIO – Live</title>
+
+  <style>
+    /* RESET */
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(145deg, #7a0000, #c40000);
+    }
+
+    /* CONTENEUR LECTEUR */
+    #sc-player {
+      width: 100%;
+      max-width: 420px;
+      padding: 12px;
+    }
+
+    /* CARTE DU PLAYER */
+    #sc-player > div {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    /* FORCE LE BLANC SUR LES BOUTONS / ICÔNES */
+    #sc-player button,
+    #sc-player svg,
+    #sc-player path,
+    #sc-player i {
+      color: #ffffff !important;
+      fill: #ffffff !important;
+      stroke: #ffffff !important;
+    }
+
+    /* BARRE DE PROGRESSION */
+    #sc-player input[type="range"] {
+      accent-color: #ffffff;
+    }
+
+    /* TEXTE */
+    #sc-player,
+    #sc-player * {
+      color: #ffffff !important;
+    }
+
+    /* MOBILE FIRST */
+    @media (max-width: 480px) {
+      #sc-player {
+        padding: 8px;
+      }
+
+      #sc-player > div {
+        border-radius: 16px;
+      }
+    }
+  </style>
 </head>
-<body style="margin:0;padding:0;display:flex;justify-content:center;">
 
-<div style="width:100%;max-width:420px;" id="sc-player">
-  <div
-    is="player"
-    lang="fr" 
-    api-url="https://manager11.streamradio.fr:1700/api/v2"
-    server-id="1"
-    station-name="SHADE RADIO"
-    imagecontainer="top"
-    controlscontainer="bottom"
-    historycontainer="both"
-    :show-history="true"
-    history-limit="5"
-    :show-share="false"
-    :show-dj="true"
-    :show-image="true"
-    play-button-color="#35495e"
-    visualizer-outline-color="#37679a"
-    :progress-show="true"
-    progress-bar-color="#35495e"
-    player-width="100%"
-  >
+<body>
+
+  <div id="sc-player">
+    <div
+      is="player"
+      lang="fr"
+      api-url="https://manager11.streamradio.fr:1700/api/v2"
+      server-id="1"
+      station-name="SHADE RADIO"
+      imagecontainer="top"
+      controlscontainer="bottom"
+      historycontainer="both"
+      :show-history="true"
+      history-limit="5"
+      :show-share="false"
+      :show-dj="true"
+      :show-image="true"
+      play-button-color="#ffffff"
+      visualizer-outline-color="#ffffff"
+      :progress-show="true"
+      progress-bar-color="#ffffff"
+      player-width="100%"
+    >
+    </div>
   </div>
-</div>
 
-<script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
 </body>
 </html>
