@@ -1,148 +1,174 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SHADE RADIO – Live</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHADE RADIO – Live</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#c40000">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7a0000">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+<style>
+/* RESET */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(145deg, #7a0000, #c40000);
-    }
+/* BACKGROUND */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(160deg, #6b0000, #c40000);
+}
 
-    #sc-player {
-      width: 100%;
-      max-width: 420px;
-      padding: 12px;
-    }
+/* CONTAINER */
+#sc-wrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px;
+  position: relative;
+}
 
-    #sc-player > div {
-      background: rgba(0, 0, 0, 0.15);
-      border-radius: 22px;
-      padding: 14px;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
-      position: relative;
-    }
+/* BADGE LIVE – FIX MOBILE */
+.live-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 9999;
+  background: #ff0000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: pulse 1.5s infinite;
+}
 
-    /* 🔴 BADGE LIVE */
-    .live-badge {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: #ff0000;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 20px;
-      animation: pulse 1.5s infinite;
-      z-index: 10;
-    }
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(255,0,0,0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
-    }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255,0,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+}
 
-    /* 🖼️ POCHETTE – STYLE SPOTIFY */
-    #sc-player img,
-    #sc-player .cover,
-    #sc-player .image,
-    #sc-player .cover-container {
-      background: transparent !important;
-      border-radius: 18px !important;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.45);
-      animation: fadeIn 0.6s ease;
-    }
+/* PLAYER CARD */
+#sc-player {
+  background: rgba(0,0,0,0.18);
+  border-radius: 22px;
+  padding: 14px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+  overflow: visible;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
+/* 🔥 SUPPRESSION RÉELLE DU FOND GRIS */
+#sc-player .image,
+#sc-player .image *,
+#sc-player .cover,
+#sc-player .cover *,
+#sc-player .image-container,
+#sc-player .image-container * {
+  background: transparent !important;
+}
 
-    /* 🎧 CONTRÔLES BLANCS */
-    #sc-player button,
-    #sc-player svg,
-    #sc-player path,
-    #sc-player i {
-      color: #ffffff !important;
-      fill: #ffffff !important;
-      stroke: #ffffff !important;
-    }
+/* POCHETTE PRO */
+#sc-player img {
+  border-radius: 18px !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+  animation: coverFade .5s ease;
+}
 
-    #sc-player input[type="range"] {
-      accent-color: #ffffff;
-    }
+@keyframes coverFade {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
 
-    #sc-player,
-    #sc-player * {
-      color: #ffffff !important;
-    }
+/* CONTRÔLES BLANCS */
+#sc-player button,
+#sc-player svg,
+#sc-player path,
+#sc-player i {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+}
 
-    /* MOBILE */
-    @media (max-width: 480px) {
-      #sc-player {
-        padding: 8px;
-      }
-      #sc-player > div {
-        border-radius: 18px;
-      }
-    }
-  </style>
+#sc-player input[type="range"] {
+  accent-color: #ffffff;
+}
+
+#sc-player,
+#sc-player * {
+  color: #ffffff !important;
+}
+
+/* MOBILE OPTIMISATION */
+@media (max-width: 480px) {
+  #sc-wrapper {
+    padding: 8px;
+  }
+  .live-badge {
+    top: 10px;
+    left: 10px;
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div id="sc-player">
-    <div class="live-badge">● LIVE</div>
+<div id="sc-wrapper">
 
-    <div
-      is="player"
-      lang="fr"
-      api-url="https://manager11.streamradio.fr:1700/api/v2"
-      server-id="1"
-      station-name="SHADE RADIO"
-      imagecontainer="top"
-      controlscontainer="bottom"
-      historycontainer="both"
-      :show-history="true"
-      history-limit="5"
-      :show-share="false"
-      :show-dj="true"
-      :show-image="true"
-      play-button-color="#ffffff"
-      visualizer-outline-color="#ffffff"
-      :progress-show="true"
-      progress-bar-color="#ffffff"
-      player-width="100%"
-    >
-    </div>
+  <!-- BADGE LIVE -->
+  <div class="live-badge">
+    <div class="live-dot"></div> LIVE
   </div>
 
-  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <div id="sc-player"
+    is="player"
+    lang="fr"
+    api-url="https://manager11.streamradio.fr:1700/api/v2"
+    server-id="1"
+    station-name="SHADE RADIO"
+    imagecontainer="top"
+    controlscontainer="bottom"
+    historycontainer="both"
+    :show-history="true"
+    history-limit="5"
+    :show-share="false"
+    :show-dj="true"
+    :show-image="true"
+    play-button-color="#ffffff"
+    visualizer-outline-color="#ffffff"
+    :progress-show="true"
+    progress-bar-color="#ffffff"
+    player-width="100%">
+  </div>
 
-  <!-- SERVICE WORKER -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-  </script>
+</div>
+
+<script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
 
 </body>
 </html>
