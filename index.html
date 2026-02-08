@@ -15,10 +15,11 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+  overflow-x: hidden;
   padding-top: 12px;
 }
 
-#app { width: 100%; max-width: 360px; padding: 0 12px; }
+#app { width: 100%; max-width: 360px; padding: 0 6px; }
 
 .player-card {
   background: transparent;
@@ -26,16 +27,24 @@ body {
   padding: 12px 6px;
   text-align: center;
   position: relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* BANNIÈRE DÉFILANTE AU-DESSUS DU LOGO */
 .radio-ticker {
   width: 100%;
   overflow: hidden;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.35);
   border-radius: 12px;
   padding: 6px 0;
   margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 }
 
 .radio-ticker span {
@@ -46,16 +55,14 @@ body {
   color: #ffffff;
   font-size: 12px;
   font-weight: bold;
+  letter-spacing: 0.3px;
 }
 
-@keyframes shade-scroll {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-100%); }
-}
+@keyframes shade-scroll { 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } }
 
 /* LOGO EN HAUT */
 .radio-logo {
-  width: 220px;
+  width: 200px;
   max-width: 90%;
   margin: 0 auto 16px;
   display: block;
@@ -65,15 +72,18 @@ body {
 }
 
 @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
-.radio-logo:hover { transform: scale(1.08); }
+.radio-logo:hover { transform: scale(1.05); }
 
-/* PLAYER CONTAINER */
+/* PLAYER CONTAINER CENTRÉ */
 .player-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 16px;
 }
 
-/* LIVE BADGE CENTRÉ */
+/* LIVE BADGE CENTRÉ SUR LA POCHETTE */
 .live-badge {
   position: absolute;
   top: -8px;
@@ -81,7 +91,7 @@ body {
   transform: translateX(-50%);
   background: #ff0000;
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   padding: 5px 14px;
   border-radius: 25px;
@@ -95,20 +105,21 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
 }
 
-/* PLAYER */
+/* PLAYER REDUIT ET CENTRÉ */
 #sc-player {
   background: transparent !important;
   margin-top: 6px;
-  transform: scale(0.78);
+  transform: scale(0.65);
   transform-origin: top center;
 }
 #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
 /* POCHETTE */
 #sc-player img {
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
   border-radius: 30px !important;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -117,9 +128,9 @@ body {
 }
 
 @keyframes pulse-cover {
-  0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-  50% { transform: scale(1.03); box-shadow: 0 12px 50px rgba(0,0,0,0.7); }
-  100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+  0% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+  50% { transform: scale(1.02); box-shadow: 0 10px 35px rgba(0,0,0,0.7); }
+  100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
 }
 
 /* CALQUES DE BRILLANCE */
@@ -158,12 +169,10 @@ body {
 
 /* MOBILE */
 @media (max-width:480px){
-  .radio-logo{width:180px;}
+  .radio-logo{width:160px;}
   .radio-ticker span{font-size:10px;}
-  .player-card{padding:6px;}
-  #sc-player{transform:scale(0.75);}
-  #sc-player img { border-radius:20px !important; }
-  .shine-overlay,.shine-overlay2{border-radius:20px;}
+  #sc-player{transform:scale(0.55);}
+  #sc-player img { width: 95%; border-radius:20px; }
 }
 </style>
 </head>
@@ -173,19 +182,17 @@ body {
 <div id="app">
   <div class="player-card">
 
-    <!-- BANNIÈRE DÉFILANTE -->
+    <!-- BANNIÈRE -->
     <div class="radio-ticker">
       <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
     </div>
 
-    <!-- LOGO EN HAUT -->
+    <!-- LOGO -->
     <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
     <div class="player-container">
-      <!-- LIVE BADGE CENTRÉ ET LÉGÈREMENT REHAUSSÉ -->
       <div class="live-badge">● LIVE</div>
 
-      <!-- PLAYER -->
       <div id="sc-player"
            is="player"
            lang="fr"
