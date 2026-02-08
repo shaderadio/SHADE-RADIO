@@ -42,7 +42,6 @@
       position: relative;
     }
 
-    /* HEADER Ticker */
     .header-container {
       display: flex;
       align-items: center;
@@ -81,43 +80,44 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* CADRE PRINCIPAL AGRANDI VERS LE BAS */
     .main-frame {
       background: rgba(107, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 40px;
-      padding: 25px 10px 10px 10px; /* Padding ajusté pour laisser de la place au titre */
+      padding: 30px 10px 10px 10px; 
       margin: 10px auto;
       width: 320px;
       box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.3);
       position: relative;
       z-index: 11;
-      /* On s'assure que le contenu ne déborde pas du cadre arrondi */
       overflow: hidden; 
     }
 
+    /* LOGO AGRANDI ET EFFET VIBRATION */
     .radio-logo {
-      width: 170px;
-      margin: 0 auto 5px;
+      width: 210px; /* Agrandissement */
+      margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
-      animation: logo-float 2s ease-in-out infinite alternate;
+      animation: logo-vibe 0.4s linear infinite;
     }
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
 
-    /* PLAYER RÉGLAGES */
-    .player-container { 
-      position: relative; 
-      width: 100%; 
-      margin: 0 auto; 
+    @keyframes logo-vibe {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(1px, 1px) rotate(0.5deg); }
+      50% { transform: translate(-1px, -1px) rotate(-0.5deg); }
+      75% { transform: translate(1px, -1px) rotate(0.2deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
     }
+
+    .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
       background: transparent !important;
       transform: scale(0.7); 
       transform-origin: top center;
       margin-top: 5px;
-      height: 380px; /* Augmenté pour englober les textes à l'intérieur du cadre */
+      height: 380px;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
@@ -128,7 +128,6 @@
       box-shadow: 0 15px 30px rgba(0,0,0,0.7);
     }
 
-    /* TITRES (Maintenant bien dans le cadre) */
     #sc-player [class*="title"] {
       display: block !important;
       color: #ffffff !important;
@@ -146,11 +145,9 @@
       padding-bottom: 10px;
     }
 
-    /* BOUTON PLAY */
     #sc-player [class*="play-button"], #sc-player svg {
       transform: scale(0.75) !important;
       filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) !important;
-      /* On s'assure qu'il reste accessible en bas */
       margin-top: 5px !important;
     }
 
