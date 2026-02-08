@@ -6,28 +6,20 @@
   <title>SHADE RADIO – Live</title>
   
   <meta name="theme-color" content="#7a0000">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
-  
-  <link rel="manifest" href="manifest.json">
-  
   <link rel="apple-touch-icon" href="assets/logo.PNG">
+  <link rel="manifest" href="manifest.json">
 
   <style>
-    /* ... Ton CSS reste le même ... */
-    
-    /* Petite astuce : empêcher le défilement rebondissant sur mobile */
-    body {
-      overscroll-behavior-y: contain;
-      user-select: none; /* Empêche la sélection de texte accidentelle */
-      -webkit-tap-highlight-color: transparent;
+    * { 
+      box-sizing: border-box; 
+      font-family: Arial, Helvetica, sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      -webkit-tap-highlight-color: transparent; 
     }
-  </style>
-</head>
-  <style>
-    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
     body {
       background: linear-gradient(160deg, #6b0000, #c40000);
@@ -37,6 +29,8 @@
       min-height: 100vh;
       overflow: hidden; 
       padding-top: 6px;
+      overscroll-behavior-y: contain; /* Empêche le rebond Safari */
+      user-select: none; /* Évite la sélection de texte accidentelle */
     }
 
     #app { width: 100%; max-width: 360px; padding: 0 6px; }
@@ -124,7 +118,7 @@
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* POCHETTE - coins arrondis + ombrage + pulsation */
+    /* POCHETTE */
     #sc-player img {
       width: 100%;
       border-radius: 30px !important;
@@ -201,7 +195,6 @@
 
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-      <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
         <div id="sc-player"
              is="player"
@@ -231,9 +224,18 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Ajouter l'effet pulsation sur la pochette
-    const playerImg = document.querySelector('#sc-player img');
-    if(playerImg) playerImg.classList.add('pulse');
+    // Enregistrement du Service Worker pour le mode PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+      });
+    }
+
+    // Ajouter l'effet pulsation sur la pochette une fois chargée
+    window.onload = () => {
+      const playerImg = document.querySelector('#sc-player img');
+      if(playerImg) playerImg.classList.add('pulse');
+    };
   </script>
 
 </body>
