@@ -43,44 +43,39 @@
       position: relative;
     }
 
-    /* CADRE ROUGE BORDEAUX PLUS COMPACT */
-    .main-frame {
-      background: rgba(107, 0, 0, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 15px 5px; /* Réduit pour s'ajuster à la taille réduite du contenu */
-      margin: 15px auto 0;
-      width: 260px; /* Largeur fixée pour bien cadrer le logo et la petite pochette */
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 11;
+    /* BANNIÈRE ET LIVE BADGE FUSIONNÉS */
+    .header-container {
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.45);
+      border-radius: 10px;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    /* LIVE BADGE */
     .live-badge {
-      position: absolute;
-      top: 15px; left: 10px;
-      background: #ff0000; color: #fff;
-      font-size: 10px; font-weight: bold;
-      padding: 2px 8px; border-radius: 20px;
+      background: #ff0000;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 8px 12px;
       animation: pulse 1.5s infinite;
+      white-space: nowrap;
       z-index: 20;
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-      70% { box-shadow: 0 0 0 6px rgba(255,0,0,0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+      0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
+      70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
+      100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
     }
 
-    /* BANNIÈRE */
     .radio-ticker {
-      width: 100%;
+      flex: 1;
       overflow: hidden;
-      background: rgba(0,0,0,0.45);
-      border-radius: 10px;
       padding: 6px 0;
-      margin-bottom: 5px; margin-top: 20px;
       display: flex;
     }
 
@@ -96,10 +91,22 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO HARMONISÉ */
+    /* CADRE ROUGE BORDEAUX */
+    .main-frame {
+      background: rgba(107, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 15px 5px;
+      margin: 15px auto 0;
+      width: 260px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 11;
+    }
+
     .radio-logo {
-      width: 180px; 
-      margin: 5px auto 10px;
+      width: 170px; 
+      margin: 5px auto 5px;
       display: block;
       filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -107,19 +114,15 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
 
-    /* LECTEUR RÉDUIT EN COHÉRENCE AVEC LE LOGO */
-    .player-container { 
-      position: relative; 
-      width: 100%; 
-      margin: 0 auto; 
-    }
+    /* PLAYER ET BOUTON LECTURE */
+    .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.65); /* Taille réduite pour cohérence logo */
+      transform: scale(0.65);
       transform-origin: top center;
       margin-top: -10px;
-      height: 340px; /* Hauteur ajustée pour éviter les grands espaces vides */
+      height: 310px;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
@@ -128,20 +131,29 @@
       width: 100%;
       border-radius: 20px !important;
       box-shadow: 0 12px 25px rgba(0,0,0,0.7);
-      animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
-    /* Rapprochement des contrôles du lecteur */
-    #sc-player [class*="controls"] {
-      margin-top: -40px !important; 
+    /* TAILLE ET OMBRE DU BOUTON PLAY */
+    #sc-player [class*="play-button"], #sc-player svg {
+      transform: scale(0.8) !important; /* Réduction du bouton */
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) !important; /* Ombre du bouton */
     }
 
-    @keyframes music-beat {
-      0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.02); filter: brightness(1.05); }
+    /* PARTAGER LA RADIO */
+    .share-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 10px 20px; border-radius: 50px;
+      font-size: 13px; font-weight: bold;
+      margin: -20px auto 20px; /* Descendu légèrement (de -60px à -20px) */
+      cursor: pointer;
+      display: inline-flex; align-items: center;
+      transition: all 0.3s; position: relative; z-index: 30;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    /* DOUBLE BRILLANCE */
+    /* BRILLANCE */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -168,19 +180,6 @@
     @keyframes full-shine {
       0% { transform: translateX(-100%) rotate(25deg); }
       100% { transform: translateX(100%) rotate(25deg); }
-    }
-
-    /* BOUTON PARTAGER REMONTÉ */
-    .share-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      padding: 10px 20px; border-radius: 50px;
-      font-size: 13px; font-weight: bold;
-      margin: -60px auto 10px; /* Remonté pour compenser la réduction du lecteur */
-      cursor: pointer;
-      display: inline-flex; align-items: center;
-      transition: all 0.3s; position: relative; z-index: 30;
     }
 
     /* POPUP */
@@ -210,10 +209,12 @@
 
   <div id="app">
     <div class="player-card">
-      <div class="live-badge">● LIVE</div>
-
-      <div class="radio-ticker">
-        <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+      
+      <div class="header-container">
+        <div class="live-badge">● LIVE</div>
+        <div class="radio-ticker">
+          <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+        </div>
       </div>
 
       <div class="main-frame">
@@ -233,7 +234,7 @@
     <div id="install-pwa-popup">
       <div class="popup-content">
         <p>Installer l'application SHADE RADIO</p>
-        <div id="ios-instructions" style="display: none; font-size: 13px; color: #ccc;">
+        <div id="ios-instructions" style="display: none;">
           Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
         <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
@@ -245,12 +246,6 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
-      });
-    }
-
     function shareRadio() {
       if (navigator.share) {
         navigator.share({
@@ -259,14 +254,13 @@
           url: window.location.href
         }).catch(() => {});
       } else {
-        alert("Lien de la radio : " + window.location.href);
+        alert("Lien : " + window.location.href);
       }
     }
 
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
     const btnAndroid = document.getElementById('android-install-btn');
-    const iosInstructions = document.getElementById('ios-instructions');
 
     function showPopup() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -274,11 +268,9 @@
         popup.style.display = 'block';
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIos) {
-          iosInstructions.style.display = 'block';
-          btnAndroid.style.display = 'none';
+          document.getElementById('ios-instructions').style.display = 'block';
         } else {
           btnAndroid.style.display = 'block';
-          iosInstructions.style.display = 'none';
         }
       }
     }
@@ -291,8 +283,6 @@
     btnAndroid.addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') popup.style.display = 'none';
         deferredPrompt = null;
       }
     });
