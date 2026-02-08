@@ -112,40 +112,37 @@
       100% { transform: translate(0, 0); }
     }
 
-    /* ONDES DERRIÈRE LA POCHETTE ET ALTERNÉES */
+    /* CONTENEUR ONDES SONORES */
     .waves-container {
       position: absolute;
-      top: 155px; /* Ajusté pour être pile au centre de la pochette sc-player */
+      top: 130px; /* Aligné sur la pochette */
       left: 50%;
       transform: translateX(-50%);
-      width: 220px;
-      height: 220px;
-      z-index: 1; /* Derrière le player (z-index 2) */
+      width: 200px;
+      height: 200px;
+      z-index: -1;
       display: flex;
       justify-content: center;
       align-items: center;
-      pointer-events: none;
     }
 
     .wave {
       position: absolute;
+      border: 2px solid rgba(255, 0, 0, 0.5);
       border-radius: 50%;
       width: 100%;
       height: 100%;
-      animation: wave-expand 2.5s infinite;
+      animation: wave-expand 2s infinite;
       opacity: 0;
-      border: 3px solid;
     }
 
-    /* Alternance des couleurs */
-    .wave:nth-child(1) { border-color: #6b0000; animation-delay: 0s; }   /* Bordeaux */
-    .wave:nth-child(2) { border-color: #ff0000; animation-delay: 0.8s; } /* Rouge */
-    .wave:nth-child(3) { border-color: #6b0000; animation-delay: 1.6s; } /* Bordeaux */
+    .wave:nth-child(2) { animation-delay: 0.6s; }
+    .wave:nth-child(3) { animation-delay: 1.2s; }
 
     @keyframes wave-expand {
-      0% { transform: scale(0.6); opacity: 0; }
-      30% { opacity: 0.6; }
-      100% { transform: scale(1.6); opacity: 0; }
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { opacity: 0.5; border-color: #ff3333; }
+      100% { transform: scale(1.8); opacity: 0; }
     }
 
     .player-container { position: relative; width: 100%; margin: 0 auto; }
@@ -157,7 +154,7 @@
       margin-top: 5px;
       height: 380px;
       position: relative;
-      z-index: 2; /* Devant les ondes */
+      z-index: 2;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
