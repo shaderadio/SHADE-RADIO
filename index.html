@@ -8,217 +8,120 @@
   <meta name="theme-color" content="#6b0000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
   
   <link rel="apple-touch-icon" href="assets/logo.PNG">
   <link rel="manifest" href="manifest.json">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: Arial, Helvetica, sans-serif; 
-      margin: 0; padding: 0; 
-      -webkit-tap-highlight-color: transparent; 
-    }
+    * { box-sizing: border-box; font-family: Arial, sans-serif; margin: 0; padding: 0; }
 
     body {
       background: radial-gradient(circle at center, #9e0000 0%, #6b0000 50%, #3d0000 100%);
       background-attachment: fixed;
       display: flex; justify-content: center; align-items: center;
-      min-height: 100vh; overflow: hidden; 
-      padding-top: env(safe-area-inset-top, 20px); 
-      overscroll-behavior-y: contain;
-      user-select: none;
+      min-height: 100vh; overflow: hidden;
     }
 
-    #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
+    #app { width: 100%; max-width: 420px; padding: 0 15px; text-align: center; }
 
-    .player-card { text-align: center; position: relative; }
-
+    /* HEADER */
     .header-container {
-      display: flex; align-items: center;
-      background: rgba(0,0,0,0.45); border-radius: 12px;
-      margin-bottom: 10px; overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: flex; align-items: center; background: rgba(0,0,0,0.45);
+      border-radius: 12px; margin-bottom: 15px; overflow: hidden;
     }
+    .live-badge { background: #ff0000; color: #fff; font-size: 11px; font-weight: bold; padding: 10px 15px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    .radio-ticker { flex: 1; overflow: hidden; color: white; font-size: 12px; font-weight: 600; }
+    .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll 12s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-    .live-badge {
-      background: #ff0000; color: #fff;
-      font-size: 11px; font-weight: bold;
-      padding: 10px 15px; animation: pulse 1.5s infinite;
-      white-space: nowrap;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
-      70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
-      100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
-    }
-
-    .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
-    .radio-ticker span {
-      display: inline-block; white-space: nowrap;
-      padding-left: 100%; animation: shade-scroll 12s linear infinite;
-      color: #ffffff; font-size: 12px; font-weight: 600;
-    }
-    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
-
+    /* CADRE PRINCIPAL */
     .main-frame {
       background: rgba(107, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 40px;
-      padding: 30px 10px 10px 10px; 
-      margin: 10px auto; width: 320px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.3);
-      position: relative; z-index: 11; overflow: hidden; 
+      border-radius: 40px; padding: 30px 15px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+      position: relative;
     }
 
-    .radio-logo {
-      width: 210px; margin: 0 auto 10px; display: block;
-      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
-      animation: electric-vibe 2s linear infinite;
-    }
+    .radio-logo { width: 180px; margin-bottom: 15px; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); }
 
-    @keyframes electric-vibe {
-      0%, 50% { transform: translate(0, 0); }
-      55% { transform: translate(2px, -2px); filter: brightness(1.5) drop-shadow(0 0 5px #ff0000); }
-      80% { transform: translate(-2px, 1px); filter: brightness(1.5) drop-shadow(0 0 10px #ff0000); }
-      100% { transform: translate(0, 0); }
-    }
-
-    /* ONDES SONORES */
-    .waves-bg {
-      position: absolute; top: 155px; left: 50%;
-      transform: translateX(-50%); width: 200px; height: 200px;
-      z-index: 1; pointer-events: none;
-    }
-    .wave {
-      position: absolute; width: 100%; height: 100%;
-      border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 50%;
-      animation: ripple 3s infinite linear; opacity: 0;
-    }
-    .wave:nth-child(2) { animation-delay: 1s; }
-    .wave:nth-child(3) { animation-delay: 2s; }
-    @keyframes ripple {
-      0% { transform: scale(0.5); opacity: 0; }
-      50% { opacity: 0.5; }
-      100% { transform: scale(1.8); opacity: 0; }
-    }
-
-    .player-container { position: relative; width: 100%; margin: 0 auto; }
-
-    /* --- NETTOYAGE DU LECTEUR --- */
+    /* LECTEUR - NETTOYAGE CRITIQUE */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.7); transform-origin: top center;
-      margin-top: 5px; height: 380px; position: relative; z-index: 2;
+      min-height: 300px;
     }
 
-    /* Supprime le carré gris forcé sur ordinateur */
-    #sc-player, #sc-player div, #sc-player section {
+    /* Supprime le gris SANS cacher le contenu */
+    #sc-player div[class*="container"], 
+    #sc-player div[class*="wrapper"],
+    #sc-player section {
       background: transparent !important;
-      background-color: transparent !important;
       border: none !important;
-      box-shadow: none !important;
     }
 
-    #sc-player img {
-      width: 100%; border-radius: 20px !important;
-      animation: pochette-fx 3s ease-in-out infinite;
+    #sc-player img { 
+      border-radius: 20px !important; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+      max-width: 240px !important; margin: 0 auto !important;
     }
 
-    @keyframes pochette-fx {
-      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
+    #sc-player [class*="title"] { color: white !important; font-size: 24px !important; margin-top: 15px !important; }
+    #sc-player [class*="artist"] { color: rgba(255,255,255,0.7) !important; font-size: 16px !important; }
+
+    /* BOUTON PLAY - FIX MOBILE ET PC */
+    #sc-player [class*="play-button"], 
+    #sc-player button, 
+    #sc-player svg {
+      width: 70px !important; height: 70px !important;
+      margin: 15px auto !important;
+      display: block !important;
+      fill: white !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      position: relative !important;
+      cursor: pointer !important;
     }
 
-    /* --- STYLE SPÉCIFIQUE ORDINATEUR (Desktop) --- */
-    @media (min-width: 1024px) {
-      #sc-player [class*="play-button"], #sc-player svg {
-        width: 60px !important;
-        height: 60px !important;
-        margin: 10px auto !important;
-        display: block !important;
-        position: relative !important;
-        transform: none !important;
-        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) !important;
-      }
-      
-      #sc-player [class*="title"] { font-size: 22px !important; margin-top: 5px !important; }
-      #sc-player [class*="artist"] { font-size: 16px !important; }
-    }
-
-    /* Mobile et général */
-    #sc-player [class*="title"] {
-      display: block !important; color: #ffffff !important;
-      font-size: 26px !important; font-weight: 800 !important;
-      margin-top: 15px !important; text-transform: uppercase;
-    }
-
-    #sc-player [class*="artist"] {
-      display: block !important; color: rgba(255,255,255,0.7) !important;
-      font-size: 18px !important; padding-bottom: 10px;
-    }
-
-    #sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] { 
-      display: none !important; 
-    }
-
-    .actions-box {
-      display: flex; justify-content: center;
-      gap: 10px; margin: 15px auto 20px; flex-wrap: wrap;
-    }
-
+    /* ACTIONS */
+    .actions-box { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
     .btn-custom {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white; padding: 12px 20px; border-radius: 50px;
-      font-size: 13px; font-weight: bold; cursor: pointer;
-      display: inline-flex; align-items: center; backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white; padding: 12px 18px; border-radius: 50px; font-size: 13px;
+      cursor: pointer; backdrop-filter: blur(5px); display: flex; align-items: center;
     }
 
+    /* POPUP RÉPARÉE */
     #install-pwa-popup {
-      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-      width: 90%; max-width: 360px; background: #1a1a1a;
-      border: 1px solid #7a0000; border-radius: 20px; padding: 20px;
-      z-index: 9999; color: white; text-align: center; display: none;
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      width: 90%; max-width: 350px; background: #1a1a1a;
+      border: 1px solid #7a0000; border-radius: 15px; padding: 15px;
+      z-index: 9999; color: white; display: none; /* Masqué par défaut */
     }
   </style>
 </head>
 
 <body>
   <div id="app">
-    <div class="player-card">
-      <div class="header-container">
-        <div class="live-badge">● LIVE</div>
-        <div class="radio-ticker">
-          <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-        </div>
-      </div>
-
-      <div class="main-frame">
-        <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
-        <div class="player-container">
-          <div class="waves-bg">
-            <div class="wave"></div><div class="wave"></div><div class="wave"></div>
-          </div>
-          
-          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
-        </div>
-      </div>
-
-      <div class="actions-box">
-        <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">
-          <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes.png" width="16" style="margin-right: 8px;">
-          Demander un titre
-        </button>
-        <button class="btn-custom" onclick="shareRadio()">
-          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="margin-right: 8px;">
-          Partager
-        </button>
-      </div>
+    <div class="header-container">
+      <div class="live-badge">● LIVE</div>
+      <div class="radio-ticker"><span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span></div>
     </div>
+
+    <div class="main-frame">
+      <img src="assets/logo.PNG" class="radio-logo">
+      <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
+    </div>
+
+    <div class="actions-box">
+      <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">Demander un titre</button>
+      <button class="btn-custom" onclick="shareRadio()">Partager</button>
+    </div>
+  </div>
+
+  <div id="install-pwa-popup">
+    <p style="margin-bottom: 10px;">Installer SHADE RADIO sur votre écran d'accueil ?</p>
+    <button onclick="closePopup()" style="background: #c40000; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;">Fermer</button>
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
@@ -230,15 +133,19 @@
       }
     }
 
-    const popup = document.getElementById('install-pwa-popup');
-    function showPopup() {
+    // GESTION POPUP - FORCÉE POUR TEST
+    window.addEventListener('load', function() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       if (!isStandalone) {
-        popup.style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('install-pwa-popup').style.display = 'block';
+        }, 3000);
       }
+    });
+
+    function closePopup() {
+      document.getElementById('install-pwa-popup').style.display = 'none';
     }
-    setTimeout(showPopup, 4000);
-    function closePopup() { popup.style.display = 'none'; }
   </script>
 </body>
 </html>
