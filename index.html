@@ -127,22 +127,6 @@
     @keyframes shine1 { 0%{transform:translateX(-100%) rotate(25deg); opacity:0.3;} 50%{opacity:0.6;} 100%{transform:translateX(100%) rotate(25deg); opacity:0.3;} }
     @keyframes shine2 { 0%{transform:translateX(-120%) rotate(25deg); opacity:0.2;} 50%{opacity:0.5;} 100%{transform:translateX(120%) rotate(25deg); opacity:0.2;} }
 
-    /* SUPPRIMER "mp3 128Kbps" */
-    #sc-player .sc-bitrate { display: none !important; }
-
-    /* REMONTER TITRE ET TIMING */
-    #sc-player .sc-title,
-    #sc-player .sc-current-time,
-    #sc-player .sc-duration {
-      display: block !important;
-      margin: 4px auto !important;
-      font-size: 12px !important;
-      color: #ffffff !important;
-      text-align: center !important;
-    }
-
-    #sc-player .sc-title { margin-top: 6px !important; font-weight: bold; }
-
     /* MOBILE ULTRA-COMPACTE */
     @media (max-width:480px){
       .radio-logo{width:150px;}
@@ -197,6 +181,37 @@
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+
+  <!-- SCRIPT POUR AJUSTER LE PLAYER -->
+  <script>
+    function ajusterLecteur() {
+      const player = document.querySelector('#sc-player');
+      if(!player) return;
+
+      // Masquer "mp3 128Kbps"
+      const bitrate = player.querySelector('[data-bitrate]');
+      if(bitrate) bitrate.style.display = 'none';
+
+      // Remonter titre et timing
+      const title = player.querySelector('.sc-title');
+      const currentTime = player.querySelector('.sc-current-time');
+      const duration = player.querySelector('.sc-duration');
+
+      if(title) title.style.marginTop = '6px';
+      if(title) title.style.textAlign = 'center';
+      if(currentTime) currentTime.style.textAlign = 'center';
+      if(duration) duration.style.textAlign = 'center';
+    }
+
+    // Vérifier toutes les 200ms tant que le player n'est pas prêt
+    const interval = setInterval(() => {
+      const player = document.querySelector('#sc-player');
+      if(player && player.querySelector('.sc-title')) {
+        clearInterval(interval);
+        ajusterLecteur();
+      }
+    }, 200);
+  </script>
 
 </body>
 </html>
