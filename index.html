@@ -26,6 +26,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       padding: 6px;
     }
 
@@ -40,9 +41,9 @@
 
     /* LOGO SHADE RADIO */
     .radio-logo {
-      width: 220px;
+      width: 200px;
       max-width: 90%;
-      margin: 0 auto 12px;
+      margin: 0 auto 8px;
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -51,7 +52,7 @@
 
     @keyframes logo-float {
       0% { transform: translateY(0px); }
-      100% { transform: translateY(-14px); }
+      100% { transform: translateY(-12px); }
     }
     .radio-logo:hover { transform: scale(1.05); }
 
@@ -60,9 +61,9 @@
       display: inline-block;
       background: #ff0000;
       color: #fff;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: bold;
-      padding: 2px 6px;
+      padding: 3px 8px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
       margin-bottom: 4px;
@@ -81,7 +82,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 3px 0;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -103,16 +104,19 @@
       100%{transform:translateX(-100%);}
     }
 
-    /* PLAYER CONTAINER POUR BRILLANCE */
+    /* PLAYER CONTAINER */
     .player-container {
       position: relative;
       width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     /* PLAYER */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.78);
+      transform: scale(0.7);
       transform-origin: top center;
       margin-top: 4px;
     }
@@ -176,9 +180,9 @@
 
     /* MOBILE */
     @media (max-width:480px){
-      .radio-logo{width:170px;}
+      .radio-logo{width:160px;}
       .radio-ticker span{font-size:10px;}
-      #sc-player{transform:scale(0.72);}
+      #sc-player{transform:scale(0.65);}
       #sc-player img { border-radius: 20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
@@ -192,7 +196,7 @@
       <!-- LOGO EN HAUT -->
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-      <!-- LIVE + BANNIÈRE juste au dessus de la pochette -->
+      <!-- LIVE + BANNIÈRE juste au-dessus de la pochette -->
       <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:6px;">
         <div class="live-badge">● LIVE</div>
         <div class="radio-ticker">
@@ -218,7 +222,8 @@
              play-button-color="#ffffff"
              :progress-show="true"
              progress-bar-color="#ffffff"
-             player-width="100%">
+             player-width="100%"
+             autoplay>
         </div>
 
         <!-- EFFETS BRILLANCE -->
@@ -234,6 +239,14 @@
     // Ajouter l'effet pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
+
+    // Tenter de démarrer le lecteur automatiquement
+    document.addEventListener('DOMContentLoaded', () => {
+      const scPlayer = document.querySelector('#sc-player');
+      if(scPlayer && scPlayer.play) {
+        scPlayer.play().catch(()=>{console.log('Autoplay bloqué par le navigateur');});
+      }
+    });
   </script>
 </body>
 </html>
