@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#7a0000">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <title>SHADE RADIO – Live</title>
 
   <style>
@@ -16,16 +16,14 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      /* safe area pour iPhone avec encoche */
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+      overflow: hidden; /* Empêche le scroll / flottement sur mobile */
     }
 
     body {
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: flex-start; /* conserve ton alignement original */
       min-height: 100vh;
     }
 
@@ -173,7 +171,6 @@
 
     /* MOBILE RESPONSIVE */
     @media (max-width:480px){
-      html, body { height: 100vh; }
       .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
       .player-card{padding:3px 6px 5px 6px;}
@@ -226,6 +223,7 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
+    // Ajouter l'effet pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
   </script>
