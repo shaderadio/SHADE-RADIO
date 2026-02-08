@@ -112,39 +112,6 @@
       100% { transform: translate(0, 0); }
     }
 
-    /* CONTENEUR ONDES SONORES */
-    .waves-container {
-      position: absolute;
-      top: 130px; /* Aligné sur la pochette */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 200px;
-      z-index: -1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .wave {
-      position: absolute;
-      border: 2px solid rgba(255, 0, 0, 0.5);
-      border-radius: 50%;
-      width: 100%;
-      height: 100%;
-      animation: wave-expand 2s infinite;
-      opacity: 0;
-    }
-
-    .wave:nth-child(2) { animation-delay: 0.6s; }
-    .wave:nth-child(3) { animation-delay: 1.2s; }
-
-    @keyframes wave-expand {
-      0% { transform: scale(0.8); opacity: 0; }
-      50% { opacity: 0.5; border-color: #ff3333; }
-      100% { transform: scale(1.8); opacity: 0; }
-    }
-
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
@@ -153,8 +120,6 @@
       transform-origin: top center;
       margin-top: 5px;
       height: 380px;
-      position: relative;
-      z-index: 2;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
@@ -166,7 +131,7 @@
     }
 
     @keyframes pochette-fx {
-      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); transform: scale(1); }
+      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); }
       50% { box-shadow: 0 0 25px 5px #6b0000, 0 0 40px 10px rgba(158, 0, 0, 0.6), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.02); }
       70% { box-shadow: 0 0 35px 8px #6b0000, 0 0 50px 15px rgba(158, 0, 0, 0.7), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.03); }
       80%, 100% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); transform: scale(1); }
@@ -199,16 +164,33 @@
       display: none !important; 
     }
 
-    .share-btn {
+    /* CONTENEUR DES BOUTONS DU BAS */
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px auto 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      padding: 12px 25px; border-radius: 50px;
-      font-size: 14px; font-weight: bold;
-      margin: 15px auto 20px; 
+      padding: 12px 20px; 
+      border-radius: 50px;
+      font-size: 13px; 
+      font-weight: bold;
       cursor: pointer;
-      display: inline-flex; align-items: center;
+      display: inline-flex; 
+      align-items: center;
       backdrop-filter: blur(5px);
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:active {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0.96);
     }
 
     .shine-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; }
@@ -243,22 +225,22 @@
 
       <div class="main-frame">
         <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
-        
         <div class="player-container">
-          <div class="waves-container">
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-          </div>
-          
           <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%"></div>
         </div>
       </div>
 
-      <button class="share-btn" onclick="shareRadio()">
-        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="margin-right: 8px;">
-        Partager la radio
-      </button>
+      <div class="button-group">
+        <button class="btn-action" onclick="requestTitle()">
+          <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes-symbols.png" width="16" style="margin-right: 8px;">
+          Demander un titre
+        </button>
+
+        <button class="btn-action" onclick="shareRadio()">
+          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="margin-right: 8px;">
+          Partager
+        </button>
+      </div>
     </div>
 
     <div id="install-pwa-popup">
@@ -276,6 +258,13 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
+    function requestTitle() {
+      const email = "shaderadiolive@gmail.com";
+      const subject = encodeURIComponent("Demande de titre - SHADE RADIO");
+      const body = encodeURIComponent("Bonjour SHADE RADIO,\n\nJ'aimerais demander le titre suivant :\n\n- Artiste / Titre :\n\nMerci !");
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
