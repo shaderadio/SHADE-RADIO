@@ -17,13 +17,9 @@
     * { 
       box-sizing: border-box; 
       font-family: Arial, Helvetica, sans-serif; 
-      margin: 0; padding: 0; 
+      margin: 0; 
+      padding: 0; 
       -webkit-tap-highlight-color: transparent; 
-    }
-
-    body, html {
-      height: 100%;
-      overflow: hidden; /* Empêche tout scroll */
     }
 
     body {
@@ -31,41 +27,38 @@
       background-attachment: fixed;
       display: flex;
       justify-content: center;
-      align-items: center; /* Centre verticalement le tout */
-      padding-top: env(safe-area-inset-top, 20px);
-      padding-bottom: env(safe-area-inset-bottom, 20px);
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow: hidden; 
+      /* Gère l'encoche (notch) des téléphones modernes */
+      padding-top: env(safe-area-inset-top, 20px); 
+      overscroll-behavior-y: contain;
       user-select: none;
     }
 
-    #app { 
-      width: 100%; 
-      max-width: 360px; 
-      height: 100%;
-      max-height: 90vh; /* Garde une marge de sécurité */
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around; /* Répartit l'espace entre les éléments */
-      padding: 0 15px;
-    }
+    #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; }
 
     .player-card {
+      background: transparent;
+      border-radius: 20px;
+      padding: 10px 6px 8px 6px;
       text-align: center;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      position: relative;
     }
 
     /* LIVE BADGE */
     .live-badge {
-      align-self: flex-start;
+      position: absolute;
+      top: 15px;
+      left: 10px;
       background: #ff0000;
       color: #fff;
       font-size: 10px;
       font-weight: bold;
-      padding: 2px 10px;
+      padding: 2px 8px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
-      margin-bottom: 5px;
+      z-index: 10;
     }
 
     @keyframes pulse {
@@ -80,8 +73,10 @@
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
-      padding: 5px 0;
-      flex-shrink: 0; /* Empêche l'écrasement */
+      padding: 6px 0;
+      margin-bottom: 8px;
+      margin-top: 20px;
+      display: flex;
     }
 
     .radio-ticker span {
@@ -90,62 +85,70 @@
       padding-left: 100%;
       animation: shade-scroll 12s linear infinite;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
     }
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO - TAILLE ADAPTATIVE */
+    /* LOGO */
     .radio-logo {
-      height: 12vh; /* Hauteur basée sur l'écran */
-      width: auto;
-      margin: 10px auto;
-      object-fit: contain;
+      width: 170px;
+      max-width: 80%;
+      margin: 15px auto 20px;
+      display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+      animation: logo-float 2s ease-in-out infinite alternate;
     }
+
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
 
     /* PLAYER CONTAINER */
-    .player-container { 
-      position: relative; 
-      width: 100%; 
-      flex-grow: 1; /* Prend l'espace dispo */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .player-container { position: relative; width: 100%; }
 
     #sc-player {
-      width: 100%;
-      transform-origin: center;
-      /* On réduit légèrement l'échelle si l'écran est minuscule */
-      transform: scale(min(1, 80vh / 600)); 
+      background: transparent !important;
+      transform: scale(0.88);
+      transform-origin: top center;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     #sc-player img {
-      width: 100% !important;
+      width: 100%;
       border-radius: 25px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      box-shadow: 0 15px 45px rgba(0,0,0,0.6);
     }
+
+    /* EFFET BRILLANCE */
+    .shine-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+      transform: translateX(-100%) rotate(25deg);
+      border-radius: 25px;
+      animation: shine 3s linear infinite;
+    }
+    @keyframes shine { 0% {transform:translateX(-150%) rotate(25deg);} 100% {transform:translateX(150%) rotate(25deg);} }
 
     /* BOUTON PARTAGER */
     .share-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      padding: 12px 20px;
+      padding: 10px 20px;
       border-radius: 50px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: bold;
-      margin-top: 10px;
+      margin: 10px auto;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      transition: all 0.3s;
     }
+    .share-btn:active { background: rgba(255, 255, 255, 0.3); transform: scale(0.95); }
 
     /* POPUP INSTALLATION */
     #install-pwa-popup {
@@ -158,11 +161,40 @@
       background: #1a1a1a;
       border: 1px solid #7a0000;
       border-radius: 20px;
-      padding: 15px;
+      padding: 20px;
       z-index: 9999;
       color: white;
       text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
       display: none;
+    }
+
+    .popup-content p { font-size: 15px; margin-bottom: 12px; font-weight: bold; }
+    #ios-instructions { font-size: 13px; color: #bbb; line-height: 1.6; }
+    #android-install-btn {
+      background: #c40000;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-top: 5px;
+      width: 100%;
+    }
+    .close-btn {
+      background: transparent;
+      color: #777;
+      border: none;
+      font-size: 12px;
+      margin-top: 15px;
+      display: block;
+      width: 100%;
+      text-decoration: underline;
+    }
+
+    @media (max-width:480px){
+      #sc-player { transform: scale(0.85); }
+      .radio-logo { width: 150px; }
     }
   </style>
 </head>
@@ -181,22 +213,23 @@
 
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
+        <div class="shine-overlay"></div>
       </div>
 
       <button class="share-btn" onclick="shareRadio()">
-        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="margin-right: 8px;">
-        PARTAGER LA RADIO
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="vertical-align: middle; margin-right: 8px;">
+        Partager la radio
       </button>
     </div>
 
     <div id="install-pwa-popup">
       <div class="popup-content">
-        <p style="margin-bottom:10px; font-weight:bold;">Installer SHADE RADIO</p>
-        <div id="ios-instructions" style="display: none; font-size: 12px; color:#ccc;">
-          Appuyez sur <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="16"> puis sur <strong>"Sur l'écran d'accueil"</strong>
+        <p>Installer l'application SHADE RADIO</p>
+        <div id="ios-instructions" style="display: none;">
+          Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
-        <button id="android-install-btn" style="display: none; background:#c40000; color:white; border:none; padding:10px; width:100%; border-radius:10px; font-weight:bold;">Installer</button>
-        <button onclick="document.getElementById('install-pwa-popup').style.display='none'" style="background:none; border:none; color:#777; margin-top:10px; text-decoration:underline;">Plus tard</button>
+        <button id="android-install-btn" style="display: none;">Installer maintenant</button>
+        <button onclick="closePopup()" class="close-btn">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -204,44 +237,65 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // PARTAGE NATIF
+    // 1. SERVICE WORKER
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
+      });
+    }
+
+    // 2. LOGIQUE PARTAGE
     function shareRadio() {
       if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO en direct !', url: window.location.href });
-      } else { alert("Lien : " + window.location.href); }
+        navigator.share({
+          title: 'SHADE RADIO',
+          text: 'Écoute SHADE RADIO en direct avec moi ! 🎧',
+          url: window.location.href
+        }).catch(() => {});
+      } else {
+        alert("Lien de la radio : " + window.location.href);
+      }
     }
 
-    // GESTION PWA & POPUP
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-
+    // 3. LOGIQUE POPUP INSTALLATION
     let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      setTimeout(showPopup, 3000);
-    });
+    const popup = document.getElementById('install-pwa-popup');
+    const btnAndroid = document.getElementById('android-install-btn');
+    const iosInstructions = document.getElementById('ios-instructions');
 
     function showPopup() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       if (!isStandalone) {
-        document.getElementById('install-pwa-popup').style.display = 'block';
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          document.getElementById('ios-instructions').style.display = 'block';
+        popup.style.display = 'block';
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIos) {
+          iosInstructions.style.display = 'block';
+          btnAndroid.style.display = 'none';
         } else {
-          document.getElementById('android-install-btn').style.display = 'block';
+          btnAndroid.style.display = 'block';
+          iosInstructions.style.display = 'none';
         }
       }
     }
 
-    document.getElementById('android-install-btn')?.addEventListener('click', async () => {
+    setTimeout(showPopup, 4000); // Apparaît après 4 secondes
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      showPopup();
+    });
+
+    btnAndroid.addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') popup.style.display = 'none';
         deferredPrompt = null;
-        document.getElementById('install-pwa-popup').style.display = 'none';
       }
     });
+
+    function closePopup() { popup.style.display = 'none'; }
   </script>
 
 </body>
