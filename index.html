@@ -32,6 +32,7 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 10px); 
       overscroll-behavior-y: contain;
+      user-select: none;
     }
 
     #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; }
@@ -50,7 +51,7 @@
       border-radius: 10px;
       padding: 6px 0;
       margin-top: 15px;
-      margin-bottom: 0px; /* Supprimé pour coller le logo */
+      margin-bottom: 0px;
       display: flex;
     }
 
@@ -66,11 +67,11 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO À RAS DE LA BANNIÈRE */
+    /* LOGO RÉDUIT À LA TAILLE DE LA POCHETTE */
     .radio-logo {
-      width: 310px;
-      max-width: 95%;
-      margin: -5px auto 0; /* Marge négative pour annuler l'espace de la bannière */
+      width: 240px; /* Taille alignée sur le rendu de la pochette */
+      max-width: 70%;
+      margin: -2px auto 0; /* À ras de la bannière */
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -80,17 +81,17 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
 
-    /* POCHETTE REMONTÉE SOUS LE LOGO */
+    /* POCHETTE REMONTÉE */
     .player-container { 
       position: relative; 
       width: 100%;
-      margin-top: -30px; /* Force la pochette à remonter sous le logo */
+      margin-top: -35px; /* Remonte encore plus sous le logo réduit */
     }
 
-    /* RÉDUCTION ET REMONTÉE DU LECTEUR */
+    /* LECTEUR RÉDUIT ET REMONTÉ */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.65); /* Encore un peu plus petit */
+      transform: scale(0.65); 
       transform-origin: top center;
     }
 
@@ -103,12 +104,17 @@
       animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
-    /* Le lecteur (boutons) remonte sur la pochette */
+    /* Boutons remontés sous l'image */
     #sc-player [class*="controls"] {
-      margin-top: -40px !important; 
+      margin-top: -45px !important; 
     }
 
-    /* BOUTON PARTAGER COLLÉ AU LECTEUR */
+    @keyframes music-beat {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.03); filter: brightness(1.1); }
+    }
+
+    /* BOUTON PARTAGER */
     .share-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -117,7 +123,7 @@
       border-radius: 50px;
       font-size: 12px;
       font-weight: bold;
-      margin-top: -65px; /* Ajusté pour suivre la réduction du lecteur */
+      margin: -75px auto 0; /* Remonte pour coller au lecteur réduit */
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -126,7 +132,7 @@
       position: relative;
     }
 
-    /* DOUBLE BRILLANCE PLEIN ÉCRAN */
+    /* EFFETS VISUELS */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -145,17 +151,11 @@
       animation: shine-animation 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .shine-overlay.delayed {
-      animation-delay: 2s;
-      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 70%);
-    }
-
     @keyframes shine-animation {
       0% { transform: translateX(-100%) rotate(25deg); }
       100% { transform: translateX(100%) rotate(25deg); }
     }
 
-    /* LIVE BADGE */
     .live-badge {
       position: absolute;
       top: 10px; left: 10px;
@@ -171,11 +171,6 @@
       70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
     }
-
-    @keyframes music-beat {
-      0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.03); filter: brightness(1.1); }
-    }
   </style>
 </head>
 
@@ -183,7 +178,6 @@
 
   <div class="shine-wrapper">
     <div class="shine-overlay"></div>
-    <div class="shine-overlay delayed"></div>
   </div>
 
   <div id="app">
