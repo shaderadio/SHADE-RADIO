@@ -2,71 +2,47 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHADE RADIO – Live</title>
   <meta name="theme-color" content="#7a0000">
 
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
+    body {
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
       justify-content: center;
-      align-items: center;
-      overflow: hidden;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow: hidden; 
+      padding-top: 6px;
     }
 
-    #app {
-      width: 100%;
-      max-width: 360px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 6px;
-    }
+    #app { width: 100%; max-width: 360px; padding: 0 6px; }
 
     .player-card {
-      width: 100%;
       background: transparent;
       border-radius: 20px;
+      padding: 4px 6px 8px 6px;
       text-align: center;
       position: relative;
-      padding: 0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
-
-    /* LOGO SHADE RADIO */
-    .radio-logo {
-      width: 200px;
-      max-width: 90%;
-      margin: 0 auto 8px;
-      display: block;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
-      animation: logo-float 2s ease-in-out infinite alternate;
-      transition: transform 0.3s ease;
-    }
-
-    @keyframes logo-float {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-12px); }
-    }
-    .radio-logo:hover { transform: scale(1.05); }
 
     /* LIVE BADGE */
     .live-badge {
-      display: inline-block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
       background: #ff0000;
       color: #fff;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: bold;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
-      margin-bottom: 4px;
+      z-index: 10;
     }
 
     @keyframes pulse {
@@ -82,7 +58,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 3px 0;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -94,37 +70,39 @@
       padding-left: 100%;
       animation: shade-scroll 10s linear infinite;
       color: #ffffff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.3px;
     }
 
-    @keyframes shade-scroll {
-      0%{transform:translateX(0);}
-      100%{transform:translateX(-100%);}
+    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+
+    /* LOGO */
+    .radio-logo {
+      width: 180px;
+      max-width: 85%;
+      margin: 4px auto 6px;
+      display: block;
+      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+      animation: logo-float 2s ease-in-out infinite alternate;
+      transition: transform 0.3s ease;
     }
 
-    /* PLAYER CONTAINER */
-    .player-container {
-      position: relative;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
+    .radio-logo:hover { transform: scale(1.05); }
+
+    /* PLAYER CONTAINER POUR BRILLANCE */
+    .player-container { position: relative; }
 
     /* PLAYER */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.7);
+      margin-top: 2px;
+      transform: scale(0.78);
       transform-origin: top center;
-      margin-top: 4px;
     }
 
-    #sc-player, #sc-player * {
-      background: transparent !important;
-      box-shadow: none !important;
-    }
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     /* POCHETTE - coins arrondis + ombrage + pulsation */
     #sc-player img {
@@ -180,9 +158,10 @@
 
     /* MOBILE */
     @media (max-width:480px){
-      .radio-logo{width:160px;}
-      .radio-ticker span{font-size:10px;}
-      #sc-player{transform:scale(0.65);}
+      .radio-logo{width:150px;}
+      .radio-ticker span{font-size:9px;}
+      .player-card{padding:3px 6px 5px 6px;}
+      #sc-player{transform:scale(0.75);}
       #sc-player img { border-radius: 20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
@@ -190,19 +169,17 @@
 </head>
 
 <body>
+
   <div id="app">
     <div class="player-card">
 
-      <!-- LOGO EN HAUT -->
-      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+      <div class="live-badge">● LIVE</div>
 
-      <!-- LIVE + BANNIÈRE juste au-dessus de la pochette -->
-      <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:6px;">
-        <div class="live-badge">● LIVE</div>
-        <div class="radio-ticker">
-          <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-        </div>
+      <div class="radio-ticker">
+        <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
       </div>
+
+      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
       <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
@@ -222,11 +199,8 @@
              play-button-color="#ffffff"
              :progress-show="true"
              progress-bar-color="#ffffff"
-             player-width="100%"
-             autoplay>
+             player-width="100%">
         </div>
-
-        <!-- EFFETS BRILLANCE -->
         <div class="shine-overlay"></div>
         <div class="shine-overlay2"></div>
       </div>
@@ -235,18 +209,12 @@
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+
   <script>
     // Ajouter l'effet pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
-
-    // Tenter de démarrer le lecteur automatiquement
-    document.addEventListener('DOMContentLoaded', () => {
-      const scPlayer = document.querySelector('#sc-player');
-      if(scPlayer && scPlayer.play) {
-        scPlayer.play().catch(()=>{console.log('Autoplay bloqué par le navigateur');});
-      }
-    });
   </script>
+
 </body>
 </html>
