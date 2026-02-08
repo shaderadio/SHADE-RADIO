@@ -6,6 +6,14 @@
   <title>SHADE RADIO – Live</title>
   <meta name="theme-color" content="#7a0000">
 
+  <!-- PWA: Manifest & iOS support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
+  <link rel="apple-touch-icon" href="assets/logo-192.png">
+  <!-- FIN PWA -->
+
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
@@ -30,7 +38,6 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
 
-    /* LIVE BADGE */
     .live-badge {
       position: absolute;
       top: 4px;
@@ -51,7 +58,6 @@
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
     }
 
-    /* BANNIÈRE DÉFILANTE */
     .radio-ticker {
       width: 100%;
       overflow: hidden;
@@ -77,7 +83,6 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO */
     .radio-logo {
       width: 180px;
       max-width: 85%;
@@ -91,10 +96,8 @@
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
     .radio-logo:hover { transform: scale(1.05); }
 
-    /* PLAYER CONTAINER POUR BRILLANCE */
     .player-container { position: relative; }
 
-    /* PLAYER */
     #sc-player {
       background: transparent !important;
       margin-top: 2px;
@@ -104,7 +107,6 @@
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* POCHETTE - coins arrondis + ombrage + pulsation */
     #sc-player img {
       width: 100%;
       border-radius: 30px !important;
@@ -122,7 +124,6 @@
       100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
     }
 
-    /* CALQUES DE BRILLANCE */
     .shine-overlay, .shine-overlay2 {
       position: absolute;
       top: 0; left: 0;
@@ -145,7 +146,6 @@
     @keyframes shine1 { 0%{transform:translateX(-100%) rotate(25deg); opacity:0.3;} 50%{opacity:0.6;} 100%{transform:translateX(100%) rotate(25deg); opacity:0.3;} }
     @keyframes shine2 { 0%{transform:translateX(-120%) rotate(25deg); opacity:0.2;} 50%{opacity:0.5;} 100%{transform:translateX(120%) rotate(25deg); opacity:0.2;} }
 
-    /* CENTRER TITRE ET TIMING */
     #sc-player .sc-title,
     #sc-player .sc-current-time,
     #sc-player .sc-duration {
@@ -156,7 +156,6 @@
       font-weight: bold;
     }
 
-    /* MOBILE */
     @media (max-width:480px){
       .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
@@ -181,7 +180,6 @@
 
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-      <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
         <div id="sc-player"
              is="player"
@@ -208,12 +206,21 @@
     </div>
   </div>
 
+  <!-- PLAYER JS -->
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Ajouter l'effet pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
+  </script>
+
+  <!-- SERVICE WORKER PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('Service Worker SHADE RADIO actif'))
+        .catch(err => console.log('SW erreur', err));
+    }
   </script>
 
 </body>
