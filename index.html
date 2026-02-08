@@ -43,7 +43,7 @@
       position: relative;
     }
 
-    /* BANNIÈRE ET LIVE BADGE FUSIONNÉS */
+    /* HEADER FUSIONNÉ */
     .header-container {
       display: flex;
       align-items: center;
@@ -63,7 +63,6 @@
       padding: 8px 12px;
       animation: pulse 1.5s infinite;
       white-space: nowrap;
-      z-index: 20;
     }
 
     @keyframes pulse {
@@ -91,7 +90,7 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* CADRE ROUGE BORDEAUX */
+    /* CADRE PRINCIPAL */
     .main-frame {
       background: rgba(107, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -114,7 +113,7 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
 
-    /* PLAYER CONFIGURATION */
+    /* PLAYER */
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
@@ -122,7 +121,7 @@
       transform: scale(0.65);
       transform-origin: top center;
       margin-top: -10px;
-      height: 280px; /* Réduit car moins d'infos à afficher */
+      height: 290px;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
@@ -133,26 +132,40 @@
       box-shadow: 0 12px 25px rgba(0,0,0,0.7);
     }
 
-    /* NETTOYAGE DES INFOS DE LECTURE (Timing, barre, etc) */
+    /* SUPPRESSION DÉFINITIVE DU TIMING ET DU BITRATE (128kbps) */
     #sc-player [class*="progress"], 
     #sc-player [class*="time"], 
     #sc-player [class*="duration"],
+    #sc-player [class*="bitrate"],
+    #sc-player .sc-player-bitrate,
     #sc-player .sc-player-time { 
       display: none !important; 
+      visibility: hidden !important;
+      opacity: 0 !important;
     }
 
-    /* GARDE LE TITRE ET LE BOUTON PLAY */
-    #sc-player [class*="title"], #sc-player [class*="artist"] {
+    /* TITRE ET ARTISTE PLUS GROS */
+    #sc-player [class*="title"] {
       display: block !important;
       color: #ffffff !important;
-      font-weight: bold !important;
-      margin-top: 10px !important;
+      font-size: 24px !important; /* Taille augmentée */
+      font-weight: 800 !important;
+      margin-top: 15px !important;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #sc-player [class*="artist"] {
+      display: block !important;
+      color: rgba(255,255,255,0.7) !important;
+      font-size: 16px !important; /* Taille augmentée */
+      margin-top: 5px !important;
+      margin-bottom: 10px !important;
     }
 
     #sc-player [class*="play-button"], #sc-player svg {
       transform: scale(0.8) !important;
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) !important;
-      margin-top: 5px !important;
     }
 
     /* BOUTON PARTAGER */
@@ -162,14 +175,12 @@
       color: white;
       padding: 10px 20px; border-radius: 50px;
       font-size: 13px; font-weight: bold;
-      margin: -10px auto 20px; 
+      margin: -15px auto 20px; 
       cursor: pointer;
       display: inline-flex; align-items: center;
       transition: all 0.3s; position: relative; z-index: 30;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    /* EFFETS VISUELS */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -193,7 +204,6 @@
       100% { transform: translateX(100%) rotate(25deg); }
     }
 
-    /* POPUP INSTALLATION */
     #install-pwa-popup {
       position: fixed;
       bottom: 25px; left: 50%;
@@ -245,7 +255,7 @@
       <div class="popup-content">
         <p>Installer l'application SHADE RADIO</p>
         <div id="ios-instructions" style="display: none;">
-          Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
+          Appuyez sur le bouton de partage <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
         <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
         <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:15px; cursor:pointer;">Pas maintenant</button>
