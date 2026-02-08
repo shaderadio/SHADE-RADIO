@@ -14,35 +14,49 @@
   <link rel="manifest" href="manifest.json">
 
   <style>
-    /* --- STYLES DE BASE ET MOBILE --- */
     * { 
       box-sizing: border-box; 
       font-family: Arial, Helvetica, sans-serif; 
-      margin: 0; padding: 0; 
+      margin: 0; 
+      padding: 0; 
       -webkit-tap-highlight-color: transparent; 
     }
 
     body {
       background: radial-gradient(circle at center, #9e0000 0%, #6b0000 50%, #3d0000 100%);
       background-attachment: fixed;
-      display: flex; justify-content: center; align-items: center;
-      min-height: 100vh; overflow: hidden; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
+      overscroll-behavior-y: contain;
+      user-select: none;
     }
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
+    .player-card { text-align: center; position: relative; }
+
     .header-container {
-      display: flex; align-items: center;
-      background: rgba(0,0,0,0.45); border-radius: 12px;
-      margin-bottom: 10px; overflow: hidden;
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.45);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .live-badge {
-      background: #ff0000; color: #fff;
-      font-size: 11px; font-weight: bold;
-      padding: 10px 15px; animation: pulse 1.5s infinite;
+      background: #ff0000;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 10px 15px;
+      animation: pulse 1.5s infinite;
+      white-space: nowrap;
     }
 
     @keyframes pulse {
@@ -53,9 +67,13 @@
 
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span {
-      display: inline-block; white-space: nowrap;
-      padding-left: 100%; animation: shade-scroll 12s linear infinite;
-      color: #ffffff; font-size: 12px; font-weight: 600;
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: shade-scroll 12s linear infinite;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
@@ -64,73 +82,163 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 40px;
       padding: 30px 10px 10px 10px; 
-      margin: 10px auto; width: 320px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+      margin: 10px auto;
+      width: 320px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.3);
       position: relative;
+      z-index: 11;
+      overflow: hidden; 
     }
 
-    .radio-logo { width: 180px; margin: 0 auto 10px; display: block; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); }
+    .radio-logo {
+      width: 210px;
+      margin: 0 auto 10px;
+      display: block;
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
+      animation: electric-vibe 2s linear infinite;
+    }
 
-    /* --- NETTOYAGE DU LECTEUR (CARRÉ GRIS ET BOUTON) --- */
-    
-    /* Supprime le fond gris sur TOUS les supports */
-    #sc-player, 
-    #sc-player div, 
-    #sc-player section, 
-    #sc-player .player-container {
+    @keyframes electric-vibe {
+      0%, 50% { transform: translate(0, 0); }
+      55% { transform: translate(2px, -2px); filter: brightness(1.5) drop-shadow(0 0 5px #ff0000); }
+      60% { transform: translate(-2px, 2px); }
+      65% { transform: translate(2px, 2px); filter: brightness(1.2); }
+      70% { transform: translate(-2px, -2px); }
+      75% { transform: translate(2px, 0px); }
+      80% { transform: translate(-2px, 1px); filter: brightness(1.5) drop-shadow(0 0 10px #ff0000); }
+      85% { transform: translate(1px, -1px); }
+      90% { transform: translate(-1px, 2px); }
+      95% { transform: translate(1px, 1px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* --- ONDES SONORES D'ORIGINE --- */
+    .waves-bg {
+      position: absolute;
+      top: 155px; 
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 200px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .wave {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: ripple 3s infinite linear;
+      opacity: 0;
+    }
+    .wave:nth-child(2) { animation-delay: 1s; }
+    .wave:nth-child(3) { animation-delay: 2s; }
+
+    @keyframes ripple {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    /* ------------------------------- */
+
+    .player-container { position: relative; width: 100%; margin: 0 auto; }
+
+    #sc-player {
       background: transparent !important;
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
+      transform: scale(0.7); 
+      transform-origin: top center;
+      margin-top: 5px;
+      height: 380px;
+      position: relative;
+      z-index: 2;
     }
 
-    #sc-player { transform: scale(0.85); transform-origin: top center; }
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     #sc-player img {
+      width: 100%;
       border-radius: 20px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
-      width: 100% !important; height: auto !important;
+      animation: pochette-fx 3s ease-in-out infinite;
     }
 
-    /* --- FIX SPÉCIFIQUE ORDINATEUR --- */
-    @media (min-width: 768px) {
-      /* Réduit la taille du bouton Play sur PC */
-      #sc-player svg, 
-      #sc-player button, 
-      #sc-player [class*="play-button"] {
-        width: 65px !important;
-        height: 65px !important;
-        margin: 20px auto !important;
-        display: block !important;
-        position: relative !important;
-        left: 0 !important; top: 0 !important;
-        transform: none !important;
-      }
-      
-      /* Force l'alignement des textes sur PC */
-      #sc-player [class*="title"], 
-      #sc-player [class*="artist"] {
-        text-align: center !important;
-        width: 100% !important;
-      }
+    @keyframes pochette-fx {
+      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 0px rgba(107, 0, 0, 0); }
+      50% { box-shadow: 0 0 25px 5px #6b0000, 0 0 40px 10px rgba(158, 0, 0, 0.6), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.02); }
+      60% { box-shadow: 0 0 15px 2px #6b0000, 0 0 20px 5px rgba(158, 0, 0, 0.4), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1); }
+      70% { box-shadow: 0 0 35px 8px #6b0000, 0 0 50px 15px rgba(158, 0, 0, 0.7), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.03); }
+      80%, 100% { box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 0px rgba(107, 0, 0, 0); transform: scale(1); }
     }
 
+    #sc-player [class*="title"] {
+      display: block !important;
+      color: #ffffff !important;
+      font-size: 26px !important; 
+      font-weight: 800 !important;
+      margin-top: 15px !important;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    #sc-player [class*="artist"] {
+      display: block !important;
+      color: rgba(255,255,255,0.7) !important;
+      font-size: 18px !important;
+      padding-bottom: 10px;
+    }
+
+    #sc-player [class*="play-button"], #sc-player svg {
+      transform: scale(0.75) !important;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) !important;
+      margin-top: 5px !important;
+    }
+
+    #sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] { 
+      display: none !important; 
+    }
+
+    /* CONTENEUR BOUTONS */
     .actions-box {
-      display: flex; justify-content: center;
-      gap: 10px; margin: 15px auto;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px auto 20px;
+      flex-wrap: wrap;
     }
 
     .btn-custom {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white; padding: 12px 20px; border-radius: 50px;
-      font-size: 13px; font-weight: bold; cursor: pointer;
-      display: inline-flex; align-items: center; backdrop-filter: blur(5px);
+      color: white;
+      padding: 12px 20px; border-radius: 50px;
+      font-size: 13px; font-weight: bold;
+      cursor: pointer;
+      display: inline-flex; align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .shine-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; }
+    .shine-layer {
+      position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 70%);
+      transform: rotate(25deg);
+      animation: full-shine 4s infinite linear;
+    }
+    @keyframes full-shine { 0% { transform: translateX(-100%) rotate(25deg); } 100% { transform: translateX(100%) rotate(25deg); } }
+
+    #install-pwa-popup {
+      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+      width: 90%; max-width: 360px; background: #1a1a1a;
+      border: 1px solid #7a0000; border-radius: 20px; padding: 20px;
+      z-index: 9999; color: white; text-align: center; display: none;
     }
   </style>
 </head>
 
 <body>
+  <div class="shine-wrapper"><div class="shine-layer"></div></div>
+
   <div id="app">
     <div class="player-card">
       <div class="header-container">
@@ -143,19 +251,37 @@
       <div class="main-frame">
         <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
         <div class="player-container">
-          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
+          <div class="waves-bg">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+          </div>
+          
+          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%"></div>
         </div>
       </div>
 
       <div class="actions-box">
-        <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">
+        <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Bonjour Shade Radio, j\'aimerais écouter :'">
           <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes.png" width="16" style="margin-right: 8px;">
           Demander un titre
         </button>
+
         <button class="btn-custom" onclick="shareRadio()">
           <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="margin-right: 8px;">
           Partager
         </button>
+      </div>
+    </div>
+
+    <div id="install-pwa-popup">
+      <div class="popup-content">
+        <p>Installer l'application SHADE RADIO</p>
+        <div id="ios-instructions" style="display: none;">
+          Appuyez sur le bouton de partage <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
+        </div>
+        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
+        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:15px; cursor:pointer;">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -168,6 +294,24 @@
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
+
+    let deferredPrompt;
+    const popup = document.getElementById('install-pwa-popup');
+
+    function showPopup() {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      if (!isStandalone) {
+        popup.style.display = 'block';
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          document.getElementById('ios-instructions').style.display = 'block';
+        } else {
+          document.getElementById('android-install-btn').style.display = 'block';
+        }
+      }
+    }
+    setTimeout(showPopup, 4000);
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; showPopup(); });
+    function closePopup() { popup.style.display = 'none'; }
   </script>
 </body>
 </html>
