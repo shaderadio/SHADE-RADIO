@@ -41,9 +41,6 @@
       background: transparent;
       text-align: center;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     /* LIVE BADGE */
@@ -75,7 +72,7 @@
       border-radius: 10px;
       padding: 6px 0;
       margin-top: 15px;
-      margin-bottom: 5px; /* Réduit pour remonter le logo */
+      margin-bottom: 0px;
       display: flex;
     }
 
@@ -91,11 +88,11 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO REMONTÉ */
+    /* LOGO XXL */
     .radio-logo {
       width: 310px;
       max-width: 95%;
-      margin: 0 auto; /* Margin supprimé pour coller à la bannière */
+      margin: 0 auto;
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -105,45 +102,37 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
 
-    /* PLAYER CONTAINER - POCHETTE AGRANDIE */
+    /* PLAYER CONTAINER */
     .player-container { 
       position: relative; 
       width: 100%;
-      margin: -10px auto 0; /* Remonte la pochette vers le logo */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin-top: -15px; /* Remonte tout le bloc vers le logo */
     }
 
-    /* On cible l'image du lecteur spécifiquement pour la grossir */
+    /* Retour à la taille initiale de la pochette */
     #sc-player {
       background: transparent !important;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      transform: scale(0.75); /* Taille d'origine */
+      transform-origin: top center;
     }
 
-    /* Le composant image du plugin */
-    #sc-player [class*="image"], #sc-player img {
-      width: 280px !important; /* Presque la largeur du logo (310px) */
-      height: 280px !important;
-      max-width: 85vw;
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
+
+    #sc-player img {
+      width: 100%;
       border-radius: 25px !important;
       box-shadow: 0 10px 35px rgba(0,0,0,0.6);
       animation: music-beat 0.6s ease-in-out infinite alternate;
-      margin-bottom: -20px; /* Rapproche les contrôles de l'image */
     }
 
-    /* MINI LECTEUR (CONTROLES) */
+    /* Ajustement précis pour que le lecteur colle à la pochette */
     #sc-player [class*="controls"] {
-      transform: scale(0.65) !important; /* Taille réduite du lecteur */
-      margin-top: -35px !important; /* Remonte les boutons sur la pochette */
+      margin-top: -10px !important; 
     }
 
     @keyframes music-beat {
       0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.02); filter: brightness(1.08); }
+      100% { transform: scale(1.03); filter: brightness(1.1); }
     }
 
     /* BOUTON PARTAGER REMONTÉ */
@@ -151,16 +140,17 @@
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      padding: 8px 20px;
+      padding: 10px 20px;
       border-radius: 50px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: bold;
-      margin-top: -15px; /* Remonte juste en dessous du lecteur */
+      margin-top: -25px; /* Remonte le bouton pour combler le vide du scale */
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       transition: all 0.3s;
-      z-index: 25;
+      z-index: 15;
+      position: relative;
     }
 
     /* DOUBLE EFFET BRILLANCE */
@@ -209,11 +199,6 @@
       text-align: center;
       display: none;
     }
-
-    @media (max-width:480px){
-      .radio-logo { width: 90%; }
-      #sc-player [class*="image"], #sc-player img { width: 75vw !important; height: 75vw !important; }
-    }
   </style>
 </head>
 
@@ -236,12 +221,12 @@
 
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
-        
-        <button class="share-btn" onclick="shareRadio()">
-          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="vertical-align: middle; margin-right: 8px;">
-          Partager la radio
-        </button>
       </div>
+
+      <button class="share-btn" onclick="shareRadio()">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="vertical-align: middle; margin-right: 8px;">
+        Partager la radio
+      </button>
     </div>
 
     <div id="install-pwa-popup">
@@ -251,7 +236,7 @@
           Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
         <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
-        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:10px; cursor:pointer; width:100%;">Pas maintenant</button>
+        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:10px; cursor:pointer;">Pas maintenant</button>
       </div>
     </div>
   </div>
