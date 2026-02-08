@@ -31,12 +31,9 @@
       min-height: 100vh;
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
-      overscroll-behavior-y: contain;
     }
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
-
-    .player-card { text-align: center; position: relative; }
 
     .header-container {
       display: flex;
@@ -55,7 +52,6 @@
       font-weight: bold;
       padding: 10px 15px;
       animation: pulse 1.5s infinite;
-      white-space: nowrap;
     }
 
     @keyframes pulse {
@@ -83,31 +79,15 @@
       padding: 30px 10px 10px 10px; 
       margin: 10px auto;
       width: 320px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
       position: relative;
-      z-index: 11;
     }
 
     .radio-logo {
-      width: 210px;
+      width: 180px;
       margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
-      animation: electric-vibe 2s linear infinite;
-    }
-
-    @keyframes electric-vibe {
-      0%, 50% { transform: translate(0, 0); }
-      55% { transform: translate(2px, -2px); filter: brightness(1.5) drop-shadow(0 0 5px #ff0000); }
-      60% { transform: translate(-2px, 2px); }
-      65% { transform: translate(2px, 2px); filter: brightness(1.2); }
-      70% { transform: translate(-2px, -2px); }
-      75% { transform: translate(2px, 0px); }
-      80% { transform: translate(-2px, 1px); filter: brightness(1.5) drop-shadow(0 0 10px #ff0000); }
-      85% { transform: translate(1px, -1px); }
-      90% { transform: translate(-1px, 2px); }
-      95% { transform: translate(1px, 1px); }
-      100% { transform: translate(0, 0); }
     }
 
     /* ONDES SONORES */
@@ -124,7 +104,7 @@
     .wave {
       position: absolute;
       width: 100%; height: 100%;
-      border: 2px solid rgba(255, 255, 255, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       animation: ripple 3s infinite linear;
       opacity: 0;
@@ -139,37 +119,41 @@
 
     .player-container { position: relative; width: 100%; margin: 0 auto; z-index: 2; }
 
-    /* CORRECTION ICI : On ne force plus le transparent sur TOUS les enfants */
+    /* --- FIX DU CARRÉ GRIS ET DU BOUTON GÉANT --- */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.75); 
+      transform: scale(0.8);
       transform-origin: top center;
-      height: 380px;
     }
 
-    /* Style spécifique pour la pochette */
+    /* On force la transparence de tous les conteneurs internes du widget */
+    div[class^="sc-player"], 
+    div[id^="sc-player"],
+    .sc-player-container,
+    .player-wrapper {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Fix du bouton Play sur ordinateur */
+    #sc-player svg, 
+    #sc-player button[class*="play"],
+    #sc-player [class*="play-button"] {
+      width: 60px !important;
+      height: 60px !important;
+      margin: 10px auto !important;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) !important;
+    }
+
     #sc-player img {
       border-radius: 20px !important;
-      animation: pochette-fx 3s ease-in-out infinite;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
     }
 
-    @keyframes pochette-fx {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-
-    /* Forcer l'affichage des textes et boutons */
-    #sc-player [class*="title"], #sc-player [class*="artist"] {
-      color: #ffffff !important;
-      display: block !important;
-    }
-
-    #sc-player [class*="play-button"] {
-      cursor: pointer !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
+    #sc-player [class*="title"] { color: #ffffff !important; font-size: 22px !important; }
+    #sc-player [class*="artist"] { color: rgba(255,255,255,0.7) !important; }
 
     .actions-box {
       display: flex;
@@ -187,13 +171,6 @@
       cursor: pointer;
       display: inline-flex; align-items: center;
       backdrop-filter: blur(5px);
-    }
-
-    #install-pwa-popup {
-      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-      width: 90%; max-width: 360px; background: #1a1a1a;
-      border: 1px solid #7a0000; border-radius: 20px; padding: 20px;
-      z-index: 9999; color: white; text-align: center; display: none;
     }
   </style>
 </head>
@@ -242,15 +219,6 @@
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
-
-    // Gestion de la popup PWA
-    const popup = document.getElementById('install-pwa-popup');
-    function showPopup() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      if (!isStandalone) { popup.style.display = 'block'; }
-    }
-    setTimeout(showPopup, 4000);
-    function closePopup() { popup.style.display = 'none'; }
   </script>
 </body>
 </html>
