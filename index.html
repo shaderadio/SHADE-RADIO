@@ -34,7 +34,7 @@
     .radio-logo {
       width: 220px; /* plus grand */
       max-width: 90%;
-      margin: 0 auto 12px;
+      margin: 12px auto 0; /* un peu d’espace en dessous */
       display: block;
       filter: drop-shadow(0 3px 15px rgba(0,0,0,0.7));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -46,16 +46,17 @@
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-12px); } }
     .radio-logo:hover { transform: scale(1.08); }
 
-    /* PLAYER CONTAINER POUR POCHETTE + BADGE + TICKER */
+    /* PLAYER CONTAINER POUR POCHETTE + BADGE */
     .player-container { 
       position: relative;
+      margin-top: 12px;
       margin-bottom: 12px; 
     }
 
-    /* LIVE BADGE CENTRÉ */
+    /* LIVE BADGE CENTRÉ ET LÉGÈREMENT REHAUSSÉ */
     .live-badge {
       position: absolute;
-      top: 10px;
+      top: -6px; /* remonté légèrement par rapport à la pochette */
       left: 50%;
       transform: translateX(-50%);
       background: #ff0000;
@@ -74,20 +75,18 @@
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
     }
 
-    /* BANNIÈRE DÉFILANTE FLUIDE */
+    /* BANNIÈRE DÉFILANTE AU-DESSUS DU LOGO */
     .radio-ticker {
       width: 100%;
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 4px 0;
-      position: absolute;
-      bottom: 100%; /* juste au-dessus de la pochette */
-      left: 0;
-      margin-bottom: 6px;
+      position: relative; /* maintenant au-dessus du logo */
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      z-index: 9;
+      z-index: 10;
     }
 
     .radio-ticker span {
@@ -184,11 +183,16 @@
   <div id="app">
     <div class="player-card">
 
+      <!-- BANNIÈRE DÉFILANTE AU-DESSUS DU LOGO -->
+      <div class="radio-ticker">
+        <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+      </div>
+
       <!-- LOGO EN HAUT -->
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
       <div class="player-container">
-        <!-- LIVE BADGE CENTRÉ -->
+        <!-- LIVE BADGE CENTRÉ ET LÉGÈREMENT REHAUSSÉ -->
         <div class="live-badge">● LIVE</div>
 
         <!-- PLAYER -->
@@ -213,11 +217,6 @@
 
         <div class="shine-overlay"></div>
         <div class="shine-overlay2"></div>
-
-        <!-- BANNIÈRE DÉFILANTE -->
-        <div class="radio-ticker">
-          <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-        </div>
       </div>
 
     </div>
