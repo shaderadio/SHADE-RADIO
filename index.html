@@ -17,45 +17,46 @@
       min-height: 100vh;
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
-      justify-content: center;
+      justify-content: flex-start; /* logo en haut */
       align-items: center;
-      overflow-x: hidden; /* empêche le scroll horizontal sur mobile */
+      overflow: hidden; /* aucun scroll */
+      padding-top: 20px; /* un peu d'espace en haut */
     }
 
     #app {
       width: 100%;
       max-width: 360px;
-      padding: 16px;
+      padding: 0 16px;
     }
 
     .player-card {
       background: rgba(0,0,0,0.25);
-      border-radius: 26px;
-      padding: 20px;
+      border-radius: 20px;
+      padding: 16px;
       text-align: center;
       position: relative;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
     }
 
     /* LOGO */
     .radio-logo {
-      width: 180px;
-      max-width: 85%;
-      margin: 0 auto 12px;
+      width: 160px;
+      max-width: 90%;
+      margin: 0 auto 8px;
       display: block;
-      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
     }
 
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 14px;
-      left: 14px;
+      top: 10px;
+      left: 10px;
       background: #ff0000;
       color: #fff;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
-      padding: 6px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
       z-index: 10;
@@ -63,27 +64,8 @@
 
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-      70% { box-shadow: 0 0 0 10px rgba(255,0,0,0); }
+      70% { box-shadow: 0 0 0 8px rgba(255,0,0,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
-    }
-
-    /* FORCE SUPPRESSION CADRE GRIS */
-    #sc-player,
-    #sc-player * {
-      background: transparent !important;
-    }
-
-    #sc-player img {
-      width: 100%;
-      border-radius: 20px !important;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.5);
-    }
-
-    #sc-player button,
-    #sc-player svg,
-    #sc-player path {
-      color: #ffffff !important;
-      fill: #ffffff !important;
     }
 
     /* BANNIÈRE DÉFILANTE SHADE RADIO */
@@ -92,8 +74,8 @@
       overflow: hidden;
       background: rgba(0, 0, 0, 0.35);
       border-radius: 14px;
-      margin: 12px 0;
-      padding: 6px 0;
+      margin: 6px 0 10px;
+      padding: 4px 0;
     }
 
     .radio-ticker span {
@@ -102,7 +84,7 @@
       padding-left: 100%;
       animation: shade-scroll 15s linear infinite;
       color: #ffffff;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.5px;
     }
@@ -112,23 +94,33 @@
       100% { transform: translateX(-100%); }
     }
 
+    /* PLAYER */
+    #sc-player img {
+      width: 100%;
+      border-radius: 16px !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    #sc-player button,
+    #sc-player svg,
+    #sc-player path {
+      color: #ffffff !important;
+      fill: #ffffff !important;
+    }
+
     /* MOBILE OPTIMISÉ */
     @media (max-width: 480px) {
+      body {
+        padding-top: 16px;
+      }
       .radio-logo {
-        width: 150px;
+        width: 140px;
       }
       .radio-ticker span {
-        font-size: 12px;
+        font-size: 11px;
       }
       .player-card {
-        padding: 16px;
-      }
-      #sc-player img {
-        border-radius: 16px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-      }
-      body {
-        padding: 0;
+        padding: 12px;
       }
     }
   </style>
