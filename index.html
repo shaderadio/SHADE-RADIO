@@ -32,7 +32,6 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 10px); 
       overscroll-behavior-y: contain;
-      user-select: none;
     }
 
     #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; }
@@ -43,27 +42,6 @@
       position: relative;
     }
 
-    /* LIVE BADGE */
-    .live-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #ff0000;
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 20px;
-      animation: pulse 1.5s infinite;
-      z-index: 30;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-      70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
-    }
-
     /* BANNIÈRE DÉFILANTE */
     .radio-ticker {
       width: 100%;
@@ -72,7 +50,7 @@
       border-radius: 10px;
       padding: 6px 0;
       margin-top: 15px;
-      margin-bottom: 2px;
+      margin-bottom: 0px; /* Supprimé pour coller le logo */
       display: flex;
     }
 
@@ -88,11 +66,11 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO REMONTÉ À RAS */
+    /* LOGO À RAS DE LA BANNIÈRE */
     .radio-logo {
       width: 310px;
       max-width: 95%;
-      margin: 0 auto;
+      margin: -5px auto 0; /* Marge négative pour annuler l'espace de la bannière */
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -102,17 +80,17 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
 
-    /* PLAYER CONTAINER */
+    /* POCHETTE REMONTÉE SOUS LE LOGO */
     .player-container { 
       position: relative; 
       width: 100%;
-      margin-top: -15px; /* Remonte la pochette vers le logo */
+      margin-top: -30px; /* Force la pochette à remonter sous le logo */
     }
 
-    /* TAILLE POCHETTE ET LECTEUR RÉDUITE */
+    /* RÉDUCTION ET REMONTÉE DU LECTEUR */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.68); /* Lecteur global plus petit */
+      transform: scale(0.65); /* Encore un peu plus petit */
       transform-origin: top center;
     }
 
@@ -125,17 +103,12 @@
       animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
-    /* Remonte le lecteur sous l'image */
+    /* Le lecteur (boutons) remonte sur la pochette */
     #sc-player [class*="controls"] {
-      margin-top: -25px !important; 
+      margin-top: -40px !important; 
     }
 
-    @keyframes music-beat {
-      0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.03); filter: brightness(1.1); }
-    }
-
-    /* BOUTON PARTAGER REMONTÉ */
+    /* BOUTON PARTAGER COLLÉ AU LECTEUR */
     .share-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -144,16 +117,16 @@
       border-radius: 50px;
       font-size: 12px;
       font-weight: bold;
-      margin-top: -45px; /* Très haut pour coller au lecteur réduit */
+      margin-top: -65px; /* Ajusté pour suivre la réduction du lecteur */
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       transition: all 0.3s;
-      z-index: 15;
+      z-index: 20;
       position: relative;
     }
 
-    /* DOUBLE EFFET BRILLANCE */
+    /* DOUBLE BRILLANCE PLEIN ÉCRAN */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -182,22 +155,26 @@
       100% { transform: translateX(100%) rotate(25deg); }
     }
 
-    /* POPUP INSTALLATION */
-    #install-pwa-popup {
-      position: fixed;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 340px;
-      background: #1a1a1a;
-      border: 1px solid #7a0000;
-      border-radius: 20px;
-      padding: 20px;
-      z-index: 9999;
-      color: white;
-      text-align: center;
-      display: none;
+    /* LIVE BADGE */
+    .live-badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: #ff0000; color: #fff;
+      font-size: 10px; font-weight: bold;
+      padding: 2px 8px; border-radius: 20px;
+      animation: pulse 1.5s infinite;
+      z-index: 30;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
+      70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+    }
+
+    @keyframes music-beat {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.03); filter: brightness(1.1); }
     }
   </style>
 </head>
@@ -228,28 +205,11 @@
         Partager la radio
       </button>
     </div>
-
-    <div id="install-pwa-popup">
-      <div class="popup-content">
-        <p>Installer l'application SHADE RADIO</p>
-        <div id="ios-instructions" style="display: none;">
-          Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
-        </div>
-        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
-        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:10px; cursor:pointer;">Pas maintenant</button>
-      </div>
-    </div>
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
-      });
-    }
-
     function shareRadio() {
       if (navigator.share) {
         navigator.share({
@@ -261,41 +221,6 @@
         alert("Lien de la radio : " + window.location.href);
       }
     }
-
-    let deferredPrompt;
-    const popup = document.getElementById('install-pwa-popup');
-    const btnAndroid = document.getElementById('android-install-btn');
-    const iosInstructions = document.getElementById('ios-instructions');
-
-    function showPopup() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      if (!isStandalone) {
-        popup.style.display = 'block';
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIos) {
-          iosInstructions.style.display = 'block';
-          btnAndroid.style.display = 'none';
-        } else {
-          btnAndroid.style.display = 'block';
-          iosInstructions.style.display = 'none';
-        }
-      }
-    }
-    setTimeout(showPopup, 4000);
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      showPopup();
-    });
-    btnAndroid.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') popup.style.display = 'none';
-        deferredPrompt = null;
-      }
-    });
-    function closePopup() { popup.style.display = 'none'; }
   </script>
 
 </body>
