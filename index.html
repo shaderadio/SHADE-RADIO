@@ -37,6 +37,15 @@
       box-shadow: 0 15px 40px rgba(0,0,0,0.35);
     }
 
+    /* LOGO */
+    .radio-logo {
+      width: 180px;
+      max-width: 85%;
+      margin: 0 auto 12px;
+      display: block;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6));
+    }
+
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
@@ -105,14 +114,17 @@
 
     /* MOBILE OPTIMISÉ */
     @media (max-width: 480px) {
+      .radio-logo {
+        width: 150px;
+      }
       .radio-ticker span {
-        font-size: 12px;        /* texte plus petit pour mobile */
+        font-size: 12px;
       }
       .player-card {
-        padding: 16px;          /* moins d’espace pour tenir sur petit écran */
+        padding: 16px;
       }
       #sc-player img {
-        border-radius: 16px;    /* coins légèrement plus petits sur mobile */
+        border-radius: 16px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.5);
       }
       body {
@@ -129,6 +141,9 @@
 
       <!-- LIVE BADGE -->
       <div class="live-badge">● LIVE</div>
+
+      <!-- LOGO -->
+      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
       <!-- TEXTE DÉFILANT -->
       <div class="radio-ticker">
