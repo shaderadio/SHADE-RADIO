@@ -2,32 +2,53 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
   <meta name="theme-color" content="#7a0000">
 
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
-    body {
-      background: linear-gradient(160deg, #6b0000, #c40000);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      overflow: hidden; 
-      padding-top: 6px;
+    /* Gradient full screen fixe pour iOS et mobile */
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #000; /* fallback */
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 6px; }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #6b0000, #c40000);
+      z-index: -1;
+    }
+
+    /* Conteneur principal centré, full screen, responsive */
+    #app {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
+      padding-top: 4px; /* petit espace */
+    }
 
     .player-card {
       background: transparent;
       border-radius: 20px;
-      padding: 4px 6px 8px 6px;
+      padding: 2px 4px 6px 4px;
       text-align: center;
       position: relative;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+      width: 100%;
+      max-width: 360px;
     }
 
     /* LIVE BADGE */
@@ -57,7 +78,7 @@
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
-      padding: 3px 0;
+      padding: 2px 0;
       margin-bottom: 4px;
       display: flex;
       align-items: center;
@@ -79,26 +100,26 @@
 
     /* LOGO */
     .radio-logo {
-      width: 180px;
+      width: 190px;
       max-width: 85%;
-      margin: 4px auto 6px;
+      margin: 2px auto 4px;
       display: block;
       filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
       transition: transform 0.3s ease;
     }
 
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-12px); } }
     .radio-logo:hover { transform: scale(1.05); }
 
     /* PLAYER CONTAINER POUR BRILLANCE */
-    .player-container { position: relative; }
+    .player-container { position: relative; width: 100%; }
 
     /* PLAYER */
     #sc-player {
       background: transparent !important;
       margin-top: 2px;
-      transform: scale(0.78);
+      transform: scale(0.72); /* réduit pour iPhone 17 et mobile */
       transform-origin: top center;
     }
 
@@ -158,10 +179,10 @@
 
     /* MOBILE */
     @media (max-width:480px){
-      .radio-logo{width:150px;}
+      .radio-logo{width:160px;}
       .radio-ticker span{font-size:9px;}
-      .player-card{padding:3px 6px 5px 6px;}
-      #sc-player{transform:scale(0.75);}
+      .player-card{padding:2px 4px 4px 4px;}
+      #sc-player{transform:scale(0.68);}
       #sc-player img { border-radius: 20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
