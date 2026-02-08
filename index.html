@@ -1,199 +1,220 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SHADE RADIO – Live</title>
-<meta name="theme-color" content="#7a0000">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHADE RADIO – Live</title>
+  <meta name="theme-color" content="#7a0000">
 
-<style>
-/* 🔒 BLOQUER TOUT SCROLL */
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+  <style>
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
-* {
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-}
+    body {
+      background: linear-gradient(160deg, #6b0000, #c40000);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow: hidden; 
+      padding-top: 6px;
+    }
 
-/* BODY FULL SCREEN */
-body {
-  background: linear-gradient(160deg, #6b0000, #c40000);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    #app { width: 100%; max-width: 360px; padding: 0 6px; }
 
-/* APP */
-#app {
-  width: 100%;
-  max-width: 360px;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .player-card {
+      background: transparent;
+      border-radius: 20px;
+      padding: 4px 6px 8px 6px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
 
-/* CARD */
-.player-card {
-  width: 100%;
-  height: 100%;
-  padding: 10px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-}
+    /* LIVE BADGE */
+    .live-badge {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: #ff0000;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 20px;
+      animation: pulse 1.5s infinite;
+      z-index: 10;
+    }
 
-/* BANNIÈRE */
-.radio-ticker {
-  width: 100%;
-  background: rgba(0,0,0,0.35);
-  border-radius: 12px;
-  padding: 6px 0;
-  overflow: hidden;
-}
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
+      70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+    }
 
-.radio-ticker span {
-  display: inline-block;
-  white-space: nowrap;
-  padding-left: 100%;
-  animation: ticker 18s linear infinite;
-  color: #fff;
-  font-size: 11px;
-  font-weight: bold;
-}
+    /* BANNIÈRE DÉFILANTE */
+    .radio-ticker {
+      width: 100%;
+      overflow: hidden;
+      background: rgba(0,0,0,0.35);
+      border-radius: 10px;
+      padding: 3px 0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
-}
+    .radio-ticker span {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: shade-scroll 10s linear infinite;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
 
-/* LOGO */
-.radio-logo {
-  width: 180px;
-  margin: 6px 0;
-  filter: drop-shadow(0 3px 12px rgba(0,0,0,.7));
-  animation: logoFloat 2s ease-in-out infinite alternate;
-}
+    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-@keyframes logoFloat {
-  from { transform: translateY(0); }
-  to { transform: translateY(-8px); }
-}
+    /* LOGO */
+    .radio-logo {
+      width: 180px;
+      max-width: 85%;
+      margin: 4px auto 6px;
+      display: block;
+      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+      animation: logo-float 2s ease-in-out infinite alternate;
+      transition: transform 0.3s ease;
+    }
 
-/* PLAYER */
-.player-container {
-  position: relative;
-  width: 100%;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
+    .radio-logo:hover { transform: scale(1.05); }
 
-/* LIVE BADGE */
-.live-badge {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: red;
-  color: white;
-  font-size: 11px;
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-weight: bold;
-  z-index: 20;
-  animation: pulse 1.4s infinite;
-}
+    /* PLAYER CONTAINER POUR BRILLANCE */
+    .player-container { position: relative; }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-  70% { box-shadow: 0 0 0 6px rgba(255,0,0,0); }
-  100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
-}
+    /* PLAYER */
+    #sc-player {
+      background: transparent !important;
+      margin-top: 2px;
+      transform: scale(0.78);
+      transform-origin: top center;
+    }
 
-/* SC PLAYER */
-#sc-player {
-  transform: scale(0.55);
-  transform-origin: center top;
-}
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-/* POCHETTE */
-#sc-player img {
-  border-radius: 24px !important;
-  box-shadow: 0 8px 30px rgba(0,0,0,.6);
-  animation: coverPulse 1.6s infinite ease-in-out;
-}
+    /* POCHETTE - coins arrondis + ombrage + pulsation */
+    #sc-player img {
+      width: 100%;
+      border-radius: 30px !important;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-@keyframes coverPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
-}
+    #sc-player img.pulse {
+      animation: pulse-cover 1.5s infinite ease-in-out;
+    }
 
-/* TITRES */
-#sc-player .sc-title,
-#sc-player .sc-current-time,
-#sc-player .sc-duration {
-  color: white !important;
-  text-align: center !important;
-  font-weight: bold;
-}
+    @keyframes pulse-cover {
+      0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+      50% { transform: scale(1.03); box-shadow: 0 12px 50px rgba(0,0,0,0.7); }
+      100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+    }
 
-/* MOBILE */
-@media (max-width:480px){
-  .radio-logo { width: 150px; }
-  #sc-player { transform: scale(0.5); }
-}
-</style>
+    /* CALQUES DE BRILLANCE */
+    .shine-overlay, .shine-overlay2 {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.25) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      transform: translateX(-100%) rotate(25deg);
+      border-radius: 30px;
+      opacity: 0.6;
+    }
+
+    .shine-overlay { animation: shine1 2.5s linear infinite alternate; }
+    .shine-overlay2 { animation: shine2 3.5s linear infinite alternate; opacity: 0.4; }
+
+    @keyframes shine1 { 0%{transform:translateX(-100%) rotate(25deg); opacity:0.3;} 50%{opacity:0.6;} 100%{transform:translateX(100%) rotate(25deg); opacity:0.3;} }
+    @keyframes shine2 { 0%{transform:translateX(-120%) rotate(25deg); opacity:0.2;} 50%{opacity:0.5;} 100%{transform:translateX(120%) rotate(25deg); opacity:0.2;} }
+
+    /* CENTRER TITRE ET TIMING */
+    #sc-player .sc-title,
+    #sc-player .sc-current-time,
+    #sc-player .sc-duration {
+      display: block !important;
+      text-align: center !important;
+      color: #ffffff !important;
+      margin: 4px auto !important;
+      font-weight: bold;
+    }
+
+    /* MOBILE */
+    @media (max-width:480px){
+      .radio-logo{width:150px;}
+      .radio-ticker span{font-size:9px;}
+      .player-card{padding:3px 6px 5px 6px;}
+      #sc-player{transform:scale(0.75);}
+      #sc-player img { border-radius: 20px !important; }
+      .shine-overlay,.shine-overlay2{border-radius:20px;}
+    }
+  </style>
 </head>
 
 <body>
 
-<div id="app">
-  <div class="player-card">
+  <div id="app">
+    <div class="player-card">
 
-    <div class="radio-ticker">
-      <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-    </div>
-
-    <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
-
-    <div class="player-container">
       <div class="live-badge">● LIVE</div>
 
-      <div id="sc-player"
-           is="player"
-           lang="fr"
-           api-url="https://manager11.streamradio.fr:1700/api/v2"
-           server-id="1"
-           station-name="SHADE RADIO"
-           imagecontainer="top"
-           controlscontainer="bottom"
-           :show-history="false"
-           :show-share="false"
-           :show-dj="false"
-           :show-image="true"
-           :show-bitrate="false"
-           play-button-color="#ffffff"
-           :progress-show="true"
-           progress-bar-color="#ffffff"
-           player-width="100%">
+      <div class="radio-ticker">
+        <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
       </div>
+
+      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+
+      <!-- PLAYER AVEC BRILLANCE -->
+      <div class="player-container">
+        <div id="sc-player"
+             is="player"
+             lang="fr"
+             api-url="https://manager11.streamradio.fr:1700/api/v2"
+             server-id="1"
+             station-name="SHADE RADIO"
+             imagecontainer="top"
+             controlscontainer="bottom"
+             :show-history="false"
+             :show-share="false"
+             :show-dj="false"
+             :show-image="true"
+             :show-bitrate="false"
+             play-button-color="#ffffff"
+             :progress-show="true"
+             progress-bar-color="#ffffff"
+             player-width="100%">
+        </div>
+        <div class="shine-overlay"></div>
+        <div class="shine-overlay2"></div>
+      </div>
+
     </div>
-
   </div>
-</div>
 
-<script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+
+  <script>
+    // Ajouter l'effet pulsation sur la pochette
+    const playerImg = document.querySelector('#sc-player img');
+    if(playerImg) playerImg.classList.add('pulse');
+  </script>
+
 </body>
 </html>
