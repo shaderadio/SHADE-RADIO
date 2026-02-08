@@ -79,7 +79,7 @@
 
     /* LOGO */
     .radio-logo {
-      width: 170px;
+      width: 180px;
       max-width: 85%;
       margin: 4px auto 6px;
       display: block;
@@ -127,7 +127,18 @@
     @keyframes shine1 { 0%{transform:translateX(-100%) rotate(25deg); opacity:0.3;} 50%{opacity:0.6;} 100%{transform:translateX(100%) rotate(25deg); opacity:0.3;} }
     @keyframes shine2 { 0%{transform:translateX(-120%) rotate(25deg); opacity:0.2;} 50%{opacity:0.5;} 100%{transform:translateX(120%) rotate(25deg); opacity:0.2;} }
 
-    /* MOBILE ULTRA-COMPACTE */
+    /* CENTRER TITRE ET TIMING */
+    #sc-player .sc-title,
+    #sc-player .sc-current-time,
+    #sc-player .sc-duration {
+      display: block !important;
+      text-align: center !important;
+      color: #ffffff !important;
+      margin: 4px auto !important;
+      font-weight: bold;
+    }
+
+    /* MOBILE */
     @media (max-width:480px){
       .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
@@ -151,7 +162,7 @@
 
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-      <!-- PLAYER AVEC CALQUES DE BRILLANCE -->
+      <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
         <div id="sc-player"
              is="player"
@@ -165,6 +176,7 @@
              :show-share="false"
              :show-dj="false"
              :show-image="true"
+             :show-bitrate="false"
              play-button-color="#ffffff"
              :progress-show="true"
              progress-bar-color="#ffffff"
@@ -178,44 +190,6 @@
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-
-  <!-- SCRIPT ROBUSTE POUR AJUSTER LE LECTEUR -->
-  <script>
-    function ajusterLecteur() {
-      const player = document.querySelector('#sc-player');
-      if(!player) return;
-
-      // Supprimer tout élément contenant "mp3" (peu importe la classe)
-      player.querySelectorAll('*').forEach(el => {
-        if(el.textContent && el.textContent.toLowerCase().includes('mp3')) {
-          el.style.display = 'none';
-        }
-      });
-
-      // Remonter titre et timing
-      const titre = player.querySelector('h3, .sc-title, span.title');
-      const currentTime = player.querySelector('.sc-current-time, span.current-time');
-      const duration = player.querySelector('.sc-duration, span.duration');
-
-      if(titre){
-        titre.style.marginTop = '6px';
-        titre.style.textAlign = 'center';
-        titre.style.color = '#ffffff';
-        titre.style.fontWeight = 'bold';
-      }
-      if(currentTime) currentTime.style.textAlign = 'center';
-      if(duration) duration.style.textAlign = 'center';
-    }
-
-    // Vérification toutes les 200ms tant que le player n'est pas complètement chargé
-    const interval = setInterval(() => {
-      const player = document.querySelector('#sc-player');
-      if(player && player.querySelector('*')) {
-        clearInterval(interval);
-        ajusterLecteur();
-      }
-    }, 200);
-  </script>
 
 </body>
 </html>
