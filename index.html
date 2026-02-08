@@ -21,34 +21,34 @@
       align-items: flex-start;
       min-height: 100vh;
       overflow: hidden; 
-      padding-top: 8px;
+      padding-top: 6px;
     }
 
     #app {
       width: 100%;
       max-width: 360px;
-      padding: 0 8px;
+      padding: 0 6px;
     }
 
     .player-card {
       background: transparent;
       border-radius: 20px;
-      padding: 6px 10px 10px 10px;
+      padding: 4px 6px 8px 6px;
       text-align: center;
       position: relative;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
 
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 6px;
-      left: 6px;
+      top: 4px;
+      left: 4px;
       background: #ff0000;
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: bold;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
       z-index: 10;
@@ -56,7 +56,7 @@
 
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-      70% { box-shadow: 0 0 0 6px rgba(255,0,0,0); }
+      70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
     }
 
@@ -65,9 +65,9 @@
       width: 100%;
       overflow: hidden;
       background: rgba(0,0,0,0.35);
-      border-radius: 12px;
-      padding: 4px 0;
-      margin-bottom: 6px;
+      border-radius: 10px;
+      padding: 3px 0;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -77,11 +77,11 @@
       display: inline-block;
       white-space: nowrap;
       padding-left: 100%;
-      animation: shade-scroll 12s linear infinite;
+      animation: shade-scroll 10s linear infinite;
       color: #ffffff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
     }
 
     @keyframes shade-scroll {
@@ -91,34 +91,30 @@
 
     /* LOGO */
     .radio-logo {
-      width: 190px;
+      width: 170px;
       max-width: 85%;
-      margin: 6px auto 8px;
+      margin: 4px auto 6px;
       display: block;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
-      transition: transform 0.3s ease;
+      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
+      transition: transform 0.3s ease;
     }
 
     @keyframes logo-float {
       0% { transform: translateY(0px); }
-      100% { transform: translateY(-4px); }
+      100% { transform: translateY(-10px); }
     }
 
     .radio-logo:hover {
-      transform: scale(1.05); /* léger zoom au survol */
+      transform: scale(1.05);
     }
 
     /* PLAYER */
     #sc-player {
       background: transparent !important;
-      margin-top: 4px;
-      animation: player-shadow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes player-shadow {
-      0% { box-shadow: 0 6px 16px rgba(0,0,0,0.5); }
-      100% { box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+      margin-top: 2px;
+      transform: scale(0.85); /* lecteur réduit pour tout tenir */
+      transform-origin: top center;
     }
 
     /* SUPPRESSION FOND DANS LE PLAYER */
@@ -130,14 +126,14 @@
 
     #sc-player img {
       width: 100%;
-      border-radius: 14px !important;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+      border-radius: 12px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       background: transparent !important;
       transition: box-shadow 0.3s ease;
     }
 
     #sc-player img:hover {
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
     }
 
     #sc-player button,
@@ -150,17 +146,20 @@
     /* MOBILE ULTRA-COMPACTE */
     @media (max-width: 480px) {
       .radio-logo {
-        width: 170px;
+        width: 150px;
       }
       .radio-ticker span {
-        font-size: 10px;
+        font-size: 9px;
       }
       .player-card {
-        padding: 4px 8px 6px 8px;
+        padding: 3px 6px 5px 6px;
+      }
+      #sc-player {
+        transform: scale(0.8);
       }
       #sc-player img {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.5);
       }
     }
   </style>
