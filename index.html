@@ -9,15 +9,17 @@
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
-    /* BODY avec gradient rouge et full screen */
+    /* BODY avec gradient rouge full screen et safe-area iOS */
     html, body {
       height: 100%;
-      min-height: 100vh;
-      margin: 0;
+      min-height: calc(100vh + env(safe-area-inset-top) + env(safe-area-inset-bottom));
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
       justify-content: center;
       align-items: flex-start;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      margin: 0;
       overflow: hidden;
     }
 
@@ -28,7 +30,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 6px;
+      padding-top: 4px;
     }
 
     .player-card {
