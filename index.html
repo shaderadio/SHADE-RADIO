@@ -20,7 +20,7 @@
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
-      overflow: hidden; /* plus aucun scroll */
+      overflow: hidden; 
       padding-top: 8px;
     }
 
@@ -91,17 +91,34 @@
 
     /* LOGO */
     .radio-logo {
-      width: 180px;
+      width: 190px;
       max-width: 85%;
       margin: 6px auto 8px;
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+      transition: transform 0.3s ease;
+      animation: logo-float 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes logo-float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-4px); }
+    }
+
+    .radio-logo:hover {
+      transform: scale(1.05); /* léger zoom au survol */
     }
 
     /* PLAYER */
     #sc-player {
       background: transparent !important;
       margin-top: 4px;
+      animation: player-shadow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes player-shadow {
+      0% { box-shadow: 0 6px 16px rgba(0,0,0,0.5); }
+      100% { box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
     }
 
     /* SUPPRESSION FOND DANS LE PLAYER */
@@ -116,6 +133,11 @@
       border-radius: 14px !important;
       box-shadow: 0 6px 16px rgba(0,0,0,0.5);
       background: transparent !important;
+      transition: box-shadow 0.3s ease;
+    }
+
+    #sc-player img:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     }
 
     #sc-player button,
@@ -128,7 +150,7 @@
     /* MOBILE ULTRA-COMPACTE */
     @media (max-width: 480px) {
       .radio-logo {
-        width: 160px;
+        width: 170px;
       }
       .radio-ticker span {
         font-size: 10px;
@@ -152,7 +174,7 @@
       <!-- LIVE BADGE -->
       <div class="live-badge">● LIVE</div>
 
-      <!-- TEXTE DÉFILANT AU-DESSUS DU LOGO -->
+      <!-- TEXTE DÉFILANT -->
       <div class="radio-ticker">
         <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
       </div>
