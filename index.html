@@ -13,32 +13,40 @@
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
     html, body {
-      height: 100dvh; /* vraie hauteur de l'écran, plus de bandes blanches */
+      height: 100dvh;           /* Hauteur dynamique réelle de l'écran */
+      width: 100vw;             /* largeur plein écran */
       margin: 0;
       padding: 0;
-      overflow: hidden; /* empêche le scroll et le flottement */
+      overflow: hidden;         /* pas de scroll */
       background: linear-gradient(160deg, #6b0000, #c40000);
+      display: flex;
+      justify-content: center;
+      align-items: center;      /* centre verticalement tout le contenu */
     }
 
     /* CONTENEUR PRINCIPAL */
     #app {
       width: 100%;
-      max-width: 360px;
-      padding: 0 6px;
+      max-width: 360px;         /* limite largeur sur grand écran */
+      padding: 0;               /* aucun padding */
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* top, ou center si tu veux centrer verticalement */
-      min-height: 100%;
+      justify-content: center;   /* centre verticalement player + logo + ticker */
+      align-items: center;
+      height: 100%;
     }
 
     /* PLAYER CARD */
     .player-card {
+      width: 100%;
       background: transparent;
-      padding: 4px 0 8px 0;
       border-radius: 20px;
+      padding: 6px 0;
       text-align: center;
       position: relative;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     /* LIVE BADGE */
@@ -68,7 +76,7 @@
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
-      margin-bottom: 4px;
+      margin: 6px 0;
       padding: 3px 0;
       display: flex;
       align-items: center;
@@ -92,7 +100,7 @@
     .radio-logo {
       width: 180px;
       max-width: 85%;
-      margin: 4px auto 6px;
+      margin: 6px auto;
       display: block;
       filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -102,20 +110,23 @@
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
     .radio-logo:hover { transform: scale(1.05); }
 
-    /* PLAYER CONTAINER POUR BRILLANCE */
-    .player-container { position: relative; }
-
     /* PLAYER */
+    .player-container {
+      position: relative;
+      width: 100%;
+      margin-top: 6px;
+    }
+
     #sc-player {
+      width: 100%;
       background: transparent !important;
-      margin-top: 2px;
       transform: scale(0.78);
       transform-origin: top center;
+      margin: 0 auto;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* POCHETTE */
     #sc-player img {
       width: 100%;
       border-radius: 30px !important;
@@ -170,9 +181,10 @@
     /* MOBILE RESPONSIVE */
     @media (max-width:480px){
       .radio-logo { width: 140px; margin: 6px auto; }
-      #sc-player { transform: scale(0.75); margin: 2px 0; }
+      #sc-player { transform: scale(0.75); }
       #sc-player img { border-radius: 15px; }
       .shine-overlay, .shine-overlay2 { border-radius: 15px; }
+      .radio-ticker span { font-size: 9px; }
     }
   </style>
 </head>
@@ -219,7 +231,7 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Ajouter l'effet pulsation sur la pochette
+    // Pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
   </script>
