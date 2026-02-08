@@ -35,7 +35,7 @@
       user-select: none;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; height: 100vh; }
+    #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; }
 
     .player-card {
       background: transparent;
@@ -72,9 +72,9 @@
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
-      padding: 4px 0;
+      padding: 6px 0;
       margin-bottom: 8px;
-      margin-top: 15px;
+      margin-top: 20px;
       display: flex;
     }
 
@@ -94,7 +94,7 @@
     .radio-logo {
       width: 170px;
       max-width: 80%;
-      margin: 10px auto 15px;
+      margin: 15px auto 20px;
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -107,7 +107,7 @@
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.85);
+      transform: scale(0.88);
       transform-origin: top center;
     }
 
@@ -118,10 +118,6 @@
       border-radius: 25px !important;
       box-shadow: 0 15px 45px rgba(0,0,0,0.6);
     }
-
-    #sc-player img.pulse { animation: pulse-cover 2s infinite ease-in-out; }
-
-    @keyframes pulse-cover { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 
     .shine-overlay {
       position: absolute;
@@ -135,54 +131,52 @@
     }
     @keyframes shine { 0% {transform:translateX(-150%) rotate(25deg);} 100% {transform:translateX(150%) rotate(25deg);} }
 
-    /* POPUP INSTALLATION */
+    /* POPUP INSTALLATION FORCEE */
     #install-pwa-popup {
       position: fixed;
-      bottom: 30px;
+      bottom: 25px;
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
-      max-width: 320px;
-      background: rgba(20, 20, 20, 0.95);
+      max-width: 340px;
+      background: #1a1a1a;
       border: 1px solid #7a0000;
-      border-radius: 15px;
-      padding: 15px;
-      z-index: 1000;
+      border-radius: 20px;
+      padding: 20px;
+      z-index: 9999;
       color: white;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      backdrop-filter: blur(10px);
-      display: none;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+      display: none; /* Affiché par JS */
     }
 
-    .popup-content p { font-size: 14px; margin-bottom: 10px; font-weight: bold; }
-    #ios-instructions { font-size: 12px; color: #ccc; line-height: 1.5; }
+    .popup-content p { font-size: 15px; margin-bottom: 12px; font-weight: bold; color: #fff; }
+    #ios-instructions { font-size: 13px; color: #bbb; line-height: 1.6; }
     #android-install-btn {
       background: #c40000;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 12px 25px;
+      border-radius: 10px;
       font-weight: bold;
       margin-top: 5px;
-      cursor: pointer;
+      width: 100%;
     }
     .close-btn {
       background: transparent;
-      color: #888;
+      color: #777;
       border: none;
-      font-size: 11px;
-      margin-top: 12px;
+      font-size: 12px;
+      margin-top: 15px;
       display: block;
       width: 100%;
       text-decoration: underline;
-      cursor: pointer;
     }
 
     /* RESPONSIVE */
     @media (max-width:480px){
-      #sc-player { transform: scale(0.82); }
-      .radio-logo { width: 140px; }
+      #sc-player { transform: scale(0.85); }
+      .radio-logo { width: 150px; }
     }
   </style>
 </head>
@@ -207,12 +201,15 @@
 
     <div id="install-pwa-popup">
       <div class="popup-content">
-        <p>Installer l'app SHADE RADIO</p>
+        <p>Installer l'application SHADE RADIO</p>
+        
         <div id="ios-instructions" style="display: none;">
-          Appuyez sur <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="16" style="vertical-align: middle;"> puis sur <br><strong>"Sur l'écran d'accueil"</strong>
+          Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
+
         <button id="android-install-btn" style="display: none;">Installer maintenant</button>
-        <button onclick="closePopup()" class="close-btn">Plus tard</button>
+        
+        <button onclick="closePopup()" class="close-btn">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -223,58 +220,63 @@
     // 1. SERVICE WORKER
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
       });
     }
 
-    // 2. LOGIQUE DE LA POPUP
+    // 2. LOGIQUE POPUP FORCEE
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
     const btnAndroid = document.getElementById('android-install-btn');
     const iosInstructions = document.getElementById('ios-instructions');
 
-    // Détection si déjà installé
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-    if (!isStandalone) {
-      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    function showPopup() {
+      // On vérifie si l'app est déjà lancée en mode "installé"
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       
-      // Affichage après 3 secondes pour laisser le temps au player de charger
-      setTimeout(() => {
+      if (!isStandalone) {
+        popup.style.display = 'block';
+        
+        // Détecter si c'est un iPhone/iPad
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
         if (isIos) {
-          popup.style.display = 'block';
           iosInstructions.style.display = 'block';
+          btnAndroid.style.display = 'none';
+        } else {
+          // Si on a déjà capturé l'événement Android, on montre le bouton, sinon on montre les instructions par défaut
+          btnAndroid.style.display = 'block';
+          iosInstructions.style.display = 'none';
         }
-      }, 3000);
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        setTimeout(() => {
-          popup.style.display = 'block';
-          btnAndroid.style.display = 'inline-block';
-        }, 3000);
-      });
+      }
     }
 
+    // Lancement automatique après 3 secondes
+    setTimeout(showPopup, 3000);
+
+    // Capturer l'événement d'installation Android (Chrome)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      showPopup(); // Affiche la popup dès que Chrome est prêt
+    });
+
+    // Action du bouton d'installation Android
     btnAndroid.addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         if (outcome === 'accepted') popup.style.display = 'none';
         deferredPrompt = null;
+      } else {
+        // Fallback si l'événement n'est pas encore capturé
+        alert("Ouvrez le menu de votre navigateur (les 3 petits points) et cliquez sur 'Installer l'application'.");
       }
     });
 
-    function closePopup() { popup.style.display = 'none'; }
-
-    // 3. EFFET PULSATION
-    window.onload = () => {
-      setTimeout(() => {
-        const playerImg = document.querySelector('#sc-player img');
-        if(playerImg) playerImg.classList.add('pulse');
-      }, 1500);
-    };
+    function closePopup() {
+      popup.style.display = 'none';
+    }
   </script>
 
 </body>
