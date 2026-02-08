@@ -24,22 +24,44 @@
     .player-card {
       background: transparent;
       border-radius: 20px;
-      padding: 4px 6px 8px 6px;
+      padding: 6px;
       text-align: center;
       position: relative;
       box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
 
+    /* LOGO SHADE RADIO EN HAUT */
+    .radio-logo {
+      width: 220px; /* plus grand */
+      max-width: 90%;
+      margin: 0 auto 12px;
+      display: block;
+      filter: drop-shadow(0 3px 15px rgba(0,0,0,0.7));
+      animation: logo-float 2s ease-in-out infinite alternate;
+      transition: transform 0.3s ease;
+      z-index: 20;
+      position: relative;
+    }
+
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-12px); } }
+    .radio-logo:hover { transform: scale(1.08); }
+
+    /* PLAYER CONTAINER POUR POCHETTE + BADGE + TICKER */
+    .player-container { 
+      position: relative;
+      margin-bottom: 12px; 
+    }
+
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 4px;
-      left: 4px;
+      top: 6px;
+      left: 6px;
       background: #ff0000;
       color: #fff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: bold;
-      padding: 2px 6px;
+      padding: 3px 7px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
       z-index: 10;
@@ -47,52 +69,41 @@
 
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-      70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
+      70% { box-shadow: 0 0 0 6px rgba(255,0,0,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
     }
 
-    /* BANNIÈRE DÉFILANTE */
+    /* BANNIÈRE DÉFILANTE FLUIDE */
     .radio-ticker {
       width: 100%;
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
-      padding: 3px 0;
-      margin-bottom: 4px;
+      padding: 4px 0;
+      position: absolute;
+      bottom: 100%; /* juste au-dessus de la pochette */
+      left: 0;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      z-index: 9;
     }
 
     .radio-ticker span {
       display: inline-block;
       white-space: nowrap;
       padding-left: 100%;
-      animation: shade-scroll 10s linear infinite;
+      animation: shade-scroll 20s linear infinite;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.3px;
     }
 
-    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
-
-    /* LOGO */
-    .radio-logo {
-      width: 180px;
-      max-width: 85%;
-      margin: 4px auto 6px;
-      display: block;
-      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
-      animation: logo-float 2s ease-in-out infinite alternate;
-      transition: transform 0.3s ease;
+    @keyframes shade-scroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
     }
-
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
-    .radio-logo:hover { transform: scale(1.05); }
-
-    /* PLAYER CONTAINER POUR BRILLANCE */
-    .player-container { position: relative; }
 
     /* PLAYER */
     #sc-player {
@@ -101,7 +112,6 @@
       transform: scale(0.78);
       transform-origin: top center;
     }
-
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     /* POCHETTE - coins arrondis + ombrage + pulsation */
@@ -158,11 +168,11 @@
 
     /* MOBILE */
     @media (max-width:480px){
-      .radio-logo{width:150px;}
+      .radio-logo{width:180px;}
       .radio-ticker span{font-size:9px;}
       .player-card{padding:3px 6px 5px 6px;}
       #sc-player{transform:scale(0.75);}
-      #sc-player img { border-radius: 20px !important; }
+      #sc-player img { border-radius:20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
   </style>
@@ -173,16 +183,14 @@
   <div id="app">
     <div class="player-card">
 
-      <div class="live-badge">● LIVE</div>
-
-      <div class="radio-ticker">
-        <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-      </div>
-
+      <!-- LOGO EN HAUT -->
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-      <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
+        <!-- LIVE BADGE -->
+        <div class="live-badge">● LIVE</div>
+
+        <!-- PLAYER -->
         <div id="sc-player"
              is="player"
              lang="fr"
@@ -201,15 +209,20 @@
              progress-bar-color="#ffffff"
              player-width="100%">
         </div>
+
         <div class="shine-overlay"></div>
         <div class="shine-overlay2"></div>
+
+        <!-- BANNIÈRE DÉFILANTE -->
+        <div class="radio-ticker">
+          <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+        </div>
       </div>
 
     </div>
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-
   <script>
     // Ajouter l'effet pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
