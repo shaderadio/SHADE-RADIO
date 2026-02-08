@@ -30,7 +30,6 @@
       align-items: flex-start;
       min-height: 100vh;
       overflow: hidden; 
-      /* Gère l'encoche (notch) des téléphones modernes */
       padding-top: env(safe-area-inset-top, 20px); 
       overscroll-behavior-y: contain;
       user-select: none;
@@ -91,11 +90,11 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO */
+    /* LOGO AGRANDI */
     .radio-logo {
-      width: 170px;
-      max-width: 80%;
-      margin: 15px auto 20px;
+      width: 220px; /* Agrandissement du logo */
+      max-width: 90%;
+      margin: 10px auto 15px;
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -103,33 +102,46 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
 
-    /* PLAYER CONTAINER */
-    .player-container { position: relative; width: 100%; }
+    /* PLAYER CONTAINER OPTIMISÉ */
+    .player-container { 
+      position: relative; 
+      width: 100%;
+      margin: 0 auto;
+    }
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.88);
+      transform: scale(0.75); /* Réduction pour visibilité totale */
       transform-origin: top center;
+      margin-top: -10px;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
+    /* ANIMATION DE LA POCHETTE (RHYTHM BEAT) */
     #sc-player img {
       width: 100%;
       border-radius: 25px !important;
-      box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+      animation: music-beat 0.6s ease-in-out infinite alternate; /* Effet de mouvement */
+    }
+
+    @keyframes music-beat {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.03); filter: brightness(1.1); }
     }
 
     /* EFFET BRILLANCE */
     .shine-overlay {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0; left: 12%; 
+      width: 76%; height: 76%; /* Adapté à la taille réduite de la pochette */
       pointer-events: none;
       background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
       transform: translateX(-100%) rotate(25deg);
       border-radius: 25px;
       animation: shine 3s linear infinite;
+      z-index: 5;
     }
     @keyframes shine { 0% {transform:translateX(-150%) rotate(25deg);} 100% {transform:translateX(150%) rotate(25deg);} }
 
@@ -142,7 +154,7 @@
       border-radius: 50px;
       font-size: 13px;
       font-weight: bold;
-      margin: 10px auto;
+      margin: 0 auto 10px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -193,8 +205,8 @@
     }
 
     @media (max-width:480px){
-      #sc-player { transform: scale(0.85); }
-      .radio-logo { width: 150px; }
+      #sc-player { transform: scale(0.75); }
+      .radio-logo { width: 190px; }
     }
   </style>
 </head>
@@ -278,7 +290,7 @@
       }
     }
 
-    setTimeout(showPopup, 4000); // Apparaît après 4 secondes
+    setTimeout(showPopup, 4000);
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
