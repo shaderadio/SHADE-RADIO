@@ -2,32 +2,40 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
   <meta name="theme-color" content="#7a0000">
 
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
-    body {
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      overflow: hidden; 
-      padding-top: 6px;
+      align-items: center;
+      overflow: hidden;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 6px; }
+    #app {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
     .player-card {
+      width: 100%;
       background: transparent;
       border-radius: 20px;
-      padding: 4px 6px 8px 6px;
       text-align: center;
       position: relative;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      padding: 0;
     }
 
     /* LIVE BADGE */
@@ -58,7 +66,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 3px 0;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -70,39 +78,51 @@
       padding-left: 100%;
       animation: shade-scroll 10s linear infinite;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.3px;
     }
 
-    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+    @keyframes shade-scroll {
+      0%{transform:translateX(0);}
+      100%{transform:translateX(-100%);}
+    }
 
     /* LOGO */
     .radio-logo {
-      width: 180px;
-      max-width: 85%;
-      margin: 4px auto 6px;
+      width: 220px; /* légèrement agrandi */
+      max-width: 90%;
+      margin: 0 auto 8px;
       display: block;
-      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
       transition: transform 0.3s ease;
     }
 
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
+    @keyframes logo-float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-14px); }
+    }
     .radio-logo:hover { transform: scale(1.05); }
 
     /* PLAYER CONTAINER POUR BRILLANCE */
-    .player-container { position: relative; }
+    .player-container {
+      position: relative;
+      width: 100%;
+      margin-top: 6px;
+    }
 
     /* PLAYER */
     #sc-player {
       background: transparent !important;
-      margin-top: 2px;
       transform: scale(0.78);
       transform-origin: top center;
     }
 
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
+    #sc-player, #sc-player * {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
 
     /* POCHETTE - coins arrondis + ombrage + pulsation */
     #sc-player img {
@@ -158,10 +178,9 @@
 
     /* MOBILE */
     @media (max-width:480px){
-      .radio-logo{width:150px;}
-      .radio-ticker span{font-size:9px;}
-      .player-card{padding:3px 6px 5px 6px;}
-      #sc-player{transform:scale(0.75);}
+      .radio-logo{width:170px;}
+      .radio-ticker span{font-size:10px;}
+      #sc-player{transform:scale(0.72);}
       #sc-player img { border-radius: 20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
@@ -169,20 +188,21 @@
 </head>
 
 <body>
-
   <div id="app">
     <div class="player-card">
 
-      <div class="live-badge">● LIVE</div>
-
-      <div class="radio-ticker">
-        <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-      </div>
-
-      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
-
       <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
+
+        <!-- LIVE + BANNIÈRE + LOGO -->
+        <div style="margin-bottom:8px;">
+          <div class="live-badge">● LIVE</div>
+          <div class="radio-ticker">
+            <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+          </div>
+          <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+        </div>
+
         <div id="sc-player"
              is="player"
              lang="fr"
@@ -201,15 +221,17 @@
              progress-bar-color="#ffffff"
              player-width="100%">
         </div>
+
+        <!-- EFFETS BRILLANCE -->
         <div class="shine-overlay"></div>
         <div class="shine-overlay2"></div>
+
       </div>
 
     </div>
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-
   <script>
     // Ajouter l'effet pulsation sur la pochette
     const playerImg = document.querySelector('#sc-player img');
