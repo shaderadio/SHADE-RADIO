@@ -112,7 +112,6 @@
       100% { transform: translate(0, 0); }
     }
 
-    /* --- ONDES SONORES D'ORIGINE --- */
     .waves-bg {
       position: absolute;
       top: 155px; 
@@ -141,7 +140,6 @@
       50% { opacity: 0.5; }
       100% { transform: scale(1.8); opacity: 0; }
     }
-    /* ------------------------------- */
 
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
@@ -198,7 +196,6 @@
       display: none !important; 
     }
 
-    /* CONTENEUR BOUTONS */
     .actions-box {
       display: flex;
       justify-content: center;
@@ -257,7 +254,7 @@
             <div class="wave"></div>
           </div>
           
-          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%"></div>
+          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%" :autoplay="true"></div>
         </div>
       </div>
 
@@ -289,6 +286,18 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
+    // SCRIPT POUR FORCER LE PLAY SI L'AUTOPLAY EST BLOQUÉ
+    window.addEventListener('load', () => {
+        const checkPlayer = setInterval(() => {
+            const playBtn = document.querySelector('#sc-player [class*="play-button"]');
+            if (playBtn) {
+                // Tente de cliquer sur play après un court délai
+                setTimeout(() => { playBtn.click(); }, 1500);
+                clearInterval(checkPlayer);
+            }
+        }, 500);
+    });
+
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
