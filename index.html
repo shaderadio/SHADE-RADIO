@@ -57,7 +57,7 @@
       padding: 2px 8px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
-      z-index: 10;
+      z-index: 20;
     }
 
     @keyframes pulse {
@@ -90,14 +90,16 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO AGRANDI */
+    /* LOGO XXL - Presque bord à bord */
     .radio-logo {
-      width: 220px; /* Agrandissement du logo */
-      max-width: 90%;
-      margin: 10px auto 15px;
+      width: 310px; /* Augmenté pour toucher presque les bords */
+      max-width: 95%;
+      margin: 5px auto 10px;
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
+      position: relative;
+      z-index: 15;
     }
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
@@ -111,19 +113,18 @@
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.75); /* Réduction pour visibilité totale */
+      transform: scale(0.72); /* Légèrement réduit pour compenser la taille du logo */
       transform-origin: top center;
       margin-top: -10px;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* ANIMATION DE LA POCHETTE (RHYTHM BEAT) */
     #sc-player img {
       width: 100%;
       border-radius: 25px !important;
       box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-      animation: music-beat 0.6s ease-in-out infinite alternate; /* Effet de mouvement */
+      animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
     @keyframes music-beat {
@@ -131,19 +132,35 @@
       100% { transform: scale(1.03); filter: brightness(1.1); }
     }
 
-    /* EFFET BRILLANCE */
+    /* DOUBLE EFFET BRILLANCE PLEIN ÉCRAN */
+    .shine-wrapper {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+
     .shine-overlay {
       position: absolute;
-      top: 0; left: 12%; 
-      width: 76%; height: 76%; /* Adapté à la taille réduite de la pochette */
-      pointer-events: none;
-      background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
-      transform: translateX(-100%) rotate(25deg);
-      border-radius: 25px;
-      animation: shine 3s linear infinite;
-      z-index: 5;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0) 70%);
+      transform: rotate(25deg);
+      animation: shine-animation 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
     }
-    @keyframes shine { 0% {transform:translateX(-150%) rotate(25deg);} 100% {transform:translateX(150%) rotate(25deg);} }
+
+    /* Deuxième brillance décalée */
+    .shine-overlay.delayed {
+      animation-delay: 2s;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 70%);
+    }
+
+    @keyframes shine-animation {
+      0% { transform: translateX(-100%) rotate(25deg); }
+      100% { transform: translateX(100%) rotate(25deg); }
+    }
 
     /* BOUTON PARTAGER */
     .share-btn {
@@ -159,8 +176,8 @@
       display: inline-flex;
       align-items: center;
       transition: all 0.3s;
+      z-index: 15;
     }
-    .share-btn:active { background: rgba(255, 255, 255, 0.3); transform: scale(0.95); }
 
     /* POPUP INSTALLATION */
     #install-pwa-popup {
@@ -181,37 +198,19 @@
       display: none;
     }
 
-    .popup-content p { font-size: 15px; margin-bottom: 12px; font-weight: bold; }
-    #ios-instructions { font-size: 13px; color: #bbb; line-height: 1.6; }
-    #android-install-btn {
-      background: #c40000;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 10px;
-      font-weight: bold;
-      margin-top: 5px;
-      width: 100%;
-    }
-    .close-btn {
-      background: transparent;
-      color: #777;
-      border: none;
-      font-size: 12px;
-      margin-top: 15px;
-      display: block;
-      width: 100%;
-      text-decoration: underline;
-    }
-
     @media (max-width:480px){
-      #sc-player { transform: scale(0.75); }
-      .radio-logo { width: 190px; }
+      #sc-player { transform: scale(0.72); }
+      .radio-logo { width: 92%; }
     }
   </style>
 </head>
 
 <body>
+
+  <div class="shine-wrapper">
+    <div class="shine-overlay"></div>
+    <div class="shine-overlay delayed"></div>
+  </div>
 
   <div id="app">
     <div class="player-card">
@@ -225,7 +224,6 @@
 
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
-        <div class="shine-overlay"></div>
       </div>
 
       <button class="share-btn" onclick="shareRadio()">
@@ -241,7 +239,7 @@
           Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
         <button id="android-install-btn" style="display: none;">Installer maintenant</button>
-        <button onclick="closePopup()" class="close-btn">Pas maintenant</button>
+        <button onclick="closePopup()" class="close-btn" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:10px; cursor:pointer; width:100%;">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -249,14 +247,12 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // 1. SERVICE WORKER
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
       });
     }
 
-    // 2. LOGIQUE PARTAGE
     function shareRadio() {
       if (navigator.share) {
         navigator.share({
@@ -269,7 +265,6 @@
       }
     }
 
-    // 3. LOGIQUE POPUP INSTALLATION
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
     const btnAndroid = document.getElementById('android-install-btn');
