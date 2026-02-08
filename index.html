@@ -114,7 +114,7 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
 
-    /* PLAYER ET BOUTON LECTURE */
+    /* PLAYER CONFIGURATION */
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
@@ -122,7 +122,7 @@
       transform: scale(0.65);
       transform-origin: top center;
       margin-top: -10px;
-      height: 310px;
+      height: 280px; /* Réduit car moins d'infos à afficher */
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
@@ -133,27 +133,43 @@
       box-shadow: 0 12px 25px rgba(0,0,0,0.7);
     }
 
-    /* TAILLE ET OMBRE DU BOUTON PLAY */
-    #sc-player [class*="play-button"], #sc-player svg {
-      transform: scale(0.8) !important; /* Réduction du bouton */
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) !important; /* Ombre du bouton */
+    /* NETTOYAGE DES INFOS DE LECTURE (Timing, barre, etc) */
+    #sc-player [class*="progress"], 
+    #sc-player [class*="time"], 
+    #sc-player [class*="duration"],
+    #sc-player .sc-player-time { 
+      display: none !important; 
     }
 
-    /* PARTAGER LA RADIO */
+    /* GARDE LE TITRE ET LE BOUTON PLAY */
+    #sc-player [class*="title"], #sc-player [class*="artist"] {
+      display: block !important;
+      color: #ffffff !important;
+      font-weight: bold !important;
+      margin-top: 10px !important;
+    }
+
+    #sc-player [class*="play-button"], #sc-player svg {
+      transform: scale(0.8) !important;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) !important;
+      margin-top: 5px !important;
+    }
+
+    /* BOUTON PARTAGER */
     .share-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
       padding: 10px 20px; border-radius: 50px;
       font-size: 13px; font-weight: bold;
-      margin: -20px auto 20px; /* Descendu légèrement (de -60px à -20px) */
+      margin: -10px auto 20px; 
       cursor: pointer;
       display: inline-flex; align-items: center;
       transition: all 0.3s; position: relative; z-index: 30;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    /* BRILLANCE */
+    /* EFFETS VISUELS */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -172,17 +188,12 @@
       animation: full-shine 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .shine-layer-2 {
-      animation-delay: 2s;
-      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 70%);
-    }
-
     @keyframes full-shine {
       0% { transform: translateX(-100%) rotate(25deg); }
       100% { transform: translateX(100%) rotate(25deg); }
     }
 
-    /* POPUP */
+    /* POPUP INSTALLATION */
     #install-pwa-popup {
       position: fixed;
       bottom: 25px; left: 50%;
@@ -204,7 +215,6 @@
 
   <div class="shine-wrapper">
     <div class="shine-layer"></div>
-    <div class="shine-layer shine-layer-2"></div>
   </div>
 
   <div id="app">
@@ -221,7 +231,7 @@
         <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
         <div class="player-container">
-          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
+          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%"></div>
         </div>
       </div>
 
