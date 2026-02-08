@@ -1,21 +1,30 @@
 {
-  "name": "SHADE RADIO – Live",
+  "name": "SHADE RADIO",
   "short_name": "SHADE RADIO",
-  "description": "Retrouvez SHADE RADIO en direct.",
+  "description": "Retrouvez SHADE RADIO en direct – Live 21h sur TikTok",
   "start_url": "index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#6b0000",
-  "theme_color": "#7a0000",
+  "theme_color": "#6b0000",
   "icons": [
     {
       "src": "assets/logo.PNG",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "assets/logo.PNG",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo.PNG",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
