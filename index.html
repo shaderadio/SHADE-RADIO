@@ -22,8 +22,9 @@
       -webkit-tap-highlight-color: transparent; 
     }
 
+    /* FOND AMÉLIORÉ AVEC DÉGRADÉ RADIAL PROFOND */
     body {
-      background: linear-gradient(160deg, #6b0000, #c40000);
+      background: radial-gradient(circle at center, #9e0000 0%, #6b0000 50%, #3d0000 100%);
       background-attachment: fixed;
       display: flex;
       justify-content: center;
@@ -56,11 +57,12 @@
       border-radius: 20px;
       animation: pulse 1.5s infinite;
       z-index: 20;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
 
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(255,0,0,.7); }
-      70% { box-shadow: 0 0 0 4px rgba(255,0,0,0); }
+      70% { box-shadow: 0 0 0 6px rgba(255,0,0,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
     }
 
@@ -68,12 +70,13 @@
     .radio-ticker {
       width: 100%;
       overflow: hidden;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.45);
       border-radius: 10px;
       padding: 6px 0;
       margin-bottom: 8px;
       margin-top: 20px;
       display: flex;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .radio-ticker span {
@@ -88,17 +91,21 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO */
+    /* LOGO AVEC OMBRE PORTÉE ÉTENDUE */
     .radio-logo {
       width: 220px;
       max-width: 90%;
       margin: 10px auto 15px;
       display: block;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+      /* L'ombre donne l'effet de relief sur le fond */
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.7));
       animation: logo-float 2s ease-in-out infinite alternate;
     }
 
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
+    @keyframes logo-float { 
+      0% { transform: translateY(0px); filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); } 
+      100% { transform: translateY(-10px); filter: drop-shadow(0 20px 25px rgba(0,0,0,0.8)); } 
+    }
 
     /* PLAYER CONTAINER */
     .player-container { position: relative; width: 100%; margin: 0 auto; }
@@ -112,10 +119,12 @@
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
+    /* POCHETTE AVEC OMBRE DE RELIEF INTERACTIVE */
     #sc-player img {
       width: 100%;
       border-radius: 25px !important;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+      /* Double ombre : une sombre pour le relief et une légère rouge pour l'intégration */
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(158, 0, 0, 0.4);
       animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
@@ -124,49 +133,34 @@
       100% { transform: scale(1.03); filter: brightness(1.1); }
     }
 
-    /* --- NOUVEL EFFET BRILLANCE DOUBLE PLEIN ÉCRAN --- */
+    /* EFFET BRILLANCE */
     .shine-wrapper {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
-      z-index: 5; /* Derrière les boutons mais devant le fond */
+      z-index: 5;
       overflow: hidden;
     }
 
     .shine-layer {
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        120deg, 
-        rgba(255, 255, 255, 0) 30%, 
-        rgba(255, 255, 255, 0.12) 50%, 
-        rgba(255, 255, 255, 0) 70%
-      );
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 70%);
       transform: rotate(25deg);
       animation: full-shine 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .shine-layer-2 {
-      animation-delay: 2s; /* Décalage pour le deuxième effet */
-      background: linear-gradient(
-        120deg, 
-        rgba(255, 255, 255, 0) 30%, 
-        rgba(255, 255, 255, 0.08) 50%, 
-        rgba(255, 255, 255, 0) 70%
-      );
+      animation-delay: 2s;
+      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 70%);
     }
 
     @keyframes full-shine {
       0% { transform: translateX(-100%) rotate(25deg); }
       100% { transform: translateX(100%) rotate(25deg); }
     }
-    /* ----------------------------------------------- */
 
     .share-btn {
       background: rgba(255, 255, 255, 0.1);
@@ -183,23 +177,7 @@
       transition: all 0.3s;
       position: relative;
       z-index: 30;
-    }
-
-    #install-pwa-popup {
-      position: fixed;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 340px;
-      background: #1a1a1a;
-      border: 1px solid #7a0000;
-      border-radius: 20px;
-      padding: 20px;
-      z-index: 9999;
-      color: white;
-      text-align: center;
-      display: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
   </style>
 </head>
@@ -230,28 +208,11 @@
         Partager la radio
       </button>
     </div>
-
-    <div id="install-pwa-popup">
-      <div class="popup-content">
-        <p>Installer l'application SHADE RADIO</p>
-        <div id="ios-instructions" style="display: none;">
-          Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
-        </div>
-        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
-        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:15px; cursor:pointer;">Pas maintenant</button>
-      </div>
-    </div>
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
-      });
-    }
-
     function shareRadio() {
       if (navigator.share) {
         navigator.share({
@@ -263,41 +224,6 @@
         alert("Lien de la radio : " + window.location.href);
       }
     }
-
-    let deferredPrompt;
-    const popup = document.getElementById('install-pwa-popup');
-    const btnAndroid = document.getElementById('android-install-btn');
-    const iosInstructions = document.getElementById('ios-instructions');
-
-    function showPopup() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      if (!isStandalone) {
-        popup.style.display = 'block';
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIos) {
-          iosInstructions.style.display = 'block';
-          btnAndroid.style.display = 'none';
-        } else {
-          btnAndroid.style.display = 'block';
-          iosInstructions.style.display = 'none';
-        }
-      }
-    }
-    setTimeout(showPopup, 4000);
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      showPopup();
-    });
-    btnAndroid.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') popup.style.display = 'none';
-        deferredPrompt = null;
-      }
-    });
-    function closePopup() { popup.style.display = 'none'; }
   </script>
 
 </body>
