@@ -25,8 +25,8 @@
       max-width: 360px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      padding: 6px;
     }
 
     .player-card {
@@ -38,19 +38,34 @@
       padding: 0;
     }
 
+    /* LOGO SHADE RADIO */
+    .radio-logo {
+      width: 220px;
+      max-width: 90%;
+      margin: 0 auto 12px;
+      display: block;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+      animation: logo-float 2s ease-in-out infinite alternate;
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes logo-float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-14px); }
+    }
+    .radio-logo:hover { transform: scale(1.05); }
+
     /* LIVE BADGE */
     .live-badge {
-      position: absolute;
-      top: 4px;
-      left: 4px;
+      display: inline-block;
       background: #ff0000;
       color: #fff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: bold;
       padding: 2px 6px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
-      z-index: 10;
+      margin-bottom: 4px;
     }
 
     @keyframes pulse {
@@ -66,7 +81,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 3px 0;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -88,28 +103,10 @@
       100%{transform:translateX(-100%);}
     }
 
-    /* LOGO */
-    .radio-logo {
-      width: 220px; /* légèrement agrandi */
-      max-width: 90%;
-      margin: 0 auto 8px;
-      display: block;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
-      animation: logo-float 2s ease-in-out infinite alternate;
-      transition: transform 0.3s ease;
-    }
-
-    @keyframes logo-float {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-14px); }
-    }
-    .radio-logo:hover { transform: scale(1.05); }
-
     /* PLAYER CONTAINER POUR BRILLANCE */
     .player-container {
       position: relative;
       width: 100%;
-      margin-top: 6px;
     }
 
     /* PLAYER */
@@ -117,6 +114,7 @@
       background: transparent !important;
       transform: scale(0.78);
       transform-origin: top center;
+      margin-top: 4px;
     }
 
     #sc-player, #sc-player * {
@@ -191,18 +189,19 @@
   <div id="app">
     <div class="player-card">
 
+      <!-- LOGO EN HAUT -->
+      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+
+      <!-- LIVE + BANNIÈRE juste au dessus de la pochette -->
+      <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:6px;">
+        <div class="live-badge">● LIVE</div>
+        <div class="radio-ticker">
+          <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+        </div>
+      </div>
+
       <!-- PLAYER AVEC BRILLANCE -->
       <div class="player-container">
-
-        <!-- LIVE + BANNIÈRE + LOGO -->
-        <div style="margin-bottom:8px;">
-          <div class="live-badge">● LIVE</div>
-          <div class="radio-ticker">
-            <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
-          </div>
-          <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
-        </div>
-
         <div id="sc-player"
              is="player"
              lang="fr"
@@ -225,7 +224,6 @@
         <!-- EFFETS BRILLANCE -->
         <div class="shine-overlay"></div>
         <div class="shine-overlay2"></div>
-
       </div>
 
     </div>
@@ -237,6 +235,5 @@
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
   </script>
-
 </body>
 </html>
