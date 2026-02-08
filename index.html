@@ -286,18 +286,32 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // SCRIPT POUR FORCER LE PLAY SI L'AUTOPLAY EST BLOQUÉ
+    // --- FORCE START SCRIPT ---
+    let radioStarted = false;
+
+    function startRadio() {
+      if (radioStarted) return;
+      const playBtn = document.querySelector('#sc-player [class*="play-button"]');
+      if (playBtn) {
+        playBtn.click();
+        radioStarted = true;
+        console.log("Flux démarré par interaction.");
+        // Nettoie les écouteurs pour économiser de la batterie
+        window.removeEventListener('touchstart', startRadio);
+        window.removeEventListener('click', startRadio);
+      }
+    }
+
+    // Essaye de démarrer au chargement (pour PC)
     window.addEventListener('load', () => {
-        const checkPlayer = setInterval(() => {
-            const playBtn = document.querySelector('#sc-player [class*="play-button"]');
-            if (playBtn) {
-                // Tente de cliquer sur play après un court délai
-                setTimeout(() => { playBtn.click(); }, 1500);
-                clearInterval(checkPlayer);
-            }
-        }, 500);
+        setTimeout(startRadio, 1500);
     });
 
+    // Force le démarrage au premier toucher n'importe où sur l'écran (pour Mobile)
+    window.addEventListener('touchstart', startRadio, { passive: true });
+    window.addEventListener('click', startRadio);
+
+    // --- AUTRES FONCTIONS ---
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
@@ -306,7 +320,6 @@
 
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
-
     function showPopup() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       if (!isStandalone) {
