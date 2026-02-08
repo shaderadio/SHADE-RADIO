@@ -90,7 +90,6 @@
       overflow: hidden; 
     }
 
-    /* LOGO : EFFET ELECTRIQUE AVEC PAUSES */
     .radio-logo {
       width: 210px;
       margin: 0 auto 10px;
@@ -100,7 +99,7 @@
     }
 
     @keyframes electric-vibe {
-      0%, 50% { transform: translate(0, 0); } /* Pause de 1s */
+      0%, 50% { transform: translate(0, 0); }
       55% { transform: translate(2px, -2px); filter: brightness(1.5) drop-shadow(0 0 5px #ff0000); }
       60% { transform: translate(-2px, 2px); }
       65% { transform: translate(2px, 2px); filter: brightness(1.2); }
@@ -113,6 +112,39 @@
       100% { transform: translate(0, 0); }
     }
 
+    /* CONTENEUR ONDES SONORES */
+    .waves-container {
+      position: absolute;
+      top: 130px; /* Aligné sur la pochette */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 200px;
+      z-index: -1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wave {
+      position: absolute;
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      animation: wave-expand 2s infinite;
+      opacity: 0;
+    }
+
+    .wave:nth-child(2) { animation-delay: 0.6s; }
+    .wave:nth-child(3) { animation-delay: 1.2s; }
+
+    @keyframes wave-expand {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { opacity: 0.5; border-color: #ff3333; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
@@ -121,11 +153,12 @@
       transform-origin: top center;
       margin-top: 5px;
       height: 380px;
+      position: relative;
+      z-index: 2;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* POCHETTE : EFFET GLOW + EQUALISER BORDEAUX */
     #sc-player img {
       width: 100%;
       border-radius: 20px !important;
@@ -133,25 +166,10 @@
     }
 
     @keyframes pochette-fx {
-      0%, 40% { /* Temps mort */
-        box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 0px rgba(107, 0, 0, 0);
-      }
-      50% { /* Equaliser et Glow */
-        box-shadow: 0 0 25px 5px #6b0000, 0 0 40px 10px rgba(158, 0, 0, 0.6), 0 15px 30px rgba(0,0,0,0.7);
-        transform: scale(1.02);
-      }
-      60% { 
-        box-shadow: 0 0 15px 2px #6b0000, 0 0 20px 5px rgba(158, 0, 0, 0.4), 0 15px 30px rgba(0,0,0,0.7);
-        transform: scale(1);
-      }
-      70% { 
-        box-shadow: 0 0 35px 8px #6b0000, 0 0 50px 15px rgba(158, 0, 0, 0.7), 0 15px 30px rgba(0,0,0,0.7);
-        transform: scale(1.03);
-      }
-      80%, 100% { 
-        box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 0px rgba(107, 0, 0, 0);
-        transform: scale(1);
-      }
+      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); transform: scale(1); }
+      50% { box-shadow: 0 0 25px 5px #6b0000, 0 0 40px 10px rgba(158, 0, 0, 0.6), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.02); }
+      70% { box-shadow: 0 0 35px 8px #6b0000, 0 0 50px 15px rgba(158, 0, 0, 0.7), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.03); }
+      80%, 100% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); transform: scale(1); }
     }
 
     #sc-player [class*="title"] {
@@ -225,7 +243,14 @@
 
       <div class="main-frame">
         <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+        
         <div class="player-container">
+          <div class="waves-container">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+          </div>
+          
           <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%"></div>
         </div>
       </div>
