@@ -1,161 +1,169 @@
-<style>
-  /* Import d'une police plus moderne */
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SHADE RADIO – Live</title>
+    
+    <meta name="theme-color" content="#2b0000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
+    
+    <link rel="apple-touch-icon" href="assets/logo.PNG">
+    <link rel="manifest" href="manifest.json">
 
-  * { 
-    box-sizing: border-box; 
-    font-family: 'Montserrat', sans-serif; 
-    margin: 0; padding: 0; 
-    -webkit-tap-highlight-color: transparent; 
-  }
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
-  body {
-    /* Dégradé plus profond et sombre pour faire ressortir le blanc */
-    background: radial-gradient(circle at top, #8b0000 0%, #2b0000 100%);
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centré verticalement */
-    min-height: 100vh;
-    overflow: hidden; 
-    padding-top: env(safe-area-inset-top, 20px); 
-    overscroll-behavior-y: contain;
-    user-select: none;
-  }
+    <style>
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; padding: 0; 
+            -webkit-tap-highlight-color: transparent; 
+        }
 
-  #app { 
-    width: 100%; 
-    max-width: 380px; 
-    padding: 20px; 
-    position: relative; 
-  }
+        body {
+            background: radial-gradient(circle at top, #8b0000 0%, #1a0000 100%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            padding-top: env(safe-area-inset-top, 20px); 
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+            overflow: hidden;
+        }
 
-  /* Effet Glassmorphism pour la carte */
-  .player-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-    padding: 30px 15px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-  }
+        #app { 
+            width: 100%; 
+            max-width: 380px; 
+            padding: 20px; 
+            z-index: 2;
+        }
 
-  /* LIVE BADGE - Plus pro */
-  .live-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ff0000;
-    color: #fff;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 4px 12px;
-    border-radius: 20px;
-    animation: pulse 2s infinite;
-    z-index: 10;
-    letter-spacing: 1px;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-  }
+        .player-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 35px;
+            padding: 40px 20px 30px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
 
-  @keyframes pulse {
-    0% { transform: translateX(-50%) scale(1); opacity: 1; }
-    50% { transform: translateX(-50%) scale(1.05); opacity: 0.8; }
-    100% { transform: translateX(-50%) scale(1); opacity: 1; }
-  }
+        /* Badge LIVE */
+        .live-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff0000;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 6px 15px;
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
 
-  /* BANNIÈRE DÉFILANTE - Plus discrète */
-  .radio-ticker {
-    width: 100%;
-    overflow: hidden;
-    background: rgba(0,0,0,0.2);
-    border-radius: 50px;
-    padding: 8px 0;
-    margin: 25px 0 15px;
-    display: flex;
-    border: 1px solid rgba(255,255,255,0.05);
-  }
+        @keyframes pulse {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.7; transform: translateX(-50%) scale(1.05); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
 
-  .radio-ticker span {
-    display: inline-block;
-    white-space: nowrap;
-    animation: shade-scroll 15s linear infinite;
-    color: rgba(255,255,255,0.9);
-    font-size: 12px;
-    font-weight: 400;
-  }
+        /* Ticker */
+        .radio-ticker {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50px;
+            padding: 10px 0;
+            margin: 10px 0 20px;
+            white-space: nowrap;
+        }
 
-  /* LOGO - Avec lueur */
-  .radio-logo {
-    width: 140px;
-    margin: 10px auto 25px;
-    display: block;
-    filter: drop-shadow(0 0 20px rgba(255,0,0,0.3));
-    animation: logo-float 3s ease-in-out infinite alternate;
-  }
+        .radio-ticker span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: shade-scroll 15s linear infinite;
+            font-size: 12px;
+            color: #ddd;
+        }
 
-  @keyframes logo-float { 
-    0% { transform: translateY(0px) rotate(-1deg); } 
-    100% { transform: translateY(-10px) rotate(1deg); } 
-  }
+        @keyframes shade-scroll { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-150%); } 
+        }
 
-  /* PLAYER CONTAINER */
-  .player-container { 
-    position: relative; 
-    width: 100%; 
-    margin-top: 10px;
-  }
+        /* Logo */
+        .radio-logo {
+            width: 160px;
+            margin: 0 auto 30px;
+            display: block;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+            animation: float 3s ease-in-out infinite alternate;
+        }
 
-  #sc-player {
-    background: transparent !important;
-    transform: scale(1); /* On remet à 1 pour la lisibilité */
-  }
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
 
-  #sc-player img {
-    border-radius: 20px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255,255,255,0.1);
-  }
+        /* Player Customization */
+        .player-container {
+            position: relative;
+            min-height: 180px; /* Évite que l'app soit vide pendant le chargement */
+            width: 100%;
+        }
 
-  /* BOUTON PARTAGER - Look iOS/Android moderne */
-  .share-btn {
-    background: white;
-    color: #8b0000;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 700;
-    margin-top: 25px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-  }
-  
-  .share-btn img { filter: invert(13%) sepia(94%) saturate(7414%) hue-rotate(356deg) brightness(91%) contrast(114%); }
+        #sc-player {
+            background: transparent !important;
+            display: block !important;
+        }
 
-  .share-btn:active { transform: scale(0.9); }
+        /* Bouton Partager */
+        .share-btn {
+            background: #ffffff;
+            color: #8b0000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 30px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
 
-  /* POPUP INSTALLATION - Style Dark Mode */
-  #install-pwa-popup {
-    background: #121212;
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
-    border-radius: 30px 30px 0 0; /* Arrondi seulement en haut */
-    bottom: 0;
-    width: 100%;
-    max-width: 100%;
-  }
+        .share-btn:active { transform: scale(0.95); }
 
-  #android-install-btn {
-    background: #ff0000;
-    border-radius: 15px;
-    height: 50px;
-    font-size: 16px;
-  }
-</style>
+        /* Popups */
+        #install-pwa-popup {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 350px;
+            background: #111;
+            border: 1px solid #444;
+            border-radius: 25px;
+            padding: 20px;
+            z-index: 9999;
+            display: none;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .close-btn { color: #888; text-decoration: underline; background: none; border: none; margin-top: 15px; cursor: pointer; }
+        #android-install-btn { background: #ff0000; color: white; border: none; padding: 12px; width: 100%; border-radius: 12
