@@ -72,7 +72,7 @@
       border-radius: 10px;
       padding: 6px 0;
       margin-top: 15px;
-      margin-bottom: 0px;
+      margin-bottom: 2px;
       display: flex;
     }
 
@@ -88,7 +88,7 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO XXL */
+    /* LOGO REMONTÉ À RAS */
     .radio-logo {
       width: 310px;
       max-width: 95%;
@@ -106,13 +106,13 @@
     .player-container { 
       position: relative; 
       width: 100%;
-      margin-top: -15px; /* Remonte tout le bloc vers le logo */
+      margin-top: -15px; /* Remonte la pochette vers le logo */
     }
 
-    /* Retour à la taille initiale de la pochette */
+    /* TAILLE POCHETTE ET LECTEUR RÉDUITE */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.75); /* Taille d'origine */
+      transform: scale(0.68); /* Lecteur global plus petit */
       transform-origin: top center;
     }
 
@@ -125,9 +125,9 @@
       animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
-    /* Ajustement précis pour que le lecteur colle à la pochette */
+    /* Remonte le lecteur sous l'image */
     #sc-player [class*="controls"] {
-      margin-top: -10px !important; 
+      margin-top: -25px !important; 
     }
 
     @keyframes music-beat {
@@ -142,9 +142,9 @@
       color: white;
       padding: 10px 20px;
       border-radius: 50px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-      margin-top: -25px; /* Remonte le bouton pour combler le vide du scale */
+      margin-top: -45px; /* Très haut pour coller au lecteur réduit */
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -224,7 +224,7 @@
       </div>
 
       <button class="share-btn" onclick="shareRadio()">
-        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="vertical-align: middle; margin-right: 8px;">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="vertical-align: middle; margin-right: 8px;">
         Partager la radio
       </button>
     </div>
