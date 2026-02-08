@@ -18,7 +18,7 @@
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* contenu en haut */
+      align-items: flex-start;
       min-height: 100vh;
       overflow-x: hidden; /* pas de scroll horizontal */
       padding-top: 12px;
@@ -31,9 +31,9 @@
     }
 
     .player-card {
-      background: rgba(0,0,0,0.25);
+      background: transparent; /* suppression du fond gris */
       border-radius: 22px;
-      padding: 16px;
+      padding: 12px 16px 20px 16px;
       text-align: center;
       position: relative;
       box-shadow: 0 12px 28px rgba(0,0,0,0.35);
@@ -42,8 +42,8 @@
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 8px;
+      left: 8px;
       background: #ff0000;
       color: #fff;
       font-size: 12px;
@@ -67,7 +67,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 14px;
       padding: 6px 0;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -99,10 +99,16 @@
     }
 
     /* PLAYER */
+    #sc-player {
+      background: transparent !important; /* suppression fond gris */
+      margin-top: 8px;
+    }
+
     #sc-player img {
       width: 100%;
       border-radius: 16px !important;
       box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      background: transparent !important;
     }
 
     #sc-player button,
@@ -121,7 +127,11 @@
         font-size: 11px;
       }
       .player-card {
-        padding: 12px;
+        padding: 10px 12px 16px 12px;
+      }
+      #sc-player img {
+        border-radius: 14px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.5);
       }
     }
   </style>
