@@ -9,18 +9,27 @@
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* pas de scroll */
       background: linear-gradient(160deg, #6b0000, #c40000);
+    }
+
+    body {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      min-height: 100vh;
-      overflow: hidden; 
       padding-top: 6px;
       position: relative;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 6px; }
+    #app {
+      width: 100%;
+      max-width: 360px;
+      padding: 0 6px;
+      z-index: 10; /* au-dessus de la brillance */
+    }
 
     .player-card {
       background: transparent;
@@ -29,7 +38,6 @@
       text-align: center;
       position: relative;
       box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-      z-index: 10; /* au-dessus de la brillance page */
     }
 
     /* LIVE BADGE */
@@ -103,7 +111,7 @@
     #sc-player {
       background: transparent !important;
       margin-top: 2px;
-      transform: scale(0.78); /* Lecteur réduit */
+      transform: scale(0.78);
       transform-origin: top center;
       position: relative;
       z-index: 15;
@@ -111,7 +119,7 @@
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* CALQUES DE BRILLANCE SUR POCHE ET PAGE */
+    /* CALQUES DE BRILLANCE SUR POCHE */
     .shine-overlay, .shine-overlay2 {
       position: absolute;
       top: 0; left: 0;
@@ -151,8 +159,8 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       background: linear-gradient(
         120deg,
@@ -161,7 +169,7 @@
         rgba(255,255,255,0) 100%
       );
       transform: translateX(-100%) rotate(25deg);
-      z-index: 5; /* derrière le player */
+      z-index: 1; /* derrière le contenu */
       animation: page-shine-anim 3s linear infinite;
     }
 
@@ -184,7 +192,7 @@
 
 <body>
 
-  <!-- BRILLANCE FULL SCREEN -->
+  <!-- BRILLANCE FULL PAGE -->
   <div class="page-shine"></div>
 
   <div id="app">
