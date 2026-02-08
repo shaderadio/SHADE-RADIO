@@ -43,6 +43,18 @@
       position: relative;
     }
 
+    /* CADRE ROUGE BORDEAUX */
+    .main-frame {
+      background: rgba(107, 0, 0, 0.85); /* Rouge Bordeaux avec légère transparence */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 20px 10px;
+      margin-top: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 11;
+    }
+
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
@@ -68,9 +80,8 @@
       background: rgba(0,0,0,0.45);
       border-radius: 10px;
       padding: 6px 0;
-      margin-bottom: 8px; margin-top: 20px;
+      margin-bottom: 5px; margin-top: 20px;
       display: flex;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .radio-ticker span {
@@ -85,18 +96,18 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO RELIEF */
+    /* LOGO */
     .radio-logo {
-      width: 220px; max-width: 90%;
-      margin: 10px auto 15px;
+      width: 200px; max-width: 85%;
+      margin: 5px auto 10px;
       display: block;
-      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.7));
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
     }
 
     @keyframes logo-float { 
-      0% { transform: translateY(0px); filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); } 
-      100% { transform: translateY(-10px); filter: drop-shadow(0 20px 25px rgba(0,0,0,0.8)); } 
+      0% { transform: translateY(0px); } 
+      100% { transform: translateY(-8px); } 
     }
 
     /* PLAYER */
@@ -104,23 +115,23 @@
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.75);
+      transform: scale(0.85); /* Un peu plus grand pour remplir le cadre */
       transform-origin: top center;
-      margin-top: -10px;
+      margin-top: -5px;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     #sc-player img {
       width: 100%;
-      border-radius: 25px !important;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 20px rgba(158, 0, 0, 0.4);
+      border-radius: 20px !important;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.7);
       animation: music-beat 0.6s ease-in-out infinite alternate;
     }
 
     @keyframes music-beat {
       0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.03); filter: brightness(1.1); }
+      100% { transform: scale(1.02); filter: brightness(1.05); }
     }
 
     /* DOUBLE BRILLANCE */
@@ -159,13 +170,12 @@
       color: white;
       padding: 10px 20px; border-radius: 50px;
       font-size: 13px; font-weight: bold;
-      margin: 0 auto 10px; cursor: pointer;
+      margin: 15px auto 10px; cursor: pointer;
       display: inline-flex; align-items: center;
       transition: all 0.3s; position: relative; z-index: 30;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    /* POPUP INSTALLATION RÉINTÉGRÉE */
+    /* POPUP */
     #install-pwa-popup {
       position: fixed;
       bottom: 25px; left: 50%;
@@ -178,19 +188,7 @@
       z-index: 9999;
       color: white;
       text-align: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
       display: none;
-    }
-    .popup-content p { font-size: 15px; margin-bottom: 12px; font-weight: bold; }
-    #android-install-btn {
-      background: #c40000; color: white; border: none;
-      padding: 12px; border-radius: 10px; width: 100%;
-      font-weight: bold; margin-top: 10px; cursor: pointer;
-    }
-    .close-popup-text {
-      background: none; border: none; color: #777;
-      text-decoration: underline; margin-top: 15px; cursor: pointer;
-      font-size: 12px; display: block; width: 100%;
     }
   </style>
 </head>
@@ -210,12 +208,13 @@
         <span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
       </div>
 
-      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+      <div class="main-frame">
+        <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-      <div class="player-container">
-        <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
+        <div class="player-container">
+          <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
+        </div>
       </div>
-
       <button class="share-btn" onclick="shareRadio()">
         <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="vertical-align: middle; margin-right: 8px;">
         Partager la radio
@@ -228,8 +227,8 @@
         <div id="ios-instructions" style="display: none; font-size: 13px; color: #ccc;">
           Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
-        <button id="android-install-btn" style="display: none;">Installer maintenant</button>
-        <button onclick="closePopup()" class="close-popup-text">Pas maintenant</button>
+        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
+        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:15px; cursor:pointer;">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -237,14 +236,12 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // 1. Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch((err) => console.log("SW Error:", err));
       });
     }
 
-    // 2. Partage
     function shareRadio() {
       if (navigator.share) {
         navigator.share({
@@ -257,7 +254,6 @@
       }
     }
 
-    // 3. Logique Popup Installation
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
     const btnAndroid = document.getElementById('android-install-btn');
@@ -277,16 +273,12 @@
         }
       }
     }
-
-    // Affiche la popup après 4 secondes
     setTimeout(showPopup, 4000);
-
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       showPopup();
     });
-
     btnAndroid.addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -295,7 +287,6 @@
         deferredPrompt = null;
       }
     });
-
     function closePopup() { popup.style.display = 'none'; }
   </script>
 </body>
