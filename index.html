@@ -7,34 +7,24 @@
   <meta name="theme-color" content="#7a0000">
 
   <style>
-    /* RESET & BASE */
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
-
-    html, body {
-      height: 100%;                  /* Full screen */
-      margin: 0;
-      padding: 0;
-    }
 
     body {
       background: linear-gradient(160deg, #6b0000, #c40000);
       display: flex;
-      justify-content: center;       /* centre horizontal */
-      align-items: center;           /* centre vertical */
+      justify-content: center;
+      align-items: flex-start;
       min-height: 100vh;
+      overflow: hidden; 
+      padding-top: 6px;
     }
 
-    #app {
-      width: 100%;
-      max-width: 360px;
-      padding: 0 6px;
-    }
+    #app { width: 100%; max-width: 360px; padding: 0 6px; }
 
-    /* PLAYER CARD */
     .player-card {
       background: transparent;
       border-radius: 20px;
-      padding: 6px;
+      padding: 4px 6px 8px 6px;
       text-align: center;
       position: relative;
       box-shadow: 0 8px 20px rgba(0,0,0,0.35);
@@ -68,7 +58,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 3px 0;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -114,7 +104,7 @@
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* POCHETTE */
+    /* POCHETTE - coins arrondis + ombrage + pulsation */
     #sc-player img {
       width: 100%;
       border-radius: 30px !important;
@@ -166,20 +156,20 @@
       font-weight: bold;
     }
 
-    /* MOBILE RESPONSIVE */
+    /* MOBILE */
     @media (max-width:480px){
-      html, body { height: 100vh; } /* Full screen mobile */
       .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
       .player-card{padding:3px 6px 5px 6px;}
       #sc-player{transform:scale(0.75);}
-      #sc-player img { border-radius:20px !important; }
+      #sc-player img { border-radius: 20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
   </style>
 </head>
 
 <body>
+
   <div id="app">
     <div class="player-card">
 
@@ -225,5 +215,6 @@
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
   </script>
+
 </body>
 </html>
