@@ -30,7 +30,7 @@
       align-items: flex-start;
       min-height: 100vh;
       overflow: hidden; 
-      padding-top: env(safe-area-inset-top, 20px); 
+      padding-top: env(safe-area-inset-top, 10px); 
       overscroll-behavior-y: contain;
       user-select: none;
     }
@@ -39,16 +39,17 @@
 
     .player-card {
       background: transparent;
-      border-radius: 20px;
-      padding: 10px 6px 8px 6px;
       text-align: center;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 15px;
+      top: 10px;
       left: 10px;
       background: #ff0000;
       color: #fff;
@@ -57,7 +58,7 @@
       padding: 2px 8px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
-      z-index: 20;
+      z-index: 30;
     }
 
     @keyframes pulse {
@@ -73,8 +74,8 @@
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
       padding: 6px 0;
-      margin-bottom: 8px;
-      margin-top: 20px;
+      margin-top: 15px;
+      margin-bottom: 5px; /* Réduit pour remonter le logo */
       display: flex;
     }
 
@@ -90,11 +91,11 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO XXL - Presque bord à bord */
+    /* LOGO REMONTÉ */
     .radio-logo {
-      width: 310px; /* Augmenté pour toucher presque les bords */
+      width: 310px;
       max-width: 95%;
-      margin: 5px auto 10px;
+      margin: 0 auto; /* Margin supprimé pour coller à la bannière */
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
@@ -102,37 +103,67 @@
       z-index: 15;
     }
 
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
 
-    /* PLAYER CONTAINER OPTIMISÉ */
+    /* PLAYER CONTAINER - POCHETTE AGRANDIE */
     .player-container { 
       position: relative; 
       width: 100%;
-      margin: 0 auto;
+      margin: -10px auto 0; /* Remonte la pochette vers le logo */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
+    /* On cible l'image du lecteur spécifiquement pour la grossir */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.72); /* Légèrement réduit pour compenser la taille du logo */
-      transform-origin: top center;
-      margin-top: -10px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
-
-    #sc-player img {
-      width: 100%;
+    /* Le composant image du plugin */
+    #sc-player [class*="image"], #sc-player img {
+      width: 280px !important; /* Presque la largeur du logo (310px) */
+      height: 280px !important;
+      max-width: 85vw;
       border-radius: 25px !important;
       box-shadow: 0 10px 35px rgba(0,0,0,0.6);
       animation: music-beat 0.6s ease-in-out infinite alternate;
+      margin-bottom: -20px; /* Rapproche les contrôles de l'image */
+    }
+
+    /* MINI LECTEUR (CONTROLES) */
+    #sc-player [class*="controls"] {
+      transform: scale(0.65) !important; /* Taille réduite du lecteur */
+      margin-top: -35px !important; /* Remonte les boutons sur la pochette */
     }
 
     @keyframes music-beat {
       0% { transform: scale(1); filter: brightness(1); }
-      100% { transform: scale(1.03); filter: brightness(1.1); }
+      100% { transform: scale(1.02); filter: brightness(1.08); }
     }
 
-    /* DOUBLE EFFET BRILLANCE PLEIN ÉCRAN */
+    /* BOUTON PARTAGER REMONTÉ */
+    .share-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: -15px; /* Remonte juste en dessous du lecteur */
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s;
+      z-index: 25;
+    }
+
+    /* DOUBLE EFFET BRILLANCE */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -151,7 +182,6 @@
       animation: shine-animation 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Deuxième brillance décalée */
     .shine-overlay.delayed {
       animation-delay: 2s;
       background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 70%);
@@ -160,23 +190,6 @@
     @keyframes shine-animation {
       0% { transform: translateX(-100%) rotate(25deg); }
       100% { transform: translateX(100%) rotate(25deg); }
-    }
-
-    /* BOUTON PARTAGER */
-    .share-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: bold;
-      margin: 0 auto 10px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      transition: all 0.3s;
-      z-index: 15;
     }
 
     /* POPUP INSTALLATION */
@@ -194,13 +207,12 @@
       z-index: 9999;
       color: white;
       text-align: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
       display: none;
     }
 
     @media (max-width:480px){
-      #sc-player { transform: scale(0.72); }
-      .radio-logo { width: 92%; }
+      .radio-logo { width: 90%; }
+      #sc-player [class*="image"], #sc-player img { width: 75vw !important; height: 75vw !important; }
     }
   </style>
 </head>
@@ -224,12 +236,12 @@
 
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
+        
+        <button class="share-btn" onclick="shareRadio()">
+          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="vertical-align: middle; margin-right: 8px;">
+          Partager la radio
+        </button>
       </div>
-
-      <button class="share-btn" onclick="shareRadio()">
-        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="vertical-align: middle; margin-right: 8px;">
-        Partager la radio
-      </button>
     </div>
 
     <div id="install-pwa-popup">
@@ -238,8 +250,8 @@
         <div id="ios-instructions" style="display: none;">
           Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="18" style="vertical-align: middle;"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
-        <button id="android-install-btn" style="display: none;">Installer maintenant</button>
-        <button onclick="closePopup()" class="close-btn" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:10px; cursor:pointer; width:100%;">Pas maintenant</button>
+        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
+        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:10px; cursor:pointer; width:100%;">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -284,15 +296,12 @@
         }
       }
     }
-
     setTimeout(showPopup, 4000);
-
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       showPopup();
     });
-
     btnAndroid.addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -301,7 +310,6 @@
         deferredPrompt = null;
       }
     });
-
     function closePopup() { popup.style.display = 'none'; }
   </script>
 
