@@ -33,7 +33,7 @@
     .player-card {
       background: transparent;
       border-radius: 22px;
-      padding: 12px 16px 20px 16px;
+      padding: 10px 16px 20px 16px;
       text-align: center;
       position: relative;
       box-shadow: 0 12px 28px rgba(0,0,0,0.35);
@@ -67,7 +67,7 @@
       background: rgba(0,0,0,0.35);
       border-radius: 14px;
       padding: 6px 0;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -91,17 +91,17 @@
 
     /* LOGO */
     .radio-logo {
-      width: 190px; /* légèrement plus grand */
+      width: 200px; /* légèrement plus grand */
       max-width: 90%;
-      margin: 0 auto 10px;
+      margin: 6px auto 12px; /* remonter logo sous bannière mais avec un petit espace */
       display: block;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
     }
 
     /* PLAYER */
     #sc-player {
-      background: transparent !important; /* fond transparent */
-      margin-top: 8px;
+      background: transparent !important;
+      margin-top: 6px; /* remonter player sous logo */
     }
 
     /* SUPPRESSION FOND DANS LE PLAYER */
@@ -128,13 +128,13 @@
     /* MOBILE */
     @media (max-width: 480px) {
       .radio-logo {
-        width: 170px;
+        width: 180px;
       }
       .radio-ticker span {
         font-size: 11px;
       }
       .player-card {
-        padding: 10px 12px 16px 12px;
+        padding: 8px 12px 14px 12px;
       }
       #sc-player img {
         border-radius: 14px;
