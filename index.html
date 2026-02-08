@@ -134,9 +134,6 @@
       .player-card{padding:3px 6px 5px 6px;}
       #sc-player{transform:scale(0.8);}
       .shine-overlay,.shine-overlay2{border-radius:12px;}
-      #sc-player .sc-title,
-      #sc-player .sc-current-time,
-      #sc-player .sc-duration{font-size:10px !important;}
     }
   </style>
 </head>
@@ -182,31 +179,38 @@
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
-  <!-- SCRIPT POUR AJUSTER LE PLAYER -->
+  <!-- SCRIPT ROBUSTE POUR AJUSTER LE LECTEUR -->
   <script>
     function ajusterLecteur() {
       const player = document.querySelector('#sc-player');
       if(!player) return;
 
-      // Masquer "mp3 128Kbps"
-      const bitrate = player.querySelector('[data-bitrate]');
-      if(bitrate) bitrate.style.display = 'none';
+      // Supprimer tout élément contenant "mp3" (peu importe la classe)
+      player.querySelectorAll('*').forEach(el => {
+        if(el.textContent && el.textContent.toLowerCase().includes('mp3')) {
+          el.style.display = 'none';
+        }
+      });
 
       // Remonter titre et timing
-      const title = player.querySelector('.sc-title');
-      const currentTime = player.querySelector('.sc-current-time');
-      const duration = player.querySelector('.sc-duration');
+      const titre = player.querySelector('h3, .sc-title, span.title');
+      const currentTime = player.querySelector('.sc-current-time, span.current-time');
+      const duration = player.querySelector('.sc-duration, span.duration');
 
-      if(title) title.style.marginTop = '6px';
-      if(title) title.style.textAlign = 'center';
+      if(titre){
+        titre.style.marginTop = '6px';
+        titre.style.textAlign = 'center';
+        titre.style.color = '#ffffff';
+        titre.style.fontWeight = 'bold';
+      }
       if(currentTime) currentTime.style.textAlign = 'center';
       if(duration) duration.style.textAlign = 'center';
     }
 
-    // Vérifier toutes les 200ms tant que le player n'est pas prêt
+    // Vérification toutes les 200ms tant que le player n'est pas complètement chargé
     const interval = setInterval(() => {
       const player = document.querySelector('#sc-player');
-      if(player && player.querySelector('.sc-title')) {
+      if(player && player.querySelector('*')) {
         clearInterval(interval);
         ajusterLecteur();
       }
