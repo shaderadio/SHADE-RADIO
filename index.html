@@ -2,13 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
   
-  <meta name="theme-color" content="#7a0000">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#6b0000"> <meta name="apple-mobile-web-app-capable" content="yes">
+  
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
+  
   <link rel="apple-touch-icon" href="assets/logo.PNG">
   <link rel="manifest" href="manifest.json">
 
@@ -22,38 +23,43 @@
     }
 
     body {
+      /* Le dégradé couvre maintenant 100% de l'écran, même sous la barre de statut */
       background: linear-gradient(160deg, #6b0000, #c40000);
+      background-attachment: fixed;
+      
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
       overflow: hidden; 
-      padding-top: 6px;
-      overscroll-behavior-y: contain; /* Empêche le rebond Safari */
-      user-select: none; /* Évite la sélection de texte accidentelle */
+      
+      /* Gère l'espace pour l'heure/batterie sur iPhone avec encoche */
+      padding-top: env(safe-area-inset-top, 20px); 
+      
+      overscroll-behavior-y: contain;
+      user-select: none;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 6px; }
+    #app { width: 100%; max-width: 360px; padding: 0 10px; }
 
     .player-card {
       background: transparent;
       border-radius: 20px;
-      padding: 4px 6px 8px 6px;
+      padding: 10px 6px 8px 6px;
       text-align: center;
       position: relative;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
 
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 4px;
-      left: 4px;
+      top: 15px; /* Ajusté pour ne pas coller au bord haut transparent */
+      left: 10px;
       background: #ff0000;
       color: #fff;
       font-size: 10px;
       font-weight: bold;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
       z-index: 10;
@@ -71,48 +77,42 @@
       overflow: hidden;
       background: rgba(0,0,0,0.35);
       border-radius: 10px;
-      padding: 3px 0;
-      margin-bottom: 4px;
+      padding: 4px 0;
+      margin-bottom: 8px;
+      margin-top: 15px; /* Espace pour le badge live */
       display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .radio-ticker span {
       display: inline-block;
       white-space: nowrap;
       padding-left: 100%;
-      animation: shade-scroll 10s linear infinite;
+      animation: shade-scroll 12s linear infinite;
       color: #ffffff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.3px;
     }
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
     /* LOGO */
     .radio-logo {
-      width: 180px;
-      max-width: 85%;
-      margin: 4px auto 6px;
+      width: 170px;
+      max-width: 80%;
+      margin: 10px auto 15px;
       display: block;
-      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
       animation: logo-float 2s ease-in-out infinite alternate;
-      transition: transform 0.3s ease;
     }
 
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
-    .radio-logo:hover { transform: scale(1.05); }
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
 
-    /* PLAYER CONTAINER POUR BRILLANCE */
-    .player-container { position: relative; }
+    /* PLAYER CONTAINER */
+    .player-container { position: relative; width: 100%; }
 
-    /* PLAYER */
     #sc-player {
       background: transparent !important;
-      margin-top: 2px;
-      transform: scale(0.78);
+      transform: scale(0.85);
       transform-origin: top center;
     }
 
@@ -121,63 +121,40 @@
     /* POCHETTE */
     #sc-player img {
       width: 100%;
-      border-radius: 30px !important;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 25px !important;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.6);
     }
 
     #sc-player img.pulse {
-      animation: pulse-cover 1.5s infinite ease-in-out;
+      animation: pulse-cover 2s infinite ease-in-out;
     }
 
     @keyframes pulse-cover {
-      0% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-      50% { transform: scale(1.03); box-shadow: 0 12px 50px rgba(0,0,0,0.7); }
-      100% { transform: scale(1); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
     }
 
-    /* CALQUES DE BRILLANCE */
+    /* BRILLANCE */
     .shine-overlay, .shine-overlay2 {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       pointer-events: none;
-      background: linear-gradient(
-        120deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.25) 50%,
-        rgba(255,255,255,0) 100%
-      );
+      background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
       transform: translateX(-100%) rotate(25deg);
-      border-radius: 30px;
-      opacity: 0.6;
+      border-radius: 25px;
     }
+    .shine-overlay { animation: shine 3s linear infinite; }
+    @keyframes shine { 0% {transform:translateX(-150%) rotate(25deg);} 100% {transform:translateX(150%) rotate(25deg);} }
 
-    .shine-overlay { animation: shine1 2.5s linear infinite alternate; }
-    .shine-overlay2 { animation: shine2 3.5s linear infinite alternate; opacity: 0.4; }
+    /* TEXTES PLAYER */
+    #sc-player .sc-title { color: #ffffff !important; font-size: 16px !important; margin-top: 10px !important; }
+    #sc-player .sc-current-time { color: #ffffff !important; opacity: 0.8; }
 
-    @keyframes shine1 { 0%{transform:translateX(-100%) rotate(25deg); opacity:0.3;} 50%{opacity:0.6;} 100%{transform:translateX(100%) rotate(25deg); opacity:0.3;} }
-    @keyframes shine2 { 0%{transform:translateX(-120%) rotate(25deg); opacity:0.2;} 50%{opacity:0.5;} 100%{transform:translateX(120%) rotate(25deg); opacity:0.2;} }
-
-    /* CENTRER TITRE ET TIMING */
-    #sc-player .sc-title,
-    #sc-player .sc-current-time,
-    #sc-player .sc-duration {
-      display: block !important;
-      text-align: center !important;
-      color: #ffffff !important;
-      margin: 4px auto !important;
-      font-weight: bold;
-    }
-
-    /* MOBILE */
+    /* RESPONSIVE */
     @media (max-width:480px){
-      .radio-logo{width:150px;}
-      .radio-ticker span{font-size:9px;}
-      .player-card{padding:3px 6px 5px 6px;}
-      #sc-player{transform:scale(0.75);}
-      #sc-player img { border-radius: 20px !important; }
-      .shine-overlay,.shine-overlay2{border-radius:20px;}
+      #sc-player { transform: scale(0.82); }
+      .radio-logo { width: 140px; }
     }
   </style>
 </head>
@@ -215,7 +192,6 @@
              player-width="100%">
         </div>
         <div class="shine-overlay"></div>
-        <div class="shine-overlay2"></div>
       </div>
 
     </div>
@@ -224,17 +200,19 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Enregistrement du Service Worker pour le mode PWA
+    // Activation PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+        navigator.serviceWorker.register('sw.js').catch(() => {});
       });
     }
 
-    // Ajouter l'effet pulsation sur la pochette une fois chargée
+    // Effet pulsation pochette
     window.onload = () => {
-      const playerImg = document.querySelector('#sc-player img');
-      if(playerImg) playerImg.classList.add('pulse');
+      setTimeout(() => {
+        const playerImg = document.querySelector('#sc-player img');
+        if(playerImg) playerImg.classList.add('pulse');
+      }, 1000);
     };
   </script>
 
