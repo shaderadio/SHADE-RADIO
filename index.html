@@ -17,6 +17,7 @@
       min-height: 100vh;
       overflow: hidden; 
       padding-top: 6px;
+      position: relative;
     }
 
     #app { width: 100%; max-width: 360px; padding: 0 6px; }
@@ -28,6 +29,7 @@
       text-align: center;
       position: relative;
       box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      z-index: 10; /* au-dessus de la brillance page */
     }
 
     /* LIVE BADGE */
@@ -42,7 +44,7 @@
       padding: 2px 6px;
       border-radius: 20px;
       animation: pulse 1.5s infinite;
-      z-index: 10;
+      z-index: 20;
     }
 
     @keyframes pulse {
@@ -62,6 +64,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 15;
     }
 
     .radio-ticker span {
@@ -86,6 +89,8 @@
       filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
       transition: transform 0.3s ease;
+      z-index: 15;
+      position: relative;
     }
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-10px); } }
@@ -98,13 +103,15 @@
     #sc-player {
       background: transparent !important;
       margin-top: 2px;
-      transform: scale(0.78); /* Lecteur légèrement réduit */
+      transform: scale(0.78); /* Lecteur réduit */
       transform-origin: top center;
+      position: relative;
+      z-index: 15;
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* CALQUES DE BRILLANCE */
+    /* CALQUES DE BRILLANCE SUR POCHE ET PAGE */
     .shine-overlay, .shine-overlay2 {
       position: absolute;
       top: 0; left: 0;
@@ -119,6 +126,7 @@
       transform: translateX(-100%) rotate(25deg);
       border-radius: 14px;
       opacity: 0.6;
+      z-index: 15;
     }
 
     .shine-overlay { animation: shine1 2.5s linear infinite alternate; }
@@ -138,18 +146,46 @@
       font-weight: bold;
     }
 
+    /* BRILLANCE FULL PAGE */
+    .page-shine {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.15) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      transform: translateX(-100%) rotate(25deg);
+      z-index: 5; /* derrière le player */
+      animation: page-shine-anim 3s linear infinite;
+    }
+
+    @keyframes page-shine-anim {
+      0% { transform: translateX(-100%) rotate(25deg); opacity: 0.2; }
+      50% { opacity: 0.5; }
+      100% { transform: translateX(100%) rotate(25deg); opacity: 0.2; }
+    }
+
     /* MOBILE */
     @media (max-width:480px){
       .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
       .player-card{padding:3px 6px 5px 6px;}
-      #sc-player{transform:scale(0.75);} /* un peu plus petit sur mobile */
+      #sc-player{transform:scale(0.75);}
       .shine-overlay,.shine-overlay2{border-radius:12px;}
     }
   </style>
 </head>
 
 <body>
+
+  <!-- BRILLANCE FULL SCREEN -->
+  <div class="page-shine"></div>
 
   <div id="app">
     <div class="player-card">
