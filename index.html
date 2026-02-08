@@ -78,7 +78,7 @@
 
     /* LOGO */
     .radio-logo {
-      width: 200px;
+      width: 190px; /* légèrement réduit pour iPhone 17 */
       max-width: 85%;
       margin: 4px auto 6px;
       display: block;
@@ -97,7 +97,7 @@
     #sc-player {
       background: transparent !important;
       margin-top: 2px;
-      transform: scale(0.78);
+      transform: scale(0.68); /* légèrement réduit pour tenir sur iPhone 17 */
       transform-origin: top center;
     }
 
@@ -157,10 +157,10 @@
 
     /* MOBILE */
     @media (max-width:480px){
-      .radio-logo{width:160px;}
+      .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
       .player-card{padding:3px 6px 5px 6px;}
-      #sc-player{transform:scale(0.72);}
+      #sc-player{transform:scale(0.65);}
       #sc-player img { border-radius: 20px !important; }
       .shine-overlay,.shine-overlay2{border-radius:20px;}
     }
