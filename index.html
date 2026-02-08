@@ -43,13 +43,14 @@
       position: relative;
     }
 
-    /* CADRE ROUGE BORDEAUX */
+    /* CADRE ROUGE BORDEAUX PLUS COMPACT */
     .main-frame {
-      background: rgba(107, 0, 0, 0.85); /* Rouge Bordeaux avec légère transparence */
+      background: rgba(107, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 30px;
-      padding: 20px 10px;
-      margin-top: 15px;
+      padding: 15px 5px; /* Réduit pour s'ajuster à la taille réduite du contenu */
+      margin: 15px auto 0;
+      width: 260px; /* Largeur fixée pour bien cadrer le logo et la petite pochette */
       box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
       position: relative;
       z-index: 11;
@@ -64,7 +65,6 @@
       padding: 2px 8px; border-radius: 20px;
       animation: pulse 1.5s infinite;
       z-index: 20;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
 
     @keyframes pulse {
@@ -96,28 +96,30 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* LOGO */
+    /* LOGO HARMONISÉ */
     .radio-logo {
-      width: 200px; max-width: 85%;
+      width: 180px; 
       margin: 5px auto 10px;
       display: block;
       filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
     }
 
-    @keyframes logo-float { 
-      0% { transform: translateY(0px); } 
-      100% { transform: translateY(-8px); } 
-    }
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
 
-    /* PLAYER */
-    .player-container { position: relative; width: 100%; margin: 0 auto; }
+    /* LECTEUR RÉDUIT EN COHÉRENCE AVEC LE LOGO */
+    .player-container { 
+      position: relative; 
+      width: 100%; 
+      margin: 0 auto; 
+    }
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.85); /* Un peu plus grand pour remplir le cadre */
+      transform: scale(0.65); /* Taille réduite pour cohérence logo */
       transform-origin: top center;
-      margin-top: -5px;
+      margin-top: -10px;
+      height: 340px; /* Hauteur ajustée pour éviter les grands espaces vides */
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
@@ -125,8 +127,13 @@
     #sc-player img {
       width: 100%;
       border-radius: 20px !important;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.7);
       animation: music-beat 0.6s ease-in-out infinite alternate;
+    }
+
+    /* Rapprochement des contrôles du lecteur */
+    #sc-player [class*="controls"] {
+      margin-top: -40px !important; 
     }
 
     @keyframes music-beat {
@@ -163,14 +170,15 @@
       100% { transform: translateX(100%) rotate(25deg); }
     }
 
-    /* BOUTON PARTAGER */
+    /* BOUTON PARTAGER REMONTÉ */
     .share-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
       padding: 10px 20px; border-radius: 50px;
       font-size: 13px; font-weight: bold;
-      margin: 15px auto 10px; cursor: pointer;
+      margin: -60px auto 10px; /* Remonté pour compenser la réduction du lecteur */
+      cursor: pointer;
       display: inline-flex; align-items: center;
       transition: all 0.3s; position: relative; z-index: 30;
     }
@@ -215,6 +223,7 @@
           <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
         </div>
       </div>
+
       <button class="share-btn" onclick="shareRadio()">
         <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18" style="vertical-align: middle; margin-right: 8px;">
         Partager la radio
