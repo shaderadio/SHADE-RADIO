@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
   
-  <meta name="theme-color" content="#6b0000"> <meta name="apple-mobile-web-app-capable" content="yes">
-  
+  <meta name="theme-color" content="#6b0000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
   
@@ -23,24 +23,19 @@
     }
 
     body {
-      /* Le dégradé couvre maintenant 100% de l'écran, même sous la barre de statut */
       background: linear-gradient(160deg, #6b0000, #c40000);
       background-attachment: fixed;
-      
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
       overflow: hidden; 
-      
-      /* Gère l'espace pour l'heure/batterie sur iPhone avec encoche */
       padding-top: env(safe-area-inset-top, 20px); 
-      
       overscroll-behavior-y: contain;
       user-select: none;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 10px; }
+    #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; height: 100vh; }
 
     .player-card {
       background: transparent;
@@ -53,7 +48,7 @@
     /* LIVE BADGE */
     .live-badge {
       position: absolute;
-      top: 15px; /* Ajusté pour ne pas coller au bord haut transparent */
+      top: 15px;
       left: 10px;
       background: #ff0000;
       color: #fff;
@@ -79,7 +74,7 @@
       border-radius: 10px;
       padding: 4px 0;
       margin-bottom: 8px;
-      margin-top: 15px; /* Espace pour le badge live */
+      margin-top: 15px;
       display: flex;
     }
 
@@ -107,7 +102,7 @@
 
     @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
 
-    /* PLAYER CONTAINER */
+    /* PLAYER */
     .player-container { position: relative; width: 100%; }
 
     #sc-player {
@@ -118,24 +113,17 @@
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
-    /* POCHETTE */
     #sc-player img {
       width: 100%;
       border-radius: 25px !important;
       box-shadow: 0 15px 45px rgba(0,0,0,0.6);
     }
 
-    #sc-player img.pulse {
-      animation: pulse-cover 2s infinite ease-in-out;
-    }
+    #sc-player img.pulse { animation: pulse-cover 2s infinite ease-in-out; }
 
-    @keyframes pulse-cover {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-    }
+    @keyframes pulse-cover { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 
-    /* BRILLANCE */
-    .shine-overlay, .shine-overlay2 {
+    .shine-overlay {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
@@ -143,13 +131,53 @@
       background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
       transform: translateX(-100%) rotate(25deg);
       border-radius: 25px;
+      animation: shine 3s linear infinite;
     }
-    .shine-overlay { animation: shine 3s linear infinite; }
     @keyframes shine { 0% {transform:translateX(-150%) rotate(25deg);} 100% {transform:translateX(150%) rotate(25deg);} }
 
-    /* TEXTES PLAYER */
-    #sc-player .sc-title { color: #ffffff !important; font-size: 16px !important; margin-top: 10px !important; }
-    #sc-player .sc-current-time { color: #ffffff !important; opacity: 0.8; }
+    /* POPUP INSTALLATION */
+    #install-pwa-popup {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 320px;
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid #7a0000;
+      border-radius: 15px;
+      padding: 15px;
+      z-index: 1000;
+      color: white;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+    }
+
+    .popup-content p { font-size: 14px; margin-bottom: 10px; font-weight: bold; }
+    #ios-instructions { font-size: 12px; color: #ccc; line-height: 1.5; }
+    #android-install-btn {
+      background: #c40000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    .close-btn {
+      background: transparent;
+      color: #888;
+      border: none;
+      font-size: 11px;
+      margin-top: 12px;
+      display: block;
+      width: 100%;
+      text-decoration: underline;
+      cursor: pointer;
+    }
 
     /* RESPONSIVE */
     @media (max-width:480px){
@@ -163,7 +191,6 @@
 
   <div id="app">
     <div class="player-card">
-
       <div class="live-badge">● LIVE</div>
 
       <div class="radio-ticker">
@@ -173,46 +200,80 @@
       <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
       <div class="player-container">
-        <div id="sc-player"
-             is="player"
-             lang="fr"
-             api-url="https://manager11.streamradio.fr:1700/api/v2"
-             server-id="1"
-             station-name="SHADE RADIO"
-             imagecontainer="top"
-             controlscontainer="bottom"
-             :show-history="false"
-             :show-share="false"
-             :show-dj="false"
-             :show-image="true"
-             :show-bitrate="false"
-             play-button-color="#ffffff"
-             :progress-show="true"
-             progress-bar-color="#ffffff"
-             player-width="100%">
-        </div>
+        <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="true" progress-bar-color="#ffffff" player-width="100%"></div>
         <div class="shine-overlay"></div>
       </div>
+    </div>
 
+    <div id="install-pwa-popup">
+      <div class="popup-content">
+        <p>Installer l'app SHADE RADIO</p>
+        <div id="ios-instructions" style="display: none;">
+          Appuyez sur <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="16" style="vertical-align: middle;"> puis sur <br><strong>"Sur l'écran d'accueil"</strong>
+        </div>
+        <button id="android-install-btn" style="display: none;">Installer maintenant</button>
+        <button onclick="closePopup()" class="close-btn">Plus tard</button>
+      </div>
     </div>
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Activation PWA
+    // 1. SERVICE WORKER
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(() => {});
       });
     }
 
-    // Effet pulsation pochette
+    // 2. LOGIQUE DE LA POPUP
+    let deferredPrompt;
+    const popup = document.getElementById('install-pwa-popup');
+    const btnAndroid = document.getElementById('android-install-btn');
+    const iosInstructions = document.getElementById('ios-instructions');
+
+    // Détection si déjà installé
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    if (!isStandalone) {
+      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      
+      // Affichage après 3 secondes pour laisser le temps au player de charger
+      setTimeout(() => {
+        if (isIos) {
+          popup.style.display = 'block';
+          iosInstructions.style.display = 'block';
+        }
+      }, 3000);
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        setTimeout(() => {
+          popup.style.display = 'block';
+          btnAndroid.style.display = 'inline-block';
+        }, 3000);
+      });
+    }
+
+    btnAndroid.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') popup.style.display = 'none';
+        deferredPrompt = null;
+      }
+    });
+
+    function closePopup() { popup.style.display = 'none'; }
+
+    // 3. EFFET PULSATION
     window.onload = () => {
       setTimeout(() => {
         const playerImg = document.querySelector('#sc-player img');
         if(playerImg) playerImg.classList.add('pulse');
-      }, 1000);
+      }, 1500);
     };
   </script>
 
