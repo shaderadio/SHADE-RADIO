@@ -7,7 +7,14 @@
   <meta name="theme-color" content="#7a0000">
 
   <style>
+    /* RESET & BASE */
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; }
+
+    html, body {
+      height: 100%;                /* S'assurer que body et html remplissent tout l'écran */
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       background: linear-gradient(160deg, #6b0000, #c40000);
@@ -15,12 +22,17 @@
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
-      overflow: hidden; 
-      padding-top: 6px;
+      padding: 0;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 6px; }
+    #app {
+      width: 100%;
+      max-width: 360px;
+      padding: 0 6px;
+      flex-grow: 1;                /* permet au contenu de pousser la hauteur si besoin */
+    }
 
+    /* PLAYER CARD */
     .player-card {
       background: transparent;
       border-radius: 20px;
@@ -158,6 +170,7 @@
 
     /* MOBILE */
     @media (max-width:480px){
+      html, body { height: 100vh; } /* s'assure que le fond couvre tout l'écran */
       .radio-logo{width:150px;}
       .radio-ticker span{font-size:9px;}
       .player-card{padding:3px 6px 5px 6px;}
@@ -169,7 +182,6 @@
 </head>
 
 <body>
-
   <div id="app">
     <div class="player-card">
 
@@ -215,6 +227,5 @@
     const playerImg = document.querySelector('#sc-player img');
     if(playerImg) playerImg.classList.add('pulse');
   </script>
-
 </body>
 </html>
