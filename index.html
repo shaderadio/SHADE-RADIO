@@ -27,7 +27,7 @@
       background-attachment: fixed;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center; /* Centré verticalement pour remplir l'écran */
       min-height: 100vh;
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
@@ -35,7 +35,8 @@
       user-select: none;
     }
 
-    #app { width: 100%; max-width: 360px; padding: 0 10px; position: relative; z-index: 10; }
+    /* Largeur max augmentée pour prendre plus de place */
+    #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
     .player-card {
       background: transparent;
@@ -48,9 +49,8 @@
       display: flex;
       align-items: center;
       background: rgba(0,0,0,0.45);
-      border-radius: 10px;
-      margin-top: 20px;
-      margin-bottom: 5px;
+      border-radius: 12px;
+      margin-bottom: 10px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
@@ -58,9 +58,9 @@
     .live-badge {
       background: #ff0000;
       color: #fff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: bold;
-      padding: 8px 12px;
+      padding: 10px 15px;
       animation: pulse 1.5s infinite;
       white-space: nowrap;
     }
@@ -74,7 +74,7 @@
     .radio-ticker {
       flex: 1;
       overflow: hidden;
-      padding: 6px 0;
+      padding: 8px 0;
       display: flex;
     }
 
@@ -84,55 +84,55 @@
       padding-left: 100%;
       animation: shade-scroll 12s linear infinite;
       color: #ffffff;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
     }
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* CADRE PRINCIPAL */
+    /* CADRE PRINCIPAL AGRANDI */
     .main-frame {
       background: rgba(107, 0, 0, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 15px 5px;
-      margin: 15px auto 0;
-      width: 260px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
+      border-radius: 40px;
+      padding: 25px 10px;
+      margin: 10px auto;
+      width: 320px; /* Augmenté de 260px */
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.3);
       position: relative;
       z-index: 11;
     }
 
     .radio-logo {
-      width: 170px; 
-      margin: 5px auto 5px;
+      width: 210px; /* Augmenté de 170px */
+      margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
       animation: logo-float 2s ease-in-out infinite alternate;
     }
 
-    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-6px); } }
+    @keyframes logo-float { 0% { transform: translateY(0px); } 100% { transform: translateY(-8px); } }
 
-    /* PLAYER */
+    /* PLAYER AGRANDI */
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
     #sc-player {
       background: transparent !important;
-      transform: scale(0.65);
+      transform: scale(0.8); /* Augmenté de 0.65 */
       transform-origin: top center;
-      margin-top: -10px;
-      height: 290px;
+      margin-top: 0px;
+      height: 340px; /* Ajusté pour l'échelle */
     }
 
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     #sc-player img {
       width: 100%;
-      border-radius: 20px !important;
-      box-shadow: 0 12px 25px rgba(0,0,0,0.7);
+      border-radius: 25px !important;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.7);
     }
 
-    /* SUPPRESSION DÉFINITIVE DU TIMING ET DU BITRATE (128kbps) */
+    /* NETTOYAGE LECTEUR */
     #sc-player [class*="progress"], 
     #sc-player [class*="time"], 
     #sc-player [class*="duration"],
@@ -144,11 +144,10 @@
       opacity: 0 !important;
     }
 
-    /* TITRE ET ARTISTE PLUS GROS */
     #sc-player [class*="title"] {
       display: block !important;
       color: #ffffff !important;
-      font-size: 24px !important; /* Taille augmentée */
+      font-size: 26px !important; 
       font-weight: 800 !important;
       margin-top: 15px !important;
       text-transform: uppercase;
@@ -158,14 +157,14 @@
     #sc-player [class*="artist"] {
       display: block !important;
       color: rgba(255,255,255,0.7) !important;
-      font-size: 16px !important; /* Taille augmentée */
+      font-size: 18px !important;
       margin-top: 5px !important;
       margin-bottom: 10px !important;
     }
 
     #sc-player [class*="play-button"], #sc-player svg {
-      transform: scale(0.8) !important;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)) !important;
+      transform: scale(0.9) !important;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)) !important;
     }
 
     /* BOUTON PARTAGER */
@@ -173,14 +172,16 @@
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      padding: 10px 20px; border-radius: 50px;
-      font-size: 13px; font-weight: bold;
-      margin: -15px auto 20px; 
+      padding: 12px 25px; border-radius: 50px;
+      font-size: 14px; font-weight: bold;
+      margin: 10px auto 20px; 
       cursor: pointer;
       display: inline-flex; align-items: center;
       transition: all 0.3s; position: relative; z-index: 30;
+      backdrop-filter: blur(5px);
     }
 
+    /* EFFETS */
     .shine-wrapper {
       position: fixed;
       top: 0; left: 0;
@@ -208,7 +209,7 @@
       position: fixed;
       bottom: 25px; left: 50%;
       transform: translateX(-50%);
-      width: 90%; max-width: 340px;
+      width: 90%; max-width: 360px;
       background: #1a1a1a;
       border: 1px solid #7a0000;
       border-radius: 20px;
@@ -217,6 +218,7 @@
       color: white;
       text-align: center;
       display: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
   </style>
 </head>
