@@ -112,7 +112,6 @@
       100% { transform: translate(0, 0); }
     }
 
-    /* --- ONDES SONORES D'ORIGINE --- */
     .waves-bg {
       position: absolute;
       top: 155px; 
@@ -141,7 +140,6 @@
       50% { opacity: 0.5; }
       100% { transform: scale(1.8); opacity: 0; }
     }
-    /* ------------------------------- */
 
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
@@ -198,7 +196,6 @@
       display: none !important; 
     }
 
-    /* CONTENEUR BOUTONS */
     .actions-box {
       display: flex;
       justify-content: center;
@@ -289,6 +286,38 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
+    // --- GESTION ANTI-VEILLE (Screen Wake Lock) ---
+    let wakeLock = null;
+
+    const requestWakeLock = async () => {
+      try {
+        // L'API n'est disponible que sur les navigateurs modernes en HTTPS (ou localhost)
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          console.log('Anti-veille activé !');
+          
+          // Si le verrou est libéré (ex: l'onglet change), on le relance quand l'onglet redevient actif
+          wakeLock.addEventListener('release', () => {
+            console.log('Verrou libéré');
+          });
+        }
+      } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+      }
+    };
+
+    // On active l'anti-veille lors d'un clic ou interaction (obligatoire pour le navigateur)
+    window.addEventListener('mousedown', requestWakeLock);
+    window.addEventListener('touchstart', requestWakeLock);
+
+    // On réactive automatiquement si l'utilisateur revient sur l'app
+    document.addEventListener('visibilitychange', async () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+      }
+    });
+
+    // --- AUTRES FONCTIONS ---
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
