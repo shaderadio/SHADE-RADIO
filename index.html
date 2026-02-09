@@ -112,6 +112,7 @@
       100% { transform: translate(0, 0); }
     }
 
+    /* ONDES SONORES */
     .waves-bg {
       position: absolute;
       top: 155px; 
@@ -153,47 +154,17 @@
       z-index: 2;
     }
 
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; }
-
+    /* Styles spécifiques pour forcer le lecteur radio */
     #sc-player img {
-      width: 100%;
+      width: 100% !important;
       border-radius: 20px !important;
       animation: pochette-fx 3s ease-in-out infinite;
     }
 
     @keyframes pochette-fx {
-      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 0px rgba(107, 0, 0, 0); }
-      50% { box-shadow: 0 0 25px 5px #6b0000, 0 0 40px 10px rgba(158, 0, 0, 0.6), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.02); }
-      60% { box-shadow: 0 0 15px 2px #6b0000, 0 0 20px 5px rgba(158, 0, 0, 0.4), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1); }
-      70% { box-shadow: 0 0 35px 8px #6b0000, 0 0 50px 15px rgba(158, 0, 0, 0.7), 0 15px 30px rgba(0,0,0,0.7); transform: scale(1.03); }
-      80%, 100% { box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 0px rgba(107, 0, 0, 0); transform: scale(1); }
-    }
-
-    #sc-player [class*="title"] {
-      display: block !important;
-      color: #ffffff !important;
-      font-size: 26px !important; 
-      font-weight: 800 !important;
-      margin-top: 15px !important;
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-
-    #sc-player [class*="artist"] {
-      display: block !important;
-      color: rgba(255,255,255,0.7) !important;
-      font-size: 18px !important;
-      padding-bottom: 10px;
-    }
-
-    #sc-player [class*="play-button"], #sc-player svg {
-      transform: scale(0.75) !important;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) !important;
-      margin-top: 5px !important;
-    }
-
-    #sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] { 
-      display: none !important; 
+      0%, 40% { box-shadow: 0 15px 30px rgba(0,0,0,0.7); }
+      50% { transform: scale(1.02); box-shadow: 0 0 25px 5px #6b0000; }
+      100% { transform: scale(1); }
     }
 
     .actions-box {
@@ -215,6 +186,15 @@
       backdrop-filter: blur(5px);
     }
 
+    /* POPUP PWA */
+    #install-pwa-popup {
+      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+      width: 90%; max-width: 360px; background: #1a1a1a;
+      border: 1px solid #7a0000; border-radius: 20px; padding: 20px;
+      z-index: 9999; color: white; text-align: center; display: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
     .shine-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; overflow: hidden; }
     .shine-layer {
       position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -223,13 +203,6 @@
       animation: full-shine 4s infinite linear;
     }
     @keyframes full-shine { 0% { transform: translateX(-100%) rotate(25deg); } 100% { transform: translateX(100%) rotate(25deg); } }
-
-    #install-pwa-popup {
-      position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-      width: 90%; max-width: 360px; background: #1a1a1a;
-      border: 1px solid #7a0000; border-radius: 20px; padding: 20px;
-      z-index: 9999; color: white; text-align: center; display: none;
-    }
   </style>
 </head>
 
@@ -260,12 +233,12 @@
 
       <div class="actions-box">
         <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Bonjour Shade Radio, j\'aimerais écouter :'">
-          <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes.png" width="16" style="margin-right: 8px;">
+          <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes.png" width="16" style="margin-right: 8px;" alt="icon">
           Demander un titre
         </button>
 
         <button class="btn-custom" onclick="shareRadio()">
-          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="margin-right: 8px;">
+          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="16" style="margin-right: 8px;" alt="icon">
           Partager
         </button>
       </div>
@@ -273,12 +246,15 @@
 
     <div id="install-pwa-popup">
       <div class="popup-content">
-        <p>Installer l'application SHADE RADIO</p>
-        <div id="ios-instructions" style="display: none;">
-          Appuyez sur le bouton de partage <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
+        <p style="margin-bottom: 15px; font-weight: bold;">Installer l'application SHADE RADIO</p>
+        
+        <div id="ios-instructions" style="display: none; font-size: 14px; line-height: 1.4;">
+          Appuyez sur le bouton de partage <img src="https://img.icons8.com/ios/50/ffffff/export.png" width="18" style="vertical-align:middle"> <br> puis sélectionnez <br> <strong>"Sur l'écran d'accueil"</strong>
         </div>
-        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px;">Installer maintenant</button>
-        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:15px; cursor:pointer;">Pas maintenant</button>
+
+        <button id="android-install-btn" style="display: none; background: #c40000; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer;">Installer maintenant</button>
+        
+        <button onclick="closePopup()" style="background:none; border:none; color:#777; text-decoration:underline; margin-top:15px; cursor:pointer; font-size: 12px;">Pas maintenant</button>
       </div>
     </div>
   </div>
@@ -286,61 +262,67 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // --- GESTION ANTI-VEILLE (Screen Wake Lock) ---
-    let wakeLock = null;
-
-    const requestWakeLock = async () => {
-      try {
-        // L'API n'est disponible que sur les navigateurs modernes en HTTPS (ou localhost)
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen');
-          console.log('Anti-veille activé !');
-          
-          // Si le verrou est libéré (ex: l'onglet change), on le relance quand l'onglet redevient actif
-          wakeLock.addEventListener('release', () => {
-            console.log('Verrou libéré');
-          });
-        }
-      } catch (err) {
-        console.error(`${err.name}, ${err.message}`);
-      }
-    };
-
-    // On active l'anti-veille lors d'un clic ou interaction (obligatoire pour le navigateur)
-    window.addEventListener('mousedown', requestWakeLock);
-    window.addEventListener('touchstart', requestWakeLock);
-
-    // On réactive automatiquement si l'utilisateur revient sur l'app
-    document.addEventListener('visibilitychange', async () => {
-      if (wakeLock !== null && document.visibilityState === 'visible') {
-        await requestWakeLock();
-      }
-    });
-
-    // --- AUTRES FONCTIONS ---
+    // --- PARTAGE ---
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
+      } else {
+        alert("Le partage n'est pas supporté sur ce navigateur.");
       }
     }
 
+    // --- LOGIQUE PWA ---
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
+    const androidBtn = document.getElementById('android-install-btn');
+    const iosText = document.getElementById('ios-instructions');
 
-    function showPopup() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    // 1. Détecter si on est déjà en mode "App"
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    // 2. Événement spécifique Android/Chrome
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); // Empêche la bannière par défaut
+      deferredPrompt = e; // On garde l'événement sous le coude
+      
       if (!isStandalone) {
-        popup.style.display = 'block';
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          document.getElementById('ios-instructions').style.display = 'block';
-        } else {
-          document.getElementById('android-install-btn').style.display = 'block';
-        }
+        showPopup('android');
+      }
+    });
+
+    function showPopup(platform) {
+      popup.style.display = 'block';
+      if (platform === 'android') {
+        androidBtn.style.display = 'block';
+        iosText.style.display = 'none';
+      } else if (platform === 'ios') {
+        iosText.style.display = 'block';
+        androidBtn.style.display = 'none';
       }
     }
-    setTimeout(showPopup, 4000);
-    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; showPopup(); });
-    function closePopup() { popup.style.display = 'none'; }
+
+    // 3. Action du bouton Android
+    androidBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt(); // Affiche le vrai système d'installation
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Résultat installation : ${outcome}`);
+        deferredPrompt = null;
+        closePopup();
+      }
+    });
+
+    // 4. Détection iOS manuelle (car pas d'événement auto)
+    setTimeout(() => {
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isiOS && !isStandalone && popup.style.display !== 'block') {
+        showPopup('ios');
+      }
+    }, 3000);
+
+    function closePopup() { 
+      popup.style.display = 'none'; 
+    }
   </script>
 </body>
 </html>
