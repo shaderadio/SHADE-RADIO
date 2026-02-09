@@ -78,16 +78,12 @@
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
     .main-frame {
-      background: rgba(107, 0, 0, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 40px;
-      padding: 30px 10px 10px 10px; 
-      margin: 10px auto;
+      background: transparent; /* Suppression du cadre gris */
+      padding: 10px; 
+      margin: 0 auto;
       width: 320px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 25px rgba(0,0,0,0.3);
       position: relative;
       z-index: 11;
-      overflow: hidden; 
     }
 
     .radio-logo {
@@ -104,11 +100,6 @@
       60% { transform: translate(-2px, 2px); }
       65% { transform: translate(2px, 2px); filter: brightness(1.2); }
       70% { transform: translate(-2px, -2px); }
-      75% { transform: translate(2px, 0px); }
-      80% { transform: translate(-2px, 1px); filter: brightness(1.5) drop-shadow(0 0 10px #ff0000); }
-      85% { transform: translate(1px, -1px); }
-      90% { transform: translate(-1px, 2px); }
-      95% { transform: translate(1px, 1px); }
       100% { transform: translate(0, 0); }
     }
 
@@ -143,15 +134,17 @@
 
     .player-container { position: relative; width: 100%; margin: 0 auto; }
 
+    /* Correction du lecteur pour supprimer tout fond résiduel */
     #sc-player {
       background: transparent !important;
-      transform: scale(0.7); 
+      transform: scale(0.75); 
       transform-origin: top center;
-      margin-top: 5px;
       height: 380px;
       position: relative;
       z-index: 2;
     }
+
+    #sc-player * { background: transparent !important; box-shadow: none !important; }
 
     #sc-player img {
       width: 100%;
@@ -169,7 +162,7 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin: 15px auto 20px;
+      margin: 0 auto 20px;
       flex-wrap: wrap;
     }
 
@@ -205,7 +198,6 @@
     .popup-content p { font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #fff; }
     .instruction-text { font-size: 14px; line-height: 1.6; color: #ccc; }
     .instruction-text strong { color: #fff; }
-    .icon-inline { vertical-align: middle; margin: 0 3px; }
   </style>
 </head>
 
@@ -248,13 +240,11 @@
         <p>SHADE RADIO sur votre mobile</p>
         
         <div id="ios-instructions" class="instruction-text" style="display: none;">
-          Appuyez sur <img src="https://img.icons8.com/ios/50/ffffff/export.png" width="18" class="icon-inline"> 
-          puis sur <br><strong>"Sur l'écran d'accueil"</strong> pour installer l'application.
+          Appuyez sur <strong>Partager</strong> <br> puis sur <strong>"Sur l'écran d'accueil"</strong> <br> pour installer l'application.
         </div>
 
         <div id="android-instructions" class="instruction-text" style="display: none;">
-          Appuyez sur les <img src="https://img.icons8.com/material-rounded/24/ffffff/menu-2.png" width="18" class="icon-inline"> 
-          (options) du navigateur puis sur <br><strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.
+          Appuyez sur <strong>Partager</strong> (ou les trois points en haut) <br> puis sur <strong>"Installer l'application"</strong> <br> ou <strong>"Ajouter à l'écran d'accueil"</strong>.
         </div>
 
         <button onclick="closePopup()" style="background:none; border:none; color:#c40000; text-decoration:none; margin-top:20px; cursor:pointer; font-weight:bold; font-size: 14px;">FERMER</button>
@@ -265,38 +255,21 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // --- PARTAGE ---
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
 
-    // --- ANTI-VEILLE ---
-    let wakeLock = null;
-    const requestWakeLock = async () => {
-      try {
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen');
-        }
-      } catch (err) { console.log(err); }
-    };
-    window.addEventListener('mousedown', requestWakeLock);
-    window.addEventListener('touchstart', requestWakeLock);
-
-    // --- LOGIQUE POP-UP ---
     const popup = document.getElementById('install-pwa-popup');
     const iosUI = document.getElementById('ios-instructions');
     const androidUI = document.getElementById('android-instructions');
 
     function showPopup() {
-      // Vérifie si l'app est déjà installée
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      
       if (!isStandalone) {
         popup.style.display = 'block';
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
         if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
           iosUI.style.display = 'block';
         } else {
@@ -305,12 +278,8 @@
       }
     }
 
-    // Affichage auto après 5 secondes
     setTimeout(showPopup, 5000);
-
-    function closePopup() { 
-      popup.style.display = 'none'; 
-    }
+    function closePopup() { popup.style.display = 'none'; }
   </script>
 </body>
 </html>
