@@ -18,7 +18,6 @@
   padding:0;
   box-sizing:border-box;
   font-family:Arial, Helvetica, sans-serif;
-  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
@@ -28,19 +27,26 @@ html,body{
   overflow:hidden;
 }
 
-/* ===== SMOKE CINEMATIQUE ===== */
-.smoke{
+/* ===== FUMÉE CINÉMATIQUE PURE CSS ===== */
+body::before,
+body::after{
+  content:"";
   position:fixed;
-  inset:0;
-  background:url("https://i.ibb.co/7vDLJFb/smoke.png") repeat;
-  opacity:0.15;
-  animation:smokeMove 60s linear infinite;
+  inset:-50%;
+  background:radial-gradient(circle at 30% 40%, rgba(255,0,0,0.15), transparent 60%),
+             radial-gradient(circle at 70% 60%, rgba(120,0,0,0.2), transparent 70%);
+  animation:smokeMove 25s linear infinite;
   z-index:0;
 }
 
+body::after{
+  animation-direction:reverse;
+  animation-duration:35s;
+}
+
 @keyframes smokeMove{
-  from{background-position:0 0;}
-  to{background-position:1000px -1000px;}
+  from{transform:translate(0,0) rotate(0deg);}
+  to{transform:translate(10%,10%) rotate(360deg);}
 }
 
 /* ===== LAYOUT APP ===== */
@@ -52,7 +58,7 @@ html,body{
   flex-direction:column;
   justify-content:space-between;
   align-items:center;
-  padding:30px 20px 40px;
+  padding:40px 20px;
   text-align:center;
 }
 
@@ -63,30 +69,35 @@ html,body{
   filter:drop-shadow(0 0 25px rgba(255,0,0,0.5));
 }
 
-/* POCHETTE */
-#sc-player img{
-  width:140px !important;
-  height:140px !important;
-  border-radius:20px !important;
-  box-shadow:0 10px 30px rgba(0,0,0,0.8);
-}
-
-/* SUPPRESSION CADRE GRIS */
-#sc-player,
-#sc-player *{
+/* PLAYER CUSTOM CLEAN */
+#sc-player{
   background:transparent !important;
   box-shadow:none !important;
   border:none !important;
 }
 
-/* CACHER PLAY NATIF */
-#sc-player button{
+#sc-player img{
+  width:150px !important;
+  height:150px !important;
+  border-radius:20px !important;
+  box-shadow:0 15px 40px rgba(0,0,0,0.8);
+}
+
+/* Supprime cadre gris */
+#sc-player [class*="container"],
+#sc-player [class*="wrapper"]{
+  background:transparent !important;
+  box-shadow:none !important;
+  border:none !important;
+}
+
+/* Cacher contrôles natifs */
+#sc-player [class*="controls"]{
   display:none !important;
 }
 
-/* BOUTON LIVE PRINCIPAL */
+/* BOUTON LIVE */
 .live-btn{
-  margin-top:20px;
   padding:18px 50px;
   border-radius:50px;
   background:linear-gradient(90deg,#ff0000,#8b0000);
@@ -102,18 +113,14 @@ html,body{
   transform:scale(0.95);
 }
 
-/* FOOTER */
 .footer{
   font-size:12px;
   opacity:0.6;
-  margin-top:20px;
 }
 </style>
 </head>
 
 <body>
-
-<div class="smoke"></div>
 
 <div class="app">
 
@@ -126,16 +133,19 @@ html,body{
       server-id="1"
       station-name="SHADE RADIO"
       imagecontainer="top"
-      controlscontainer="hidden"
+      controlscontainer="bottom"
       :show-history="false"
       :show-share="false"
       :show-dj="false"
       :show-image="true"
       :show-bitrate="false"
+      play-button-color="#ffffff"
+      :progress-show="false"
+      progress-bar-color="#ffffff"
       player-width="100%">
   </div>
 
-  <button class="live-btn" onclick="toggleRadio()" id="liveButton">
+  <button class="live-btn" onclick="togglePlay()" id="liveButton">
     🔴 ÉCOUTER EN LIVE
   </button>
 
@@ -148,25 +158,21 @@ html,body{
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
 <script>
-let isPlaying=false;
-
-function toggleRadio(){
-  const player=document.querySelector('#sc-player button');
-  if(player){
-    player.click();
+function togglePlay(){
+  const realButton = document.querySelector('#sc-player button');
+  if(realButton){
+    realButton.click();
   }
 
-  const btn=document.getElementById("liveButton");
+  const btn = document.getElementById("liveButton");
 
-  if(!isPlaying){
+  if(btn.innerText.includes("ÉCOUTER")){
     btn.innerHTML="⏸ COUPER LE LIVE";
-    btn.style.background="linear-gradient(90deg,#555,#222)";
+    btn.style.background="linear-gradient(90deg,#444,#111)";
   }else{
     btn.innerHTML="🔴 ÉCOUTER EN LIVE";
     btn.style.background="linear-gradient(90deg,#ff0000,#8b0000)";
   }
-
-  isPlaying=!isPlaying;
 }
 
 /* WAKE LOCK */
@@ -175,17 +181,10 @@ async function requestWakeLock(){
  if('wakeLock' in navigator){
    try{
      wakeLock=await navigator.wakeLock.request('screen');
-   }catch(err){}
+   }catch(e){}
  }
 }
 document.addEventListener("click",requestWakeLock);
-
-/* PWA INSTALL */
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt',(e)=>{
- e.preventDefault();
- deferredPrompt=e;
-});
 </script>
 
 </body>
