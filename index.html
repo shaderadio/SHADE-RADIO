@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
 
+<link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/current_track_widget/status_widget.css" />
+<script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
+
 <style>
 *{
   box-sizing:border-box;
@@ -21,7 +24,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== FOND SMOKY PREMIUM (Restauré) ===== */
+/* ===== FOND SMOKY PREMIUM ===== */
 body::before{
   content:"";
   position:fixed;
@@ -44,50 +47,45 @@ body::before{
 
 .hero{
   text-align:center;
-  padding:60px 20px 30px;
+  padding:40px 20px 20px;
 }
 
 .radio-logo{
-  width:90%;
-  max-width:420px;
+  width:80%;
+  max-width:300px;
   display:block;
-  margin:0 auto 40px;
+  margin:0 auto 30px;
   filter:drop-shadow(0 0 30px rgba(255,0,0,0.4));
 }
 
-/* ===== PLAYER RÉDUIT DE MOITIÉ (Propre) ===== */
-.player-wrapper{
-  margin: 20px auto;
-  max-width: 200px; /* Taille réduite demandée */
-}
-
-#sc-player{
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-#sc-player img{
-  border-radius:20px !important;
-  box-shadow:0 15px 40px rgba(0,0,0,0.8);
-}
-
-/* On cache les textes inutiles du lecteur */
-#sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] {
-  display:none !important;
-}
-
-/* ===== LE BOUTON LIVE (Avec Play intégré) ===== */
-.live-btn-container {
+/* ===== CONTENEUR NOUVELLE POCHETTE (Widget Statut) ===== */
+.status-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: -20px; /* On le remonte un peu vers la pochette */
+  margin-bottom: 30px;
 }
 
-/* On force le bouton play original à ressembler à ton bouton LIVE */
+/* On force le widget à être transparent et propre */
+.sc-status-widget {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* On ajuste l'image du widget */
+.sc-status-widget img {
+  border-radius: 15px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+/* ===== BOUTON PLAY (Restauré et stylisé) ===== */
+.player-container {
+  margin-bottom: 40px;
+}
+
 #sc-player [class*="play-button"] {
   position: relative !important;
   margin: 0 auto !important;
-  padding: 18px 50px !important;
+  padding: 16px 40px !important;
   border-radius: 50px !important;
   background: linear-gradient(90deg,#ff0000,#8b0000) !important;
   color: white !important;
@@ -96,24 +94,27 @@ body::before{
   text-decoration: none !important;
   box-shadow: 0 0 25px rgba(255,0,0,0.4) !important;
   cursor: pointer !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center;
-  justify-content: center;
   border: none !important;
-  min-width: 220px;
+  text-transform: uppercase;
 }
 
-/* On change le texte "Play" du bouton original par "ÉCOUTER EN LIVE" */
 #sc-player [class*="play-button"]::after {
   content: "ÉCOUTER EN LIVE";
   margin-left: 10px;
 }
 
+/* Masquer les éléments inutiles du player de contrôle */
+#sc-player img, #sc-player [class*="progress"], #sc-player [class*="time"] {
+  display: none !important;
+}
+
 .actions-box{
-  margin:40px 20px;
+  margin:20px 20px 80px;
   display:flex;
   flex-direction:column;
-  gap:15px;
+  gap:12px;
 }
 
 .btn-custom{
@@ -124,6 +125,7 @@ body::before{
   color:white;
   font-weight:bold;
   backdrop-filter:blur(6px);
+  cursor: pointer;
 }
 
 .bottom-live{
@@ -148,21 +150,39 @@ body::before{
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="player-wrapper">
+  <div class="status-wrapper">
+    <div style="width: 240px;">
+      <div class="sc-status-widget">
+        <div is="stream-status-widget" 
+          lang="fr" 
+          api-base="https://manager11.streamradio.fr:1700/api/v2" 
+          server-id="1" 
+          bgcolor="transparent"
+          border="none"
+          bgopacity="0"
+          meta_font_size="18"
+          meta_font_style="normal"
+          meta_font_color="#ffffff"
+          track_image_default="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png"
+          track_image_size="200"
+          vote_show="false">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="player-container">
     <div id="sc-player"
       is="player"
       lang="fr"
       api-url="https://manager11.streamradio.fr:1700/api/v2"
       server-id="1"
       station-name="SHADE RADIO"
-      imagecontainer="top"
-      controlscontainer="bottom"
+      :show-image="false"
       :show-history="false"
       :show-share="false"
       :show-dj="false"
-      :show-image="true"
       :show-bitrate="false"
-      play-button-color="#ffffff"
       :progress-show="false"
       player-width="100%">
     </div>
