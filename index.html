@@ -40,15 +40,7 @@
       z-index: -1;
     }
 
-    /* REMONTÉE DE TOUS LES ÉLÉMENTS */
-    #app { 
-      width: 100%; 
-      max-width: 420px; 
-      padding: 0 15px; 
-      position: relative; 
-      z-index: 10; 
-      margin-top: -60px; /* Ajuste ce chiffre pour remonter plus ou moins haut */
-    }
+    #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
     /* LOGO : ANIMATION SHADE EN BOUCLE */
     .radio-logo {
@@ -117,7 +109,7 @@
     #sc-player [class*="play-button"] { 
       background: linear-gradient(90deg, #ff0000, #8b0000) !important; 
       border-radius: 50px !important; 
-      transform: scale(0.7) !important; 
+      transform: scale(0.7) !important; /* Taille réduite ici */
       transform-origin: center !important;
       margin-top: 5px !important;
     }
