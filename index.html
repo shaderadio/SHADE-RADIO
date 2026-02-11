@@ -60,56 +60,60 @@ body::before{
 
 .radio-logo{
   width:80%;
-  max-width:300px; /* Logo légèrement réduit pour l'équilibre */
+  max-width:300px;
   display:block;
   margin:0 auto 30px;
   filter:drop-shadow(0 0 30px rgba(255,0,0,0.4));
 }
 
-/* ===== BOUTON LIVE ===== */
+/* ===== BOUTON LIVE (FAIT OFFICE DE PLAY) ===== */
 .live-btn{
   display:inline-block;
-  padding:14px 40px;
+  padding:16px 50px;
   border-radius:50px;
   background:linear-gradient(90deg,#ff0000,#8b0000);
   font-weight:bold;
-  font-size:14px;
+  font-size:16px;
   text-decoration:none;
   color:white;
   transition:0.3s;
-  box-shadow:0 0 20px rgba(255,0,0,0.3);
+  box-shadow:0 0 25px rgba(255,0,0,0.4);
+  cursor: pointer;
+  border: none;
 }
 
-/* ===== PLAYER RÉDUIT DE MOITIÉ ===== */
+.live-btn:active{
+  transform: scale(0.95);
+}
+
+/* ===== PLAYER RÉDUIT ===== */
 .player-wrapper{
   margin: 40px auto;
-  max-width: 200px; /* Taille de la pochette réduite de moitié */
+  max-width: 200px;
   padding-bottom: 20px;
 }
 
 #sc-player{
   background:transparent !important;
-  box-shadow:none !important;
 }
 
-/* On force la suppression du fond gris du widget */
-#sc-player, .sc-player-container, [class*="player"] {
-  background: transparent !important;
-  background-color: transparent !important;
+/* Rendre le bouton play original invisible mais présent */
+#sc-player [class*="play-button"], 
+#sc-player [class*="controls"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 #sc-player img{
   border-radius:15px !important;
   box-shadow:0 10px 30px rgba(0,0,0,0.8);
   width: 100% !important;
-  height: auto !important;
 }
 
-/* Nettoyage des éléments inutiles */
+/* Nettoyage */
 #sc-player [class*="progress"],
 #sc-player [class*="time"],
-#sc-player [class*="bitrate"],
-#sc-player [class*="share"]{
+#sc-player [class*="bitrate"]{
   display:none !important;
 }
 
@@ -128,9 +132,7 @@ body::before{
   border-radius:50px;
   color:white;
   font-weight:bold;
-  font-size: 14px;
   backdrop-filter:blur(6px);
-  cursor: pointer;
 }
 
 /* ===== LIVE BAR FIXE ===== */
@@ -142,15 +144,13 @@ body::before{
   padding:15px;
   text-align:center;
   font-weight:bold;
-  font-size: 14px;
-  letter-spacing:1px;
   z-index:1000;
 }
 
 /* ===== POPUP INSTALL ===== */
 #install-pwa-popup{
   position:fixed;
-  bottom:80px; /* Remonté pour ne pas chevaucher la barre fixe */
+  bottom:80px;
   left:50%;
   transform:translateX(-50%);
   width:90%;
@@ -176,7 +176,7 @@ body::before{
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <a href="#player" class="live-btn">ÉCOUTER EN LIVE</a>
+  <button onclick="triggerPlay()" class="live-btn">ÉCOUTER EN LIVE</button>
 
   <div class="player-wrapper" id="player">
     <div id="sc-player"
@@ -203,7 +203,6 @@ body::before{
     <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre'">
       🎵 Demander un titre
     </button>
-
     <button class="btn-custom" onclick="shareRadio()">
       📲 Partager
     </button>
@@ -217,30 +216,39 @@ body::before{
 <div id="install-pwa-popup">
   <p>Installer l'application SHADE RADIO</p>
   <div id="ios-instructions" style="display:none;">
-    Appuyez sur le bouton de partage puis sélectionnez
-    <strong>"Sur l'écran d'accueil"</strong>
+    Appuyez sur le bouton de partage puis sélectionnez <strong>"Sur l'écran d'accueil"</strong>
   </div>
-  <button id="android-install-btn" style="display:none;background:#c40000;color:white;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin-top:10px;">
-    Installer maintenant
-  </button>
-  <button onclick="closePopup()" style="background:none;border:none;color:#777;text-decoration:underline;margin-top:15px;cursor:pointer;">
-    Pas maintenant
-  </button>
+  <button id="android-install-btn" style="display:none;background:#c40000;color:white;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin-top:10px;">Installer maintenant</button>
+  <button onclick="closePopup()" style="background:none;border:none;color:#777;text-decoration:underline;margin-top:15px;">Pas maintenant</button>
 </div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
 <script>
+/* LIAISON BOUTON CUSTOM -> PLAYER */
+function triggerPlay() {
+  // On cherche le bouton play à l'intérieur du widget
+  const playBtn = document.querySelector('#sc-player [class*="play-button"]');
+  if(playBtn) {
+    playBtn.click();
+    // Optionnel : changer le texte du bouton après clic
+    const mainBtn = document.querySelector('.live-btn');
+    if (mainBtn.innerText === "ÉCOUTER EN LIVE") {
+        mainBtn.innerText = "CHARGEMENT...";
+        setTimeout(() => { mainBtn.innerText = "RADIO EN DIRECT"; }, 3000);
+    }
+  } else {
+    console.log("Le lecteur charge encore...");
+  }
+}
+
 /* WAKE LOCK */
 let wakeLock=null;
 const requestWakeLock=async()=>{
  if('wakeLock'in navigator){
-   try{
-     wakeLock=await navigator.wakeLock.request('screen');
-   }catch(e){}
+   try{ wakeLock=await navigator.wakeLock.request('screen'); }catch(e){}
  }
 };
-window.addEventListener('mousedown',requestWakeLock);
 window.addEventListener('touchstart',requestWakeLock);
 
 /* SHARE */
@@ -257,7 +265,6 @@ function shareRadio(){
 /* PWA */
 let deferredPrompt;
 const popup=document.getElementById('install-pwa-popup');
-
 function showPopup(){
  const isStandalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
  if(!isStandalone){
@@ -270,16 +277,7 @@ function showPopup(){
  }
 }
 setTimeout(showPopup,4000);
-
-window.addEventListener('beforeinstallprompt',(e)=>{
- e.preventDefault();
- deferredPrompt=e;
- showPopup();
-});
-
-function closePopup(){
- popup.style.display='none';
-}
+function closePopup(){ popup.style.display='none'; }
 </script>
 
 </body>
