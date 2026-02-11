@@ -41,41 +41,28 @@
       padding-top: env(safe-area-inset-top, 20px);
     }
 
-    /* BARRE DE NAVIGATION STYLE MIXRADIO */
+    /* BARRE DE NAVIGATION */
     .navbar {
       width: 100%;
       max-width: 1000px;
       padding: 20px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center; /* Centre le logo */
       align-items: center;
       z-index: 100;
     }
 
     .nav-logo {
-      height: 40px;
+      height: 45px;
       filter: drop-shadow(0 0 10px rgba(255,0,0,0.5));
     }
 
-    .social-links {
-      display: flex;
-      gap: 15px;
-    }
-
-    .social-links img {
-      width: 24px;
-      opacity: 0.8;
-      transition: 0.3s;
-    }
-
-    .social-links img:hover { opacity: 1; transform: scale(1.1); }
-
-    /* TICKER (BARRE DEFILANTE) */
+    /* TICKER */
     .ticker-wrap {
       width: 100%;
       background: rgba(0,0,0,0.3);
       padding: 10px 0;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       overflow: hidden;
       border-bottom: 1px solid var(--glass-border);
     }
@@ -98,8 +85,8 @@
     /* PLAYER CARD */
     #app { 
       width: 100%; 
-      max-width: 450px; 
-      padding: 20px;
+      max-width: 420px; 
+      padding: 15px;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
@@ -112,82 +99,73 @@
       -webkit-backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
       border-radius: 40px;
-      padding: 40px 20px;
+      padding: 30px 20px;
       text-align: center;
       box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-      position: relative;
     }
 
     .live-status {
       display: inline-flex;
       align-items: center;
       background: var(--bright-red);
-      padding: 5px 15px;
+      padding: 4px 12px;
       border-radius: 20px;
       font-size: 10px;
       font-weight: bold;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       animation: pulse 2s infinite;
     }
 
-    .radio-logo-main {
-      width: 180px;
-      margin-bottom: 20px;
-      animation: electric-vibe 5s infinite;
-    }
-
-    /* STYLE SPECIFIQUE AU PLAYER */
+    /* CENTRAGE ET REDUCTION POCHETTE */
     .player-container {
-      position: relative;
-      z-index: 2;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
     }
 
     #sc-player {
       background: transparent !important;
+      max-width: 280px; /* Taille réduite de la pochette */
     }
 
-    /* BOUTONS ACTIONS */
+    /* On force la suppression du fond gris du widget */
+    #sc-player, .sc-player-container, [class*="player"] {
+      background: transparent !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+    }
+
+    /* ACTIONS */
     .actions-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 30px;
+      gap: 12px;
+      margin-top: 25px;
     }
 
     .btn-custom {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       color: white;
-      padding: 15px;
+      padding: 12px;
       border-radius: 18px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: 0.3s;
     }
 
-    .btn-custom:hover {
-      background: rgba(255,255,255,0.15);
-    }
-
-    /* ANIMATIONS */
     @keyframes pulse {
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.05); opacity: 0.8; }
       100% { transform: scale(1); opacity: 1; }
     }
 
-    @keyframes electric-vibe {
-      0%, 90%, 100% { transform: scale(1); filter: brightness(1); }
-      92% { transform: scale(1.02) translate(1px, -1px); filter: brightness(1.3); }
-      95% { transform: scale(0.98) translate(-1px, 1px); filter: brightness(1.1); }
-    }
-
-    /* POPUP INSTALLATION */
     #install-pwa-popup {
       position: fixed;
       bottom: 30px;
@@ -206,16 +184,12 @@
 
 <body>
   <nav class="navbar">
-    <img src="assets/logo.PNG" alt="Logo" class="nav-logo">
-    <div class="social-links">
-      <a href="#"><img src="https://img.icons8.com/ios-filled/50/ffffff/tiktok.png" alt="TikTok"></a>
-      <a href="#"><img src="https://img.icons8.com/ios-filled/50/ffffff/instagram-new.png" alt="Instagram"></a>
-    </div>
+    <img src="assets/logo.PNG" alt="SHADE RADIO" class="nav-logo">
   </nav>
 
   <div class="ticker-wrap">
     <div class="ticker-content">
-      Retrouvez-nous tous les soirs dès 21h sur TikTok en live • SHADE RADIO - La radio qui fait bouger tes nuits •
+      Retrouvez-nous tous les soirs dès 21h sur TikTok en live • SHADE RADIO•
     </div>
   </div>
 
@@ -223,20 +197,18 @@
     <div class="main-frame">
       <div class="live-status">● EN DIRECT</div>
       
-      <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo-main">
-
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" progress-bar-color="#ffffff" player-width="100%"></div>
       </div>
 
       <div class="actions-box">
-        <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Titre'">
-          <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes.png" width="20">
-          Dédicace
+        <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre'">
+          <img src="https://img.icons8.com/material-rounded/24/ffffff/musical-notes.png" width="18">
+          Demander un titre
         </button>
 
         <button class="btn-custom" onclick="shareRadio()">
-          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="20">
+          <img src="https://img.icons8.com/ios-glyphs/30/ffffff/share--v1.png" width="18">
           Partager
         </button>
       </div>
@@ -244,7 +216,7 @@
   </div>
 
   <div id="install-pwa-popup">
-    <p style="margin-bottom:15px; font-weight:bold;">Installer SHADE RADIO sur ton mobile</p>
+    <p style="margin-bottom:15px; font-weight:bold;">Installer SHADE RADIO</p>
     <div id="ios-instructions" style="display:none; font-size: 14px; color: #ccc;">
       Clique sur <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" width="15"> puis "Sur l'écran d'accueil"
     </div>
@@ -255,17 +227,14 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Partage
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
 
-    // Gestion PWA
     let deferredPrompt;
     const popup = document.getElementById('install-pwa-popup');
-
     function showPopup() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
       if (!isStandalone) {
@@ -277,16 +246,9 @@
         }
       }
     }
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      showPopup();
-    });
-
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; showPopup(); });
     function closePopup() { popup.style.display = 'none'; }
-    
-    // Anti-veille
+
     let wakeLock = null;
     const requestWakeLock = async () => {
       try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {}
