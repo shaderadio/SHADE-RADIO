@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
 
-<link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/current_track_widget/status_widget.css" />
-<script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
-
 <style>
 *{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
 body{ background:#000; color:#fff; min-height:100vh; overflow-x:hidden; }
@@ -20,58 +17,75 @@ body::before{
 }
 
 .topbar{ width:100%; background:linear-gradient(90deg,#8b0000,#c40000); text-align:center; padding:12px; font-size:13px; font-weight:bold; }
-.hero{ text-align:center; padding:40px 20px 20px; }
+.hero{ text-align:center; padding:40px 20px; }
 .radio-logo{ width:80%; max-width:300px; display:block; margin:0 auto 30px; filter:drop-shadow(0 0 30px rgba(255,0,0,0.4)); }
 
-/* ===== SECTION POCHETTE ET TITRE ===== */
-.status-container {
+/* ===== CONTAINER DU PLAYER (POCHETTE + BOUTON) ===== */
+.player-wrapper {
+  max-width: 240px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
-  width: 100%;
-  margin: 0 auto 30px;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* On force le style du widget pour qu'il ne disparaisse pas */
-.sc-status-widget {
-  background: transparent !important;
-  color: #ffffff !important;
-  text-align: center;
-}
-
-.sc-status-widget img {
+/* Style de la pochette */
+#sc-player img {
+  width: 200px !important; /* Taille réduite demandée */
+  height: 200px !important;
   border-radius: 15px !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  display: block !important;
 }
 
-/* Style des textes du titre et artiste */
-.sc-status-widget .track-info {
+/* Style du texte (Artiste - Titre) */
+#sc-player [class*="meta"] {
+  font-size: 16px !important;
+  font-weight: bold !important;
   color: #ffffff !important;
-  font-weight: bold;
+  margin-bottom: 20px !important;
+  display: block !important;
 }
 
-/* ===== BOUTON PLAY ===== */
+/* Style du bouton PLAY */
 #sc-player [class*="play-button"] {
   position: relative !important;
-  margin: 10px auto !important;
   padding: 16px 40px !important;
   border-radius: 50px !important;
   background: linear-gradient(90deg,#ff0000,#8b0000) !important;
   color: white !important;
   font-weight: bold !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
   text-decoration: none !important;
   box-shadow: 0 0 25px rgba(255,0,0,0.4) !important;
   cursor: pointer !important;
-  display: inline-flex !important;
+  display: flex !important;
   align-items: center;
+  justify-content: center;
+  border: none !important;
+  min-width: 200px;
+  margin: 0 auto !important;
+}
+
+#sc-player [class*="play-button"]::after {
+  content: "ÉCOUTER EN LIVE";
+  margin-left: 10px;
+}
+
+/* Masquer les éléments de barre de progression qui chargent mal */
+#sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] {
+  display: none !important;
+}
+
+/* Nettoyage du fond gris automatique du player */
+#sc-player, .sc-player-container {
+  background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
 }
 
-#sc-player [class*="play-button"]::after { content: "ÉCOUTER EN LIVE"; margin-left: 10px; }
-#sc-player img, #sc-player [class*="progress"], #sc-player [class*="time"] { display: none !important; }
-
-.actions-box{ margin:20px 20px 80px; display:flex; flex-direction:column; gap:12px; }
+.actions-box{ margin:30px 20px 80px; display:flex; flex-direction:column; gap:12px; }
 .btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor: pointer;}
 .bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
 </style>
@@ -84,33 +98,16 @@ body::before{
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="status-container">
-    <div style="width: 240px;">
-      <div is="stream-status-widget" 
-           lang="fr" 
-           api-base="https://manager11.streamradio.fr:1700/api/v2" 
-           server-id="1" 
-           bgcolor="transparent"
-           border="none"
-           bgopacity="0"
-           meta_font_size="20"
-           meta_font_style="normal"
-           meta_font_color="#ffffff"
-           track_image_default="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png"
-           track_image_size="200"
-           vote_show="false">
-      </div>
-    </div>
-  </div>
-
-  <div id="player-anchor">
+  <div class="player-wrapper">
     <div id="sc-player"
       is="player"
       lang="fr"
       api-url="https://manager11.streamradio.fr:1700/api/v2"
       server-id="1"
       station-name="SHADE RADIO"
-      :show-image="false"
+      imagecontainer="top"
+      controlscontainer="bottom"
+      :show-image="true"
       :show-history="false"
       :show-share="false"
       :show-dj="false"
@@ -121,7 +118,7 @@ body::before{
   </div>
 
   <div class="actions-box">
-    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande'">🎵 Demander un titre</button>
+    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre'">🎵 Demander un titre</button>
     <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
   </div>
 </section>
