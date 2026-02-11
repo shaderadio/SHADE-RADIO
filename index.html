@@ -29,7 +29,7 @@
       perspective: 1200px; 
     }
 
-    /* EFFET SMOKY */
+    /* EFFET SMOKY EN ARRIÈRE-PLAN */
     body::before {
       content: "";
       position: fixed;
@@ -40,17 +40,16 @@
       z-index: -1;
     }
 
-    /* REMONTÉE DE TOUS LES ÉLÉMENTS */
     #app { 
       width: 100%; 
       max-width: 420px; 
       padding: 0 15px; 
       position: relative; 
       z-index: 10; 
-      margin-top: -60px; /* Ajuste ce chiffre pour remonter plus ou moins haut */
+      margin-top: -40px; /* Remonté pour l'équilibre */
     }
 
-    /* LOGO : ANIMATION SHADE EN BOUCLE */
+    /* LOGO ANIMÉ */
     .radio-logo {
       width: 210px;
       margin: 0 auto 15px;
@@ -97,13 +96,16 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
+    /* CADRE CENTRAL ÉTIRÉ : CONTIENT TOUT MAINTENANT */
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       border-radius: 40px;
-      padding: 30px 10px 15px 10px; 
-      margin: 10px auto; width: 100%; max-width: 320px;
+      padding: 30px 10px 25px 10px; 
+      margin: 10px auto; 
+      width: 100%; 
+      max-width: 330px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
     }
 
@@ -113,7 +115,6 @@
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
-    /* BOUTON PLAY RÉTRÉCI */
     #sc-player [class*="play-button"] { 
       background: linear-gradient(90deg, #ff0000, #8b0000) !important; 
       border-radius: 50px !important; 
@@ -122,12 +123,20 @@
       margin-top: 5px !important;
     }
 
-    .actions-box { display: flex; justify-content: center; gap: 12px; margin: 15px auto; }
+    /* ACTIONS BOX À L'INTÉRIEUR DU CADRE */
+    .actions-box { 
+      display: flex; 
+      justify-content: center; 
+      gap: 10px; 
+      margin-top: -10px; /* Rapproche les boutons du player */
+      padding-bottom: 10px;
+    }
+    
     .btn-custom {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white; padding: 12px 20px; border-radius: 50px;
-      font-size: 12px; font-weight: bold; backdrop-filter: blur(10px);
+      color: white; padding: 12px 18px; border-radius: 50px;
+      font-size: 11px; font-weight: bold; backdrop-filter: blur(5px);
     }
   </style>
 </head>
@@ -142,14 +151,15 @@
 
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
+      
       <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
-    </div>
 
-    <div class="actions-box">
-      <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander</button>
-      <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
+      <div class="actions-box">
+        <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander</button>
+        <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
+      </div>
     </div>
-  </div>
+    </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script>
