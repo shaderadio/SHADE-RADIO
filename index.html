@@ -27,7 +27,7 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
       position: relative;
-      perspective: 1000px; /* Nécessaire pour l'effet 3D */
+      perspective: 1200px; /* Accentue l'effet de profondeur */
     }
 
     /* EFFET SMOKY */
@@ -43,58 +43,56 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* ANIMATION DU LOGO : "ASSEMBLAGE 3D" */
+    /* LOGO : ANIMATION CONTINUE ÉTIREMENT + ROTATION 3D */
     .radio-logo {
       width: 210px;
       margin: 0 auto 15px;
       display: block;
       filter: drop-shadow(0 0 15px rgba(255,0,0,0.4));
-      /* L'animation se lance au chargement */
-      animation: logo-assemble 2.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-      opacity: 0;
+      /* Animation de 2 secondes en boucle infinie */
+      animation: logo-vibe-3d 2s ease-in-out infinite;
+      transform-origin: center;
     }
 
-    @keyframes logo-assemble {
+    @keyframes logo-vibe-3d {
       0% {
-        opacity: 0;
-        transform: translateZ(500px) rotateY(90deg) scale(2);
-        filter: brightness(0) blur(20px);
+        transform: rotateY(0deg) scale(1, 1);
+        filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4));
       }
-      60% {
-        opacity: 1;
-        filter: brightness(2) blur(0px);
+      25% {
+        /* Étirement vertical + début de rotation */
+        transform: rotateY(15deg) scale(0.9, 1.2);
+        filter: brightness(1.3) drop-shadow(0 0 25px rgba(255,0,0,0.6));
       }
-      80% {
-        transform: translateZ(0) rotateY(-10deg) scale(1.05);
-        filter: brightness(1.2) drop-shadow(0 0 30px #ff0000);
+      50% {
+        /* Rotation maximum + étirement horizontal */
+        transform: rotateY(0deg) scale(1.1, 0.9);
+        filter: brightness(1.5) drop-shadow(0 0 35px #ff0000);
+      }
+      75% {
+        /* Rotation inverse + étirement vertical */
+        transform: rotateY(-15deg) scale(0.9, 1.2);
+        filter: brightness(1.3) drop-shadow(0 0 25px rgba(255,0,0,0.6));
       }
       100% {
-        opacity: 1;
-        transform: translateZ(0) rotateY(0deg) scale(1);
+        transform: rotateY(0deg) scale(1, 1);
         filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4));
       }
     }
 
     /* HEADER & TICKER */
     .header-container {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
-      border-radius: 12px;
-      margin-bottom: 15px;
-      overflow: hidden;
+      border-radius: 12px; margin-bottom: 15px; overflow: hidden;
     }
 
     .live-badge {
       background: linear-gradient(90deg, #ff0000, #8b0000);
-      color: #fff;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 10px 15px;
-      animation: pulse 1.5s infinite;
-      white-space: nowrap;
+      color: #fff; font-size: 11px; font-weight: bold;
+      padding: 10px 15px; animation: pulse 1.5s infinite; white-space: nowrap;
     }
 
     @keyframes pulse {
@@ -105,72 +103,39 @@
 
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
+      display: inline-block; white-space: nowrap; padding-left: 100%;
       animation: shade-scroll 12s linear infinite;
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
+      color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase;
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* CADRE CENTRAL */
+    /* CADRE CENTRAL SMOKY */
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(15px);
       border-radius: 40px;
       padding: 30px 10px 15px 10px; 
-      margin: 10px auto;
-      width: 100%;
-      max-width: 320px;
+      margin: 10px auto; width: 100%; max-width: 320px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
       position: relative;
     }
 
-    #sc-player {
-      background: transparent !important;
-      transform: scale(0.85); 
-      transform-origin: top center;
-      height: 380px;
-    }
-
+    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
-
-    #sc-player img {
-      width: 100% !important;
-      border-radius: 25px !important;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important;
-    }
-
+    #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
-
-    #sc-player [class*="play-button"] {
-      background: linear-gradient(90deg, #ff0000, #8b0000) !important;
-      border-radius: 50px !important;
-      box-shadow: 0 0 20px rgba(255,0,0,0.4) !important;
-    }
-
+    #sc-player [class*="play-button"] { background: linear-gradient(90deg, #ff0000, #8b0000) !important; border-radius: 50px !important; box-shadow: 0 0 20px rgba(255,0,0,0.4) !important; }
     #sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] { display: none !important; }
 
     /* ACTIONS */
-    .actions-box {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 15px auto;
-    }
-
+    .actions-box { display: flex; justify-content: center; gap: 12px; margin: 15px auto; }
     .btn-custom {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-      padding: 12px 20px; border-radius: 50px;
-      font-size: 12px; font-weight: bold;
-      backdrop-filter: blur(10px);
+      color: white; padding: 12px 20px; border-radius: 50px;
+      font-size: 12px; font-weight: bold; backdrop-filter: blur(10px);
     }
   </style>
 </head>
