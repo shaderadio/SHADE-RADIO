@@ -105,13 +105,16 @@
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
-    /* BOUTON PLAY RÉTRÉCI */
+    /* BOUTON PLAY : ULTRA-PETIT ET EFFET VERRE (GLASSY) */
     #sc-player [class*="play-button"] { 
-      background: linear-gradient(90deg, #ff0000, #8b0000) !important; 
-      border-radius: 50px !important; 
-      transform: scale(0.7) !important; /* Taille réduite ici */
+      background: rgba(255, 255, 255, 0.1) !important; /* Fond transparent */
+      backdrop-filter: blur(10px) !important; /* Effet de flou */
+      border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Bordure fine style verre */
+      border-radius: 50% !important; 
+      transform: scale(0.5) !important; /* Encore plus petit */
       transform-origin: center !important;
-      margin-top: 5px !important;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+      margin-top: 0px !important;
     }
 
     .actions-box { display: flex; justify-content: center; gap: 12px; margin: 15px auto; }
