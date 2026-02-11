@@ -5,77 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
 
+<link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/current_track_widget/status_widget.css" />
+<script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
+
 <style>
-*{ box-sizing:border-box; margin:0; padding:0; font-family: 'Segoe UI', Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
+*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
 body{ background:#000; color:#fff; min-height:100vh; overflow-x:hidden; }
 
-/* FOND SMOKY PREMIUM */
+/* FOND SMOKY */
 body::before{
   content:""; position:fixed; inset:0;
   background: radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%), #000;
   z-index:-1;
 }
 
-.topbar{ width:100%; background:linear-gradient(90deg,#8b0000,#c40000); text-align:center; padding:12px; font-size:13px; font-weight:bold; letter-spacing:1px; }
 .hero{ text-align:center; padding:40px 20px; }
 .radio-logo{ width:80%; max-width:300px; display:block; margin:0 auto 30px; filter:drop-shadow(0 0 30px rgba(255,0,0,0.4)); }
 
-/* ===== LECTEUR PERSONNALISÉ ===== */
-.player-container {
-  max-width: 250px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.album-art {
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 20px;
-  border-radius: 20px;
-  background: #222; /* Fond par défaut si pas d'image */
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.track-info {
+/* ===== STYLE POUR FORCER L'APPARENCE DU WIDGET ===== */
+.status-wrapper {
+  display: flex;
+  justify-content: center;
   margin-bottom: 25px;
-  min-height: 50px;
 }
 
-#track-title {
-  font-size: 18px;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-  color: #fff;
+/* On force la transparence et le texte blanc pour ton design smoky */
+.sc-status-widget {
+  background: transparent !important;
+  border: none !important;
 }
 
-#track-artist {
-  font-size: 14px;
-  color: rgba(255,255,255,0.7);
-  display: block;
+.sc-status-widget * {
+  color: #ffffff !important; /* Force le texte en blanc */
 }
 
-/* BOUTON LIVE */
+.sc-status-widget img {
+  border-radius: 20px !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+  width: 200px !important; /* On ajuste la taille ici */
+  height: auto !important;
+}
+
+/* Cache la barre de progression si elle s'affiche mal */
+[class*="progress-bar"] { display: none !important; }
+
+/* ===== BOUTON LIVE (LECTEUR) ===== */
 .live-btn {
   display: inline-block;
-  padding: 16px 45px;
+  padding: 16px 50px;
   border-radius: 50px;
   background: linear-gradient(90deg,#ff0000,#8b0000);
-  font-weight: bold;
-  font-size: 15px;
-  color: white;
-  border: none;
-  cursor: pointer;
+  font-weight: bold; font-size: 15px; color: white;
+  border: none; cursor: pointer;
   box-shadow: 0 0 25px rgba(255,0,0,0.4);
-  transition: transform 0.2s;
 }
 
-.live-btn:active { transform: scale(0.95); }
-
-/* ACTIONS */
 .actions-box{ margin:40px 20px 80px; display:flex; flex-direction:column; gap:12px; }
 .btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor:pointer; }
 .bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
@@ -84,24 +68,34 @@ body::before{
 
 <body>
 
-<div class="topbar">📧 shaderadiolive@gmail.com</div>
-
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="player-container">
-    <div id="cover" class="album-art" style="background-image: url('https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png');"></div>
-    
-    <div class="track-info">
-      <span id="track-title">Chargement...</span>
-      <span id="track-artist">SHADE RADIO</span>
+  <div class="status-wrapper">
+    <div style="width: 300px;">
+      <div class="sc-status-widget">
+        <div is="stream-status-widget" 
+          lang="fr" 
+          api-base="https://manager11.streamradio.fr:1700/api/v2" 
+          server-id="1" 
+          bgcolor="transparent"
+          border="none"
+          bgopacity="0"
+          meta_font_size="20"
+          meta_font_style="normal"
+          meta_font_color="#ffffff"
+          track_image_default="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png"
+          track_image_size="200"
+          vote_show="false">
+        </div>
+      </div>
     </div>
-
-    <button id="play-btn" class="live-btn" onclick="togglePlay()">ÉCOUTER EN LIVE</button>
   </div>
 
+  <button id="play-btn" class="live-btn" onclick="togglePlay()">ÉCOUTER EN LIVE</button>
+
   <div class="actions-box">
-    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande'">🎵 Demander un titre</button>
+    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander un titre</button>
     <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
   </div>
 </section>
@@ -109,7 +103,7 @@ body::before{
 <div class="bottom-live">🔴 SHADE RADIO – 100% HIP-HOP CLASSIC</div>
 
 <script>
-/* CONFIGURATION AUDIO */
+/* CONFIGURATION LECTEUR AUDIO */
 const streamUrl = "http://manager11.streamradio.fr:1710/stream";
 const audio = new Audio(streamUrl);
 let isPlaying = false;
@@ -119,41 +113,14 @@ function togglePlay() {
   if (!isPlaying) {
     audio.play();
     btn.innerText = "ARRÊTER LE LIVE";
-    btn.style.background = "#222"; // Change de couleur en pause
     isPlaying = true;
   } else {
     audio.pause();
-    audio.src = streamUrl; // Reset le flux pour éviter le décalage
+    audio.src = streamUrl; 
     btn.innerText = "ÉCOUTER EN LIVE";
-    btn.style.background = "linear-gradient(90deg,#ff0000,#8b0000)";
     isPlaying = false;
   }
 }
-
-/* MISE À JOUR DES INFOS (TITRE & POCHETTE) */
-async function updateMetadata() {
-  try {
-    // On utilise l'API de ton manager pour récupérer les infos en temps réel
-    const response = await fetch("https://manager11.streamradio.fr:1700/api/v2/server/1/status");
-    const data = await response.json();
-    
-    if (data && data.success) {
-      const track = data.data.track;
-      document.getElementById('track-title').innerText = track.title || "Radio en direct";
-      document.getElementById('track-artist').innerText = track.artist || "SHADE RADIO";
-      
-      if (track.image) {
-        document.getElementById('cover').style.backgroundImage = `url('${track.image}')`;
-      }
-    }
-  } catch (error) {
-    console.log("Erreur de mise à jour des infos");
-  }
-}
-
-// Mettre à jour toutes le 10 secondes
-setInterval(updateMetadata, 10000);
-updateMetadata();
 
 function shareRadio(){
   if(navigator.share){
