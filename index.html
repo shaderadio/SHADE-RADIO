@@ -26,7 +26,7 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
       position: relative;
-      perspective: 1000px;
+      perspective: 1200px; /* Profondeur 3D accentuée */
     }
 
     /* EFFET SMOKY */
@@ -42,40 +42,45 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO : ANIMATION D'ENTRÉE + ROTATION EN BOUCLE INFINIE */
+    /* LOGO : UNE SEULE ANIMATION QUI GÈRE TOUT SANS INTERRUPTION */
     .radio-logo {
       width: 210px;
       margin: 0 auto 15px;
       display: block;
       filter: drop-shadow(0 0 15px rgba(255,0,0,0.4));
-      /* logo-entrance (une fois) ET logo-swing (en boucle infinie) */
-      animation: 
-        logo-entrance 2s cubic-bezier(0.23, 1, 0.32, 1) forwards,
-        logo-swing 3s ease-in-out 2s infinite; 
+      /* On utilise une animation qui combine l'entrée et la boucle */
+      animation: shade-entrance-swing 6s ease-in-out infinite;
       transform-origin: center;
     }
 
-    /* Entrée du logo depuis la profondeur */
-    @keyframes logo-entrance {
+    @keyframes shade-entrance-swing {
+      /* ENTRÉE (0% à 20%) */
       0% {
         opacity: 0;
         transform: translateZ(500px) rotateY(90deg);
         filter: brightness(0) blur(10px);
       }
-      100% {
+      15% {
         opacity: 1;
         transform: translateZ(0) rotateY(0deg);
         filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4));
       }
-    }
-
-    /* Balancement gauche-droite infini */
-    @keyframes logo-swing {
-      0% { transform: rotateY(0deg); filter: brightness(1); }
-      25% { transform: rotateY(20deg); filter: brightness(1.3) drop-shadow(0 0 25px #ff0000); }
-      50% { transform: rotateY(0deg); filter: brightness(1); }
-      75% { transform: rotateY(-20deg); filter: brightness(1.3) drop-shadow(0 0 25px #ff0000); }
-      100% { transform: rotateY(0deg); filter: brightness(1); }
+      /* BOUCLE ROTATION (20% à 100%) */
+      35% {
+        transform: rotateY(25deg);
+        filter: brightness(1.3) drop-shadow(0 0 25px #ff0000);
+      }
+      55% {
+        transform: rotateY(-25deg);
+        filter: brightness(1.3) drop-shadow(0 0 25px #ff0000);
+      }
+      75% {
+        transform: rotateY(25deg);
+      }
+      100% {
+        transform: rotateY(0deg);
+        filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4));
+      }
     }
 
     .header-container {
@@ -122,7 +127,6 @@
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     #sc-player [class*="play-button"] { background: linear-gradient(90deg, #ff0000, #8b0000) !important; border-radius: 50px !important; }
-    #sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] { display: none !important; }
 
     .actions-box { display: flex; justify-content: center; gap: 12px; margin: 15px auto; }
     .btn-custom {
