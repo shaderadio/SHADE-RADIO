@@ -9,82 +9,51 @@
 <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial, Helvetica, sans-serif;
-  -webkit-tap-highlight-color:transparent;
-}
+*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
+body{ background:#000; color:#fff; min-height:100vh; overflow-x:hidden; }
 
-body{
-  background:#000;
-  color:#fff;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* ===== FOND SMOKY PREMIUM ===== */
+/* FOND SMOKY */
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%),
-    radial-gradient(circle at 30% 70%, rgba(120,0,0,0.5), transparent 60%),
-    #000;
+  content:""; position:fixed; inset:0;
+  background: radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%), #000;
   z-index:-1;
 }
 
-.topbar{
-  width:100%;
-  background:linear-gradient(90deg,#8b0000,#c40000);
-  text-align:center;
-  padding:12px;
-  font-size:13px;
-  font-weight:bold;
-}
+.topbar{ width:100%; background:linear-gradient(90deg,#8b0000,#c40000); text-align:center; padding:12px; font-size:13px; font-weight:bold; }
+.hero{ text-align:center; padding:40px 20px 20px; }
+.radio-logo{ width:80%; max-width:300px; display:block; margin:0 auto 30px; filter:drop-shadow(0 0 30px rgba(255,0,0,0.4)); }
 
-.hero{
-  text-align:center;
-  padding:40px 20px 20px;
-}
-
-.radio-logo{
-  width:80%;
-  max-width:300px;
-  display:block;
-  margin:0 auto 30px;
-  filter:drop-shadow(0 0 30px rgba(255,0,0,0.4));
-}
-
-/* ===== CONTENEUR NOUVELLE POCHETTE (Widget Statut) ===== */
-.status-wrapper {
+/* ===== SECTION POCHETTE ET TITRE ===== */
+.status-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  width: 100%;
+  margin: 0 auto 30px;
 }
 
-/* On force le widget à être transparent et propre */
+/* On force le style du widget pour qu'il ne disparaisse pas */
 .sc-status-widget {
   background: transparent !important;
-  border: none !important;
+  color: #ffffff !important;
+  text-align: center;
 }
 
-/* On ajuste l'image du widget */
 .sc-status-widget img {
   border-radius: 15px !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  margin-bottom: 10px;
 }
 
-/* ===== BOUTON PLAY (Restauré et stylisé) ===== */
-.player-container {
-  margin-bottom: 40px;
+/* Style des textes du titre et artiste */
+.sc-status-widget .track-info {
+  color: #ffffff !important;
+  font-weight: bold;
 }
 
+/* ===== BOUTON PLAY ===== */
 #sc-player [class*="play-button"] {
   position: relative !important;
-  margin: 0 auto !important;
+  margin: 10px auto !important;
   padding: 16px 40px !important;
   border-radius: 50px !important;
   background: linear-gradient(90deg,#ff0000,#8b0000) !important;
@@ -97,81 +66,44 @@ body::before{
   display: inline-flex !important;
   align-items: center;
   border: none !important;
-  text-transform: uppercase;
 }
 
-#sc-player [class*="play-button"]::after {
-  content: "ÉCOUTER EN LIVE";
-  margin-left: 10px;
-}
+#sc-player [class*="play-button"]::after { content: "ÉCOUTER EN LIVE"; margin-left: 10px; }
+#sc-player img, #sc-player [class*="progress"], #sc-player [class*="time"] { display: none !important; }
 
-/* Masquer les éléments inutiles du player de contrôle */
-#sc-player img, #sc-player [class*="progress"], #sc-player [class*="time"] {
-  display: none !important;
-}
-
-.actions-box{
-  margin:20px 20px 80px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.btn-custom{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  padding:15px;
-  border-radius:50px;
-  color:white;
-  font-weight:bold;
-  backdrop-filter:blur(6px);
-  cursor: pointer;
-}
-
-.bottom-live{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:linear-gradient(90deg,#8b0000,#ff0000);
-  padding:15px;
-  text-align:center;
-  font-weight:bold;
-  z-index:1000;
-}
+.actions-box{ margin:20px 20px 80px; display:flex; flex-direction:column; gap:12px; }
+.btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor: pointer;}
+.bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  📧 shaderadiolive@gmail.com
-</div>
+<div class="topbar">📧 shaderadiolive@gmail.com</div>
 
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="status-wrapper">
+  <div class="status-container">
     <div style="width: 240px;">
-      <div class="sc-status-widget">
-        <div is="stream-status-widget" 
-          lang="fr" 
-          api-base="https://manager11.streamradio.fr:1700/api/v2" 
-          server-id="1" 
-          bgcolor="transparent"
-          border="none"
-          bgopacity="0"
-          meta_font_size="18"
-          meta_font_style="normal"
-          meta_font_color="#ffffff"
-          track_image_default="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png"
-          track_image_size="200"
-          vote_show="false">
-        </div>
+      <div is="stream-status-widget" 
+           lang="fr" 
+           api-base="https://manager11.streamradio.fr:1700/api/v2" 
+           server-id="1" 
+           bgcolor="transparent"
+           border="none"
+           bgopacity="0"
+           meta_font_size="20"
+           meta_font_style="normal"
+           meta_font_color="#ffffff"
+           track_image_default="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png"
+           track_image_size="200"
+           vote_show="false">
       </div>
     </div>
   </div>
 
-  <div class="player-container">
+  <div id="player-anchor">
     <div id="sc-player"
       is="player"
       lang="fr"
@@ -189,18 +121,12 @@ body::before{
   </div>
 
   <div class="actions-box">
-    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre'">
-      🎵 Demander un titre
-    </button>
-    <button class="btn-custom" onclick="shareRadio()">
-      📲 Partager
-    </button>
+    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande'">🎵 Demander un titre</button>
+    <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
   </div>
 </section>
 
-<div class="bottom-live">
-  🔴 SHADE RADIO – 100% HIP-HOP CLASSIC
-</div>
+<div class="bottom-live">🔴 SHADE RADIO – 100% HIP-HOP CLASSIC</div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
