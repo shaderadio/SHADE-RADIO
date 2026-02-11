@@ -5,9 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
 
-  <link href="https://manager11.streamradio.fr:1700/media/static/css/player/base.css" rel="stylesheet" type="text/css" />
-  <link href="https://manager11.streamradio.fr:1700/media/static/css/player/style-14-mini.css" rel="stylesheet" type="text/css" />
-  <link href="https://manager11.streamradio.fr:1700/media/static/css/ui/jquery.ui.slider.css" rel="stylesheet" type="text/css" />
+  <meta name="theme-color" content="#8b0000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
+
+  <link rel="apple-touch-icon" href="assets/logo.PNG">
+  <link rel="manifest" href="manifest.json">
 
   <style>
     :root {
@@ -20,7 +24,7 @@
     * {
       box-sizing: border-box;
       margin: 0; padding: 0;
-      font-family: 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -31,12 +35,27 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: radial-gradient(circle at 50% 40%, rgba(180,0,0,0.4), transparent 60%), #000;
+      overflow-x: hidden;
+      background: 
+        radial-gradient(circle at 50% 40%, rgba(180,0,0,0.4), transparent 60%),
+        radial-gradient(circle at 30% 70%, rgba(120,0,0,0.3), transparent 60%),
+        #000;
       background-attachment: fixed;
     }
 
-    .navbar { width: 100%; padding: 20px; display: flex; justify-content: center; }
-    .nav-logo { height: 50px; filter: drop-shadow(0 0 15px rgba(255,0,0,0.3)); }
+    /* BARRE NAVIGATION */
+    .navbar {
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      height: 50px;
+      filter: drop-shadow(0 0 15px rgba(255,0,0,0.3));
+    }
 
     /* TICKER */
     .ticker-wrap {
@@ -48,23 +67,40 @@
       border-top: 1px solid var(--glass-border);
       border-bottom: 1px solid var(--glass-border);
     }
-    .ticker-content {
-      display: inline-block; white-space: nowrap;
-      animation: scroll 20s linear infinite;
-      font-size: 12px; font-weight: bold; text-transform: uppercase;
-    }
-    @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-    /* MAIN CARD */
-    #app { width: 100%; max-width: 420px; padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-    
+    .ticker-content {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll 20s linear infinite;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* CONTAINER PRINCIPAL */
+    #app {
+      width: 100%;
+      max-width: 420px;
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .main-frame {
       background: var(--glass-bg);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
       border-radius: 40px;
-      padding: 40px 20px;
+      padding: 30px 20px;
       text-align: center;
       box-shadow: 0 25px 50px rgba(0,0,0,0.5);
     }
@@ -76,31 +112,34 @@
       border-radius: 20px;
       font-size: 10px;
       font-weight: bold;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       animation: pulse 2s infinite;
     }
 
-    /* ADAPTATION DU NOUVEAU LECTEUR */
-    .player-zone {
+    /* LECTEUR RÉDUIT DE MOITIÉ */
+    .player-container {
+      width: 100%;
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
-      padding: 10px;
     }
 
-    /* On force le lecteur à être transparent pour le design Glass */
-    .rtplmain_window-mini {
+    #sc-player {
       background: transparent !important;
-      border: none !important;
+      max-width: 140px; /* Taille réduite de moitié par rapport au précédent */
+    }
+
+    #sc-player, .sc-player-container, [class*="player"] {
+      background: transparent !important;
+      background-color: transparent !important;
       box-shadow: none !important;
     }
 
-    .rtplcurrent_time-mini {
-      color: white !important;
-      font-family: monospace;
+    #sc-player img {
+      border-radius: 12px !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
     }
 
-    /* ACTIONS BOX */
+    /* BOUTONS ACTIONS */
     .actions-box {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -111,20 +150,25 @@
     .btn-custom {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--glass-border);
-      color: white; padding: 15px 10px; border-radius: 20px;
-      font-size: 11px; font-weight: bold; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: white;
+      padding: 15px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
       transition: 0.3s;
     }
 
-    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
-
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/jplayer/jquery.jplayer.min.js"></script>
-  <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/jplayer/jquery-ui-1.10.2.custom.min.js"></script>
-  <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/jplayer/modernizr.js"></script>
-  <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/jplayer/rt_pl.js"></script>
 </head>
 
 <body>
@@ -135,7 +179,7 @@
 
   <div class="ticker-wrap">
     <div class="ticker-content">
-      🔴 EN DIRECT : SHADE RADIO – 100% HIP-HOP CLASSIC • LA RADIO N°1 SUR LE HIP-HOP CLASSIC •
+      🔴 EN DIRECT : SHADE RADIO – 100% HIP-HOP CLASSIC • RETROUVEZ NOUS SUR TIKTOK DÈS 21H •
     </div>
   </div>
 
@@ -143,16 +187,24 @@
     <div class="main-frame">
       <div class="live-badge">LIVE</div>
       
-      <div class="player-zone">
-        <div id="rtJpID-1"></div>
-        <div class="rtplwrapperForIe-mini">
-          <div id="rtplayer-1" class="rtplmain_window-mini gradient_style-14-mini">
-            <a id="button_play_stop-1" class="rtplbutton_play_stop-mini button_play_stop_style-14-mini" href="#"></a>
-            <div id="current_time-1" class="rtplcurrent_time-mini">00:00:00</div>
-            <a id="rtplmute-1" class="rtplmute-mini button_mute_style-14-mini" href="#"></a>
-            <div id="rtplvolume-1" class="rtplvolume-mini"></div>
-            <a id="rtplmaxvol-1" class="rtplmaxvol-mini button_max_vol_style-14-mini" href="#"></a>
-          </div>
+      <div class="player-container">
+        <div id="sc-player"
+          is="player"
+          lang="fr"
+          api-url="https://manager11.streamradio.fr:1700/api/v2"
+          server-id="1"
+          station-name="SHADE RADIO"
+          imagecontainer="top"
+          controlscontainer="bottom"
+          :show-history="false"
+          :show-share="false"
+          :show-dj="false"
+          :show-image="true"
+          :show-bitrate="false"
+          play-button-color="#ffffff"
+          :progress-show="false"
+          progress-bar-color="#ffffff"
+          player-width="100%">
         </div>
       </div>
 
@@ -170,13 +222,9 @@
     </div>
   </div>
 
-  <script>
-    // Initialisation du nouveau lecteur
-    $(document).ready( function(){ 
-      new RTPlayer( 1, 50, true, "https://manager11.streamradio.fr:1700",  "mp3", {"mp3": "https://manager11.streamradio.fr:1715/stream"}, "fr");
-    });
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
-    // Fonction Partager
+  <script>
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO 🎧', url: window.location.href });
