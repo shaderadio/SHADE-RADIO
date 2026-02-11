@@ -3,33 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>SHADE RADIO</title>
+<title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
+
+<link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/current_track_widget/status_widget.css" />
+<script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
 
 <style>
-*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; }
-body{ background:#000; color:#fff; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; -webkit-tap-highlight-color:transparent; }
+body{ background:#000; color:#fff; min-height:100vh; overflow-x:hidden; }
 
-/* FOND SMOKY */
+/* RETOUR DU FOND SMOKY PREMIUM */
 body::before{
   content:""; position:fixed; inset:0;
-  background: radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%), #000;
+  background: radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%), 
+              radial-gradient(circle at 30% 70%, rgba(120,0,0,0.5), transparent 60%), #000;
   z-index:-1;
 }
 
-.hero{ text-align:center; padding:40px 20px; width:100%; max-width:400px; }
-.radio-logo{ width:200px; margin-bottom:20px; filter:drop-shadow(0 0 20px rgba(255,0,0,0.4)); }
+.topbar{ width:100%; background:linear-gradient(90deg,#8b0000,#c40000); text-align:center; padding:12px; font-size:13px; font-weight:bold; }
+.hero{ text-align:center; padding:40px 20px 20px; }
+.radio-logo{ width:80%; max-width:300px; display:block; margin:0 auto 30px; filter:drop-shadow(0 0 30px rgba(255,0,0,0.4)); }
 
-/* CONTENEUR DU WIDGET */
-.widget-box {
-  background: rgba(255,255,255,0.1);
-  padding: 15px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
+/* STYLE DU WIDGET POCHETTE */
+.pochette-container {
+  display: flex;
+  justify-content: center;
   margin-bottom: 25px;
-  min-height: 150px; /* Évite que ça disparaisse si ça charge mal */
 }
 
-/* LE BOUTON PLAY QUE TU AIMES */
+/* On force le texte du widget en blanc pour ton fond sombre */
+.sc-status-widget * { color: #ffffff !important; }
+.sc-status-widget img { border-radius: 15px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+
+/* BOUTON LECTEUR */
 .live-btn {
   display: inline-block;
   padding: 16px 50px;
@@ -38,39 +44,53 @@ body::before{
   font-weight: bold; font-size: 15px; color: white;
   border: none; cursor: pointer;
   box-shadow: 0 0 25px rgba(255,0,0,0.4);
-  margin-top: 10px;
 }
 
-.bottom-live{ position:fixed; bottom:0; width:100%; background:#8b0000; padding:15px; text-align:center; font-weight:bold; }
+.actions-box{ margin:20px 20px 80px; display:flex; flex-direction:column; gap:12px; }
+.btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor:pointer; }
+.bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
 </style>
 </head>
 
 <body>
 
+<div class="topbar">📧 shaderadiolive@gmail.com</div>
+
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="widget-box">
-    <div is="stream-status-widget" 
-         lang="fr" 
-         api-base="https://manager11.streamradio.fr:1700/api/v2" 
-         server-id="1" 
-         bgcolor="#ffffff"
-         track_image_size="150"
-         vote_show="false">
+  <div class="pochette-container">
+    <div style="width: 300px;">
+      <div class="sc-status-widget">
+        <div is="stream-status-widget" 
+          lang="fr" 
+          api-base="https://manager11.streamradio.fr:1700/api/v2" 
+          server-id="1" 
+          bgcolor="transparent"
+          border="none"
+          bgopacity="0"
+          meta_font_size="25"
+          meta_font_style="normal"
+          meta_font_color="#ffffff"
+          track_image_size="200"
+          vote_show="false">
+        </div>
+      </div>
     </div>
   </div>
 
   <button id="play-btn" class="live-btn" onclick="togglePlay()">ÉCOUTER EN LIVE</button>
 
+  <div class="actions-box">
+    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander un titre</button>
+    <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
+  </div>
 </section>
 
-<div class="bottom-live">🔴 SHADE RADIO EN DIRECT</div>
-
-<link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/current_track_widget/status_widget.css" />
-<script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
+<div class="bottom-live">🔴 SHADE RADIO – 100% HIP-HOP CLASSIC</div>
 
 <script>
+/* LECTEUR AUDIO */
 const audio = new Audio("http://manager11.streamradio.fr:1710/stream");
 let isPlaying = false;
 
@@ -85,6 +105,12 @@ function togglePlay() {
     audio.src = "http://manager11.streamradio.fr:1710/stream"; 
     btn.innerText = "ÉCOUTER EN LIVE";
     isPlaying = false;
+  }
+}
+
+function shareRadio(){
+  if(navigator.share){
+    navigator.share({ title:'SHADE RADIO', text:'Écoute SHADE RADIO 🎧', url:window.location.href });
   }
 }
 </script>
