@@ -2,190 +2,266 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>SHADE RADIO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>SHADE RADIO – Live</title>
 
-<meta name="theme-color" content="#8b0000">
+<meta name="theme-color" content="#6b0000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SHADE RADIO">
 
-<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/logo.PNG">
+<link rel="manifest" href="manifest.json">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, Helvetica, sans-serif;
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+body{
+  background:radial-gradient(circle at center,#9e0000 0%,#6b0000 50%,#3d0000 100%);
+  background-attachment:fixed;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  overflow:hidden;
+  padding-top:env(safe-area-inset-top,20px);
+  overscroll-behavior-y:contain;
+  user-select:none;
 }
 
-html,body{
-  height:100%;
-  background:#000;
-  color:#fff;
+/* ===== FUMÉE CINÉMATIQUE ===== */
+.cinematic-smoke{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
   overflow:hidden;
 }
 
-/* ===== FUMÉE CINÉMATIQUE PURE CSS ===== */
-body::before,
-body::after{
+.cinematic-smoke::before,
+.cinematic-smoke::after{
   content:"";
-  position:fixed;
-  inset:-50%;
-  background:radial-gradient(circle at 30% 40%, rgba(255,0,0,0.15), transparent 60%),
-             radial-gradient(circle at 70% 60%, rgba(120,0,0,0.2), transparent 70%);
-  animation:smokeMove 25s linear infinite;
-  z-index:0;
+  position:absolute;
+  width:200%;
+  height:200%;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255,0,0,0.15), transparent 60%),
+    radial-gradient(circle at 70% 60%, rgba(120,0,0,0.2), transparent 70%),
+    radial-gradient(circle at 50% 80%, rgba(80,0,0,0.25), transparent 70%);
+  animation:smokeDrift 50s linear infinite;
 }
 
-body::after{
+.cinematic-smoke::after{
+  animation-duration:70s;
   animation-direction:reverse;
-  animation-duration:35s;
-}
-
-@keyframes smokeMove{
-  from{transform:translate(0,0) rotate(0deg);}
-  to{transform:translate(10%,10%) rotate(360deg);}
-}
-
-/* ===== LAYOUT APP ===== */
-.app{
-  position:relative;
-  z-index:2;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  align-items:center;
-  padding:40px 20px;
-  text-align:center;
-}
-
-/* LOGO */
-.logo{
-  width:75%;
-  max-width:300px;
-  filter:drop-shadow(0 0 25px rgba(255,0,0,0.5));
-}
-
-/* PLAYER CUSTOM CLEAN */
-#sc-player{
-  background:transparent !important;
-  box-shadow:none !important;
-  border:none !important;
-}
-
-#sc-player img{
-  width:150px !important;
-  height:150px !important;
-  border-radius:20px !important;
-  box-shadow:0 15px 40px rgba(0,0,0,0.8);
-}
-
-/* Supprime cadre gris */
-#sc-player [class*="container"],
-#sc-player [class*="wrapper"]{
-  background:transparent !important;
-  box-shadow:none !important;
-  border:none !important;
-}
-
-/* Cacher contrôles natifs */
-#sc-player [class*="controls"]{
-  display:none !important;
-}
-
-/* BOUTON LIVE */
-.live-btn{
-  padding:18px 50px;
-  border-radius:50px;
-  background:linear-gradient(90deg,#ff0000,#8b0000);
-  font-weight:bold;
-  font-size:16px;
-  color:white;
-  border:none;
-  box-shadow:0 0 30px rgba(255,0,0,0.5);
-  transition:0.3s;
-}
-
-.live-btn:active{
-  transform:scale(0.95);
-}
-
-.footer{
-  font-size:12px;
   opacity:0.6;
 }
+
+@keyframes smokeDrift{
+  0%{transform:translate(-10%,-10%) rotate(0deg);}
+  50%{transform:translate(10%,5%) rotate(180deg);}
+  100%{transform:translate(-10%,-10%) rotate(360deg);}
+}
+
+#app{width:100%;max-width:420px;padding:0 15px;position:relative;z-index:5;}
+
+.player-card{text-align:center;position:relative;}
+
+.header-container{
+  display:flex;
+  align-items:center;
+  background:rgba(0,0,0,0.45);
+  border-radius:12px;
+  margin-bottom:10px;
+  overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+.live-badge{
+  background:#ff0000;
+  color:#fff;
+  font-size:11px;
+  font-weight:bold;
+  padding:10px 15px;
+  animation:pulse 1.5s infinite;
+  white-space:nowrap;
+}
+
+@keyframes pulse{
+  0%{box-shadow:inset 0 0 0 0 rgba(255,255,255,0.4);}
+  70%{box-shadow:inset 0 0 0 10px rgba(255,255,255,0);}
+  100%{box-shadow:inset 0 0 0 0 rgba(255,255,255,0);}
+}
+
+.radio-ticker{flex:1;overflow:hidden;padding:8px 0;display:flex;}
+.radio-ticker span{
+  display:inline-block;
+  white-space:nowrap;
+  padding-left:100%;
+  animation:shade-scroll 12s linear infinite;
+  color:#ffffff;
+  font-size:12px;
+  font-weight:600;
+}
+@keyframes shade-scroll{0%{transform:translateX(0);}100%{transform:translateX(-100%);}}
+
+.main-frame{
+  background:rgba(107,0,0,0.85);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:40px;
+  padding:30px 10px 10px 10px;
+  margin:10px auto;
+  width:320px;
+  box-shadow:0 20px 45px rgba(0,0,0,0.6),inset 0 0 25px rgba(0,0,0,0.3);
+  position:relative;
+  z-index:6;
+  overflow:hidden;
+}
+
+.radio-logo{
+  width:210px;
+  margin:0 auto 10px;
+  display:block;
+  filter:drop-shadow(0 8px 15px rgba(0,0,0,0.6));
+  animation:electric-vibe 2s linear infinite;
+}
+
+@keyframes electric-vibe{
+  0%,50%{transform:translate(0,0);}
+  55%{transform:translate(2px,-2px);filter:brightness(1.5) drop-shadow(0 0 5px #ff0000);}
+  60%{transform:translate(-2px,2px);}
+  65%{transform:translate(2px,2px);filter:brightness(1.2);}
+  70%{transform:translate(-2px,-2px);}
+  75%{transform:translate(2px,0px);}
+  80%{transform:translate(-2px,1px);filter:brightness(1.5) drop-shadow(0 0 10px #ff0000);}
+  85%{transform:translate(1px,-1px);}
+  90%{transform:translate(-1px,2px);}
+  95%{transform:translate(1px,1px);}
+  100%{transform:translate(0,0);}
+}
+
+.waves-bg{
+  position:absolute;
+  top:155px;
+  left:50%;
+  transform:translateX(-50%);
+  width:200px;
+  height:200px;
+  z-index:1;
+  pointer-events:none;
+}
+
+.wave{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border:2px solid rgba(255,255,255,0.4);
+  border-radius:50%;
+  animation:ripple 3s infinite linear;
+  opacity:0;
+}
+.wave:nth-child(2){animation-delay:1s;}
+.wave:nth-child(3){animation-delay:2s;}
+
+@keyframes ripple{
+  0%{transform:scale(0.5);opacity:0;}
+  50%{opacity:0.5;}
+  100%{transform:scale(1.8);opacity:0;}
+}
+
+/* Personnalisation bouton principal */
+.btn-custom{
+  background:linear-gradient(90deg,#ff0000,#8b0000);
+  border:none;
+  color:white;
+  padding:14px 25px;
+  border-radius:50px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.shine-wrapper{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:4;
+  overflow:hidden;
+}
+.shine-layer{
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(120deg,rgba(255,255,255,0) 30%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0) 70%);
+  transform:rotate(25deg);
+  animation:full-shine 4s infinite linear;
+}
+@keyframes full-shine{0%{transform:translateX(-100%) rotate(25deg);}100%{transform:translateX(100%) rotate(25deg);}}
+
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="cinematic-smoke"></div>
+<div class="shine-wrapper"><div class="shine-layer"></div></div>
 
-  <img src="assets/logo.PNG" class="logo">
+<div id="app">
+<div class="player-card">
 
-  <div id="sc-player"
-      is="player"
-      lang="fr"
-      api-url="https://manager11.streamradio.fr:1700/api/v2"
-      server-id="1"
-      station-name="SHADE RADIO"
-      imagecontainer="top"
-      controlscontainer="bottom"
-      :show-history="false"
-      :show-share="false"
-      :show-dj="false"
-      :show-image="true"
-      :show-bitrate="false"
-      play-button-color="#ffffff"
-      :progress-show="false"
-      progress-bar-color="#ffffff"
-      player-width="100%">
-  </div>
+<div class="header-container">
+<div class="live-badge">● LIVE</div>
+<div class="radio-ticker">
+<span>Retrouvez-nous tous les soirs dès 21h sur TikTok en live</span>
+</div>
+</div>
 
-  <button class="live-btn" onclick="togglePlay()" id="liveButton">
-    🔴 ÉCOUTER EN LIVE
-  </button>
+<div class="main-frame">
+<img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="footer">
-    100% HIP-HOP CLASSIC
-  </div>
+<div class="player-container">
+<div class="waves-bg">
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+</div>
 
+<div id="sc-player"
+is="player"
+lang="fr"
+api-url="https://manager11.streamradio.fr:1700/api/v2"
+server-id="1"
+station-name="SHADE RADIO"
+imagecontainer="top"
+controlscontainer="bottom"
+:show-history="false"
+:show-share="false"
+:show-dj="false"
+:show-image="true"
+:show-bitrate="false"
+play-button-color="#ffffff"
+:progress-show="false"
+progress-bar-color="#ffffff"
+player-width="100%">
+</div>
+</div>
+</div>
+
+<div class="actions-box" style="display:flex;justify-content:center;margin-top:20px;">
+<button class="btn-custom" onclick="document.querySelector('#sc-player button').click()">
+🎧 ÉCOUTER LA RADIO
+</button>
+</div>
+
+</div>
 </div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-
-<script>
-function togglePlay(){
-  const realButton = document.querySelector('#sc-player button');
-  if(realButton){
-    realButton.click();
-  }
-
-  const btn = document.getElementById("liveButton");
-
-  if(btn.innerText.includes("ÉCOUTER")){
-    btn.innerHTML="⏸ COUPER LE LIVE";
-    btn.style.background="linear-gradient(90deg,#444,#111)";
-  }else{
-    btn.innerHTML="🔴 ÉCOUTER EN LIVE";
-    btn.style.background="linear-gradient(90deg,#ff0000,#8b0000)";
-  }
-}
-
-/* WAKE LOCK */
-let wakeLock=null;
-async function requestWakeLock(){
- if('wakeLock' in navigator){
-   try{
-     wakeLock=await navigator.wakeLock.request('screen');
-   }catch(e){}
- }
-}
-document.addEventListener("click",requestWakeLock);
-</script>
 
 </body>
 </html>
