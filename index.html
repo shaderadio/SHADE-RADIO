@@ -20,63 +20,67 @@ body::before{
 .hero{ text-align:center; padding:40px 20px; }
 .radio-logo{ width:80%; max-width:280px; display:block; margin:0 auto 20px; filter:drop-shadow(0 0 20px rgba(255,0,0,0.4)); }
 
-/* ===== ADAPTATION DU PLAYER SHADE ===== */
+/* ZONE PLAYER & POCHETTE */
 .player-wrapper {
-  width: 200px; /* Taille réduite demandée */
-  margin: 0 auto 20px;
-  position: relative;
+  width: 200px;
+  margin: 0 auto 25px;
 }
 
-/* On force le player à être transparent et propre */
-#sc-player {
-  width: 100% !important;
-  background: transparent !important;
+#sc-player { width: 100% !important; background: transparent !important; }
+
+/* On masque les contrôles inutiles mais on prépare le bouton PLAY */
+#sc-player [class*="controls-container"] { background: transparent !important; border: none !important; }
+#sc-player [class*="history"], #sc-player [class*="share"], [class*="visualizer"], [class*="progress"] {
+  display: none !important;
 }
 
-/* ON REND LE BOUTON PLAY D'ORIGINE INVISIBLE */
-#sc-player [class*="play-button"], 
-#sc-player [class*="controls-container"],
-.sc-player-controls {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* On stylise l'image du player */
 #sc-player img {
-  width: 200px !important;
-  height: 200px !important;
+  width: 200px !important; height: 200px !important;
   border-radius: 20px !important;
   box-shadow: 0 15px 40px rgba(0,0,0,0.8);
   object-fit: cover !important;
 }
 
-/* On masque tout le surplus (historique, etc.) */
-#sc-player [class*="history"], #sc-player [class*="share"], [class*="visualizer"] {
-  display: none !important;
+/* ZONE DU BOUTON MAGIQUE */
+.btn-container {
+  position: relative;
+  width: 240px;
+  height: 55px;
+  margin: 0 auto;
 }
 
-/* On stylise le titre/artiste en blanc */
+/* Ton bouton visuel (celui qui reste beau) */
+.live-btn-design {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg,#ff0000,#8b0000);
+  font-weight: bold; font-size: 15px; color: white;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 25px rgba(255,0,0,0.4);
+  z-index: 1;
+  text-transform: uppercase;
+}
+
+/* Le vrai bouton du player (invisible mais capte le clic) */
+#sc-player [class*="play-button"] {
+  position: absolute !important;
+  top: 0 !important; left: 0 !important;
+  width: 240px !important; height: 55px !important;
+  opacity: 0 !important; /* INVISIBLE */
+  z-index: 10 !important; /* PAR-DESSUS TOUT */
+  cursor: pointer !important;
+}
+
+/* Style du titre sous la pochette */
 #sc-player [class*="meta-container"] {
   background: transparent !important;
   color: white !important;
   margin-top: 10px;
+  font-weight: bold;
 }
 
-/* ===== TON BOUTON LIVE ===== */
-.live-btn {
-  display: inline-block;
-  padding: 16px 50px;
-  border-radius: 50px;
-  background: linear-gradient(90deg,#ff0000,#8b0000);
-  font-weight: bold; font-size: 15px; color: white;
-  border: none; cursor: pointer;
-  box-shadow: 0 0 25px rgba(255,0,0,0.4);
-  text-transform: uppercase;
-}
-
-.actions-box{ margin:30px 20px 80px; display:flex; flex-direction:column; gap:12px; }
+.actions-box{ margin:40px 20px 80px; display:flex; flex-direction:column; gap:12px; }
 .btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor:pointer; }
 .bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
 </style>
@@ -105,7 +109,9 @@ body::before{
     </div>
   </div>
 
-  <button id="master-play" class="live-btn" onclick="triggerRealPlay()">ÉCOUTER EN LIVE</button>
+  <div class="btn-container">
+    <div class="live-btn-design" id="btn-text">ÉCOUTER EN LIVE</div>
+    </div>
 
   <div class="actions-box">
     <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander un titre</button>
@@ -118,22 +124,26 @@ body::before{
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
 <script>
-function triggerRealPlay() {
-  // On va chercher le bouton play caché dans le widget
-  const realPlayBtn = document.querySelector('#sc-player [class*="play-button"]');
-  const mainBtn = document.getElementById('master-play');
-
-  if (realPlayBtn) {
-    realPlayBtn.click();
-    if (mainBtn.innerText === "ÉCOUTER EN LIVE") {
-      mainBtn.innerText = "EN DIRECT 🟢";
-      mainBtn.style.background = "#222";
-    } else {
-      mainBtn.innerText = "ÉCOUTER EN LIVE";
-      mainBtn.style.background = "linear-gradient(90deg,#ff0000,#8b0000)";
-    }
+// On attend que le player soit chargé pour déplacer le bouton invisible au bon endroit
+window.addEventListener('load', function() {
+  const realBtn = document.querySelector('#sc-player [class*="play-button"]');
+  const container = document.querySelector('.btn-container');
+  if(realBtn && container) {
+    container.appendChild(realBtn);
+    
+    // On change le texte quand on clique
+    realBtn.addEventListener('click', function() {
+      const txt = document.getElementById('btn-text');
+      if (txt.innerText === "ÉCOUTER EN LIVE") {
+        txt.innerText = "RADIO EN DIRECT 🟢";
+        txt.style.background = "#222";
+      } else {
+        txt.innerText = "ÉCOUTER EN LIVE";
+        txt.style.background = "linear-gradient(90deg,#ff0000,#8b0000)";
+      }
+    });
   }
-}
+});
 
 function shareRadio(){
   if(navigator.share){
