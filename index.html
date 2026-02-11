@@ -5,157 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
   
-  <meta name="theme-color" content="#000000">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: Arial, Helvetica, sans-serif; 
-      margin: 0; padding: 0; 
-      -webkit-tap-highlight-color: transparent; 
-    }
-
-    body {
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden; 
-      padding-top: env(safe-area-inset-top, 20px); 
-      position: relative;
-      perspective: 1200px; 
-    }
-
-    /* EFFET SMOKY */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: 
-        radial-gradient(circle at 50% 30%, rgba(180, 0, 0, 0.45), transparent 70%),
-        radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.3), transparent 60%);
-      z-index: -1;
-    }
-
+    /* ... (Garder tout ton style précédent pour le corps et le logo) ... */
+    * { box-sizing: border-box; font-family: Arial, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; perspective: 1200px; position: relative; }
+    body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(180, 0, 0, 0.45), transparent 70%), radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.3), transparent 60%); z-index: -1; }
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO : ANIMATION SHADE EN BOUCLE */
     .radio-logo {
-      width: 210px;
-      margin: 0 auto 15px;
-      display: block;
+      width: 210px; margin: 0 auto 15px; display: block;
       filter: drop-shadow(0 0 15px rgba(255,0,0,0.4));
       animation: shade-entrance-swing 6s ease-in-out infinite;
-      transform-origin: center;
     }
-
     @keyframes shade-entrance-swing {
       0% { opacity: 0; transform: translateZ(500px) rotateY(90deg); filter: brightness(0) blur(10px); }
-      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
+      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
       35% { transform: rotateY(25deg); filter: brightness(1.3) drop-shadow(0 0 25px #ff0000); }
       55% { transform: rotateY(-25deg); filter: brightness(1.3) drop-shadow(0 0 25px #ff0000); }
-      75% { transform: rotateY(25deg); }
-      100% { transform: rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
+      100% { transform: rotateY(0deg); }
     }
-
-    .header-container {
-      display: flex; align-items: center;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px; margin-bottom: 15px; overflow: hidden;
-    }
-
-    .live-badge {
-      background: linear-gradient(90deg, #ff0000, #8b0000);
-      color: #fff; font-size: 11px; font-weight: bold;
-      padding: 10px 15px; animation: pulse 1.5s infinite; white-space: nowrap;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
-      70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
-      100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
-    }
-
-    .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
-    .radio-ticker span {
-      display: inline-block; white-space: nowrap; padding-left: 100%;
-      animation: shade-scroll 12s linear infinite;
-      color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase;
-    }
-    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(15px);
-      border-radius: 40px;
-      padding: 30px 10px 15px 10px; 
-      margin: 10px auto; width: 100%; max-width: 320px;
+      border-radius: 40px; padding: 30px 10px 15px 10px; margin: 10px auto; width: 100%; max-width: 320px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
     }
 
+    /* --- SECTION PLAYER & BOUTON PLAY --- */
     #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; }
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
-    #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
-    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
-    #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
-    /* BOUTON PLAY : ULTRA-PETIT ET EFFET VERRE (GLASSY) */
-    #sc-player [class*="play-button"] { 
-      background: rgba(255, 255, 255, 0.1) !important; /* Fond transparent */
-      backdrop-filter: blur(10px) !important; /* Effet de flou */
-      border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Bordure fine style verre */
-      border-radius: 50% !important; 
-      transform: scale(0.5) !important; /* Encore plus petit */
-      transform-origin: center !important;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
-      margin-top: 0px !important;
+    /* Ciblage ultra-précis du bouton play pour forcer l'effet glassy et la taille */
+    [id*="sc-player"] [class*="play-button"], 
+    [id*="sc-player"] button[class*="play"],
+    .play-button {
+      background: rgba(255, 255, 255, 0.15) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1), 0 10px 20px rgba(0,0,0,0.5) !important;
+      
+      /* RÉDUCTION DE TAILLE RADICALE */
+      width: 50px !important; 
+      height: 50px !important;
+      min-width: 50px !important;
+      transform: scale(0.5) !important; 
+      margin: 0 auto !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
-    .actions-box { display: flex; justify-content: center; gap: 12px; margin: 15px auto; }
-    .btn-custom {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white; padding: 12px 20px; border-radius: 50px;
-      font-size: 12px; font-weight: bold; backdrop-filter: blur(10px);
+    /* Force la couleur de l'icône à l'intérieur du bouton */
+    [id*="sc-player"] [class*="play-button"] svg,
+    [id*="sc-player"] [class*="play-button"] i {
+      fill: white !important;
+      color: white !important;
+      transform: scale(0.8) !important; /* Réduit aussi l'icône play */
     }
+
+    /* Reste du player */
+    #sc-player img { width: 100% !important; border-radius: 25px !important; }
+    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; margin-top: 15px !important; }
+    #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; }
+    
+    .header-container { display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
+    .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; padding: 10px 15px; animation: pulse 1.5s infinite; }
+    .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; }
+    .radio-ticker span { display: inline-block; white-space: nowrap; animation: shade-scroll 12s linear infinite; color: #ffffff; font-size: 12px; }
+    @keyframes shade-scroll { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+    .actions-box { display: flex; justify-content: center; gap: 12px; margin: 15px auto; }
+    .btn-custom { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 12px 20px; border-radius: 50px; font-size: 12px; backdrop-filter: blur(10px); }
   </style>
 </head>
 <body>
   <div id="app">
     <div class="header-container">
       <div class="live-badge">● LIVE</div>
-      <div class="radio-ticker">
-        <span>100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
-      </div>
+      <div class="radio-ticker"><span>100% Hip-Hop Classic — Shade Radio</span></div>
     </div>
-
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
       <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
     </div>
-
     <div class="actions-box">
       <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander</button>
       <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
     </div>
   </div>
-
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-  <script>
-    function shareRadio() {
-      if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
-      }
-    }
-    let wakeLock = null;
-    const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
-    window.addEventListener('touchstart', reqWL);
-  </script>
 </body>
 </html>
