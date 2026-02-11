@@ -6,146 +6,83 @@
 <title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial, Helvetica, sans-serif;
-  -webkit-tap-highlight-color:transparent;
-}
+*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
+body{ background:#000; color:#fff; min-height:100vh; overflow-x:hidden; }
 
-body{
-  background:#000;
-  color:#fff;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* ===== FOND SMOKY PREMIUM ===== */
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%),
-    radial-gradient(circle at 30% 70%, rgba(120,0,0,0.5), transparent 60%),
-    #000;
+  content:""; position:fixed; inset:0;
+  background: radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%), #000;
   z-index:-1;
 }
 
-/* ===== TOP BAR ===== */
-.topbar{
-  width:100%;
-  background:linear-gradient(90deg,#8b0000,#c40000);
-  text-align:center;
-  padding:12px;
-  font-size:13px;
-  font-weight:bold;
-  letter-spacing:1px;
+.hero{ text-align:center; padding:40px 20px; }
+.radio-logo{ width:80%; max-width:300px; display:block; margin:0 auto 30px; filter:drop-shadow(0 0 30px rgba(255,0,0,0.4)); }
+
+/* CONTENEUR MAGIQUE */
+.player-master-container {
+  position: relative;
+  width: 200px;
+  margin: 0 auto;
 }
 
-/* ===== HERO ===== */
-.hero{
-  text-align:center;
-  padding:40px 20px 20px;
+/* TON BOUTON (Il est au-dessus mais laisse passer le clic) */
+.live-btn-overlay {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  padding: 15px 0;
+  border-radius: 50px;
+  background: linear-gradient(90deg,#ff0000,#8b0000);
+  font-weight: bold; font-size: 14px; color: white;
+  box-shadow: 0 0 25px rgba(255,0,0,0.4);
+  z-index: 10;
+  pointer-events: none; /* TRÈS IMPORTANT : le clic passe à travers ! */
+  text-align: center;
 }
 
-.radio-logo{
-  width:80%;
-  max-width:300px;
-  display:block;
-  margin:0 auto 30px;
-  filter:drop-shadow(0 0 30px rgba(255,0,0,0.4));
-}
-
-/* ===== BOUTON LIVE ===== */
-.live-btn{
-  display:inline-block;
-  padding:16px 50px;
-  border-radius:50px;
-  background:linear-gradient(90deg,#ff0000,#8b0000);
-  font-weight:bold;
-  font-size:16px;
-  text-decoration:none;
-  color:white;
-  transition:0.3s;
-  box-shadow:0 0 25px rgba(255,0,0,0.4);
+/* LE PLAYER (Lui reçoit le clic) */
+#sc-player {
+  width: 200px !important;
+  height: 200px !important;
   cursor: pointer;
-  border: none;
-  outline: none;
 }
 
-/* ===== PLAYER RÉDUIT ===== */
-.player-wrapper{
-  margin: 40px auto;
-  max-width: 200px;
-  padding-bottom: 20px;
-}
-
-/* MASQUER LE BOUTON PLAY D'ORIGINE */
-#sc-player [class*="play-button"], 
-#sc-player [class*="controls"],
-.sc-player-controls {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-#sc-player img{
-  border-radius:15px !important;
-  box-shadow:0 10px 30px rgba(0,0,0,0.8);
-  width: 100% !important;
-}
-
-/* Nettoyage */
-#sc-player [class*="progress"],
-#sc-player [class*="time"],
-#sc-player [class*="bitrate"]{
+/* On cache tout sauf l'image et le bouton play que l'on centre */
+#sc-player [class*="progress"], #sc-player [class*="time"], #sc-player [class*="bitrate"] {
   display:none !important;
 }
 
-.actions-box{
-  margin:20px 20px 80px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+/* On rend le bouton play d'origine transparent pour qu'on ne voit que le TIEN */
+#sc-player [class*="play-button"] {
+  opacity: 0 !important; 
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top:0; left:0;
 }
 
-.btn-custom{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  padding:12px;
-  border-radius:50px;
-  color:white;
-  font-weight:bold;
-  backdrop-filter:blur(6px);
+#sc-player img {
+  border-radius: 15px;
+  width: 200px !important;
+  height: 200px !important;
+  object-fit: cover;
 }
 
-.bottom-live{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:linear-gradient(90deg,#8b0000,#ff0000);
-  padding:15px;
-  text-align:center;
-  font-weight:bold;
-  z-index:1000;
-}
+.actions-box{ margin:40px 20px 80px; display:flex; flex-direction:column; gap:12px; }
+.btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor: pointer;}
+.bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  📧 shaderadiolive@gmail.com
-</div>
-
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <button id="master-play-btn" onclick="triggerPlay()" class="live-btn">ÉCOUTER EN LIVE</button>
-
-  <div class="player-wrapper">
+  <div class="player-master-container">
+    <div class="live-btn-overlay" id="status-text">ÉCOUTER EN LIVE</div>
+    
     <div id="sc-player"
       is="player"
       lang="fr"
@@ -158,62 +95,32 @@ body::before{
       :show-dj="false"
       :show-bitrate="false"
       :progress-show="false"
-      player-width="100%">
+      player-width="200px">
     </div>
   </div>
 
   <div class="actions-box">
-    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre'">
-      🎵 Demander un titre
-    </button>
-    <button class="btn-custom" onclick="shareRadio()">
-      📲 Partager
-    </button>
+    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande'">🎵 Demander un titre</button>
+    <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
   </div>
 </section>
 
-<div class="bottom-live">
-  🔴 SHADE RADIO – 100% HIP-HOP CLASSIC
-</div>
+<div class="bottom-live">🔴 SHADE RADIO – 100% HIP-HOP CLASSIC</div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
 <script>
-function triggerPlay() {
-  const mainBtn = document.getElementById('master-play-btn');
-  
-  // 1. Essayer de trouver le bouton play dans le Shadow DOM ou le DOM normal
-  // On cherche plusieurs sélecteurs possibles utilisés par ce player
-  const selectors = ['.play-button', '.sc-player-play-pause', '[class*="play"]'];
-  let foundBtn = null;
-
-  selectors.forEach(sel => {
-    const el = document.querySelector('#sc-player').shadowRoot 
-               ? document.querySelector('#sc-player').shadowRoot.querySelector(sel)
-               : document.querySelector('#sc-player ' + sel);
-    if (el) foundBtn = el;
-  });
-
-  if (foundBtn) {
-    foundBtn.click();
-    mainBtn.innerText = "CHARGEMENT...";
-    setTimeout(() => { mainBtn.innerText = "RADIO EN DIRECT 🟢"; }, 3000);
-  } else {
-    // Si le player n'est pas encore prêt, on simule un clic sur l'élément lui-même
-    // car certains lecteurs lancent le play au clic sur le conteneur
-    document.getElementById('sc-player').click();
-    mainBtn.innerText = "LANCEMENT...";
-    setTimeout(() => { mainBtn.innerText = "RADIO EN DIRECT 🟢"; }, 2000);
-  }
-}
+// On change le texte quand on clique sur la zone du player
+document.getElementById('sc-player').addEventListener('click', function() {
+    const txt = document.getElementById('status-text');
+    txt.innerText = "CHARGEMENT...";
+    txt.style.background = "linear-gradient(90deg, #222, #000)";
+    setTimeout(() => { txt.innerText = "EN DIRECT 🟢"; }, 4000);
+});
 
 function shareRadio(){
  if(navigator.share){
-   navigator.share({
-     title:'SHADE RADIO',
-     text:'Écoute SHADE RADIO 🎧',
-     url:window.location.href
-   });
+   navigator.share({ title:'SHADE RADIO', text:'Écoute SHADE RADIO 🎧', url:window.location.href });
  }
 }
 </script>
