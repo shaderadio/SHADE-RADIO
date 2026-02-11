@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
+<title>SHADE RADIO</title>
 
 <style>
-*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; -webkit-tap-highlight-color:transparent; }
-body{ background:#000; color:#fff; min-height:100vh; overflow-x:hidden; }
+*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial, sans-serif; }
+body{ background:#000; color:#fff; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
 
 /* FOND SMOKY */
 body::before{
@@ -16,47 +16,20 @@ body::before{
   z-index:-1;
 }
 
-.hero{ text-align:center; padding:40px 20px; }
-.radio-logo{ width:80%; max-width:280px; display:block; margin:0 auto 30px; filter:drop-shadow(0 0 20px rgba(255,0,0,0.4)); }
+.hero{ text-align:center; padding:40px 20px; width:100%; max-width:400px; }
+.radio-logo{ width:200px; margin-bottom:20px; filter:drop-shadow(0 0 20px rgba(255,0,0,0.4)); }
 
-/* ===== ZONE POCHETTE ET TITRE (AUTO-GÉRÉE) ===== */
-.player-display {
-  max-width: 200px;
-  margin: 0 auto 25px;
-}
-
-#track-cover {
-  width: 180px;
-  height: 180px;
+/* CONTENEUR DU WIDGET */
+.widget-box {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
   border-radius: 20px;
-  object-fit: cover;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-  border: 1px solid rgba(255,255,255,0.1);
-  background: #111;
-  margin-bottom: 15px;
+  backdrop-filter: blur(10px);
+  margin-bottom: 25px;
+  min-height: 150px; /* Évite que ça disparaisse si ça charge mal */
 }
 
-.metadata {
-  min-height: 50px;
-  margin-top: 10px;
-}
-
-#track-title {
-  display: block;
-  font-weight: bold;
-  font-size: 16px;
-  color: #fff;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-
-#track-artist {
-  display: block;
-  font-size: 13px;
-  color: rgba(255,255,255,0.5);
-}
-
-/* ===== BOUTON LECTEUR ===== */
+/* LE BOUTON PLAY QUE TU AIMES */
 .live-btn {
   display: inline-block;
   padding: 16px 50px;
@@ -65,11 +38,10 @@ body::before{
   font-weight: bold; font-size: 15px; color: white;
   border: none; cursor: pointer;
   box-shadow: 0 0 25px rgba(255,0,0,0.4);
+  margin-top: 10px;
 }
 
-.actions-box{ margin:30px 20px 80px; display:flex; flex-direction:column; gap:12px; }
-.btn-custom{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:15px; border-radius:50px; color:white; font-weight:bold; backdrop-filter:blur(6px); cursor:pointer; }
-.bottom-live{ position:fixed; bottom:0; width:100%; background:linear-gradient(90deg,#8b0000,#ff0000); padding:15px; text-align:center; font-weight:bold; z-index:1000; }
+.bottom-live{ position:fixed; bottom:0; width:100%; background:#8b0000; padding:15px; text-align:center; font-weight:bold; }
 </style>
 </head>
 
@@ -78,28 +50,28 @@ body::before{
 <section class="hero">
   <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
 
-  <div class="player-display">
-    <img id="track-cover" src="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png" onerror="this.src='https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png'">
-    <div class="metadata">
-      <span id="track-title">CHARGEMENT...</span>
-      <span id="track-artist">SHADE RADIO</span>
+  <div class="widget-box">
+    <div is="stream-status-widget" 
+         lang="fr" 
+         api-base="https://manager11.streamradio.fr:1700/api/v2" 
+         server-id="1" 
+         bgcolor="#ffffff"
+         track_image_size="150"
+         vote_show="false">
     </div>
   </div>
 
   <button id="play-btn" class="live-btn" onclick="togglePlay()">ÉCOUTER EN LIVE</button>
 
-  <div class="actions-box">
-    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">🎵 Demander un titre</button>
-    <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
-  </div>
 </section>
 
-<div class="bottom-live">🔴 SHADE RADIO – 100% HIP-HOP CLASSIC</div>
+<div class="bottom-live">🔴 SHADE RADIO EN DIRECT</div>
+
+<link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/current_track_widget/status_widget.css" />
+<script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/current_track_widget/status_widget.js"></script>
 
 <script>
-/* 1. LECTEUR AUDIO */
-const streamUrl = "http://manager11.streamradio.fr:1710/stream";
-const audio = new Audio(streamUrl);
+const audio = new Audio("http://manager11.streamradio.fr:1710/stream");
 let isPlaying = false;
 
 function togglePlay() {
@@ -110,45 +82,9 @@ function togglePlay() {
     isPlaying = true;
   } else {
     audio.pause();
-    audio.src = streamUrl; 
+    audio.src = "http://manager11.streamradio.fr:1710/stream"; 
     btn.innerText = "ÉCOUTER EN LIVE";
     isPlaying = false;
-  }
-}
-
-/* 2. RÉCUPÉRATION DES INFOS (VIA PROXY POUR ÉVITER LES BLOCAGES) */
-async function getRadioData() {
-    try {
-        // On utilise un proxy public (allorigins) pour passer outre les blocages de sécurité du navigateur
-        const api = "https://manager11.streamradio.fr:1700/api/v2/server/1/status";
-        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(api)}`);
-        const json = await response.json();
-        const data = JSON.parse(json.contents);
-
-        if (data && data.success) {
-            const track = data.data.track;
-            document.getElementById('track-title').innerText = track.title || "LIVE";
-            document.getElementById('track-artist').innerText = track.artist || "SHADE RADIO";
-            
-            if (track.image) {
-                // On s'assure que l'URL de l'image est complète
-                let imgUrl = track.image;
-                if (!imgUrl.startsWith('http')) imgUrl = "https://manager11.streamradio.fr:1700" + imgUrl;
-                document.getElementById('track-cover').src = imgUrl;
-            }
-        }
-    } catch (e) {
-        console.log("Erreur de synchro");
-    }
-}
-
-// Update toutes les 15 secondes
-setInterval(getRadioData, 15000);
-getRadioData();
-
-function shareRadio(){
-  if(navigator.share){
-    navigator.share({ title:'SHADE RADIO', text:'Écoute SHADE RADIO 🎧', url:window.location.href });
   }
 }
 </script>
