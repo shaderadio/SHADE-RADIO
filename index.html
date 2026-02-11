@@ -40,7 +40,15 @@
       z-index: -1;
     }
 
-    #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
+    /* REMONTÉE DE TOUS LES ÉLÉMENTS */
+    #app { 
+      width: 100%; 
+      max-width: 420px; 
+      padding: 0 15px; 
+      position: relative; 
+      z-index: 10; 
+      margin-top: -60px; /* Ajuste ce chiffre pour remonter plus ou moins haut */
+    }
 
     /* LOGO : ANIMATION SHADE EN BOUCLE */
     .radio-logo {
@@ -89,34 +97,28 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* CADRE CENTRAL ÉTIRÉ */
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(15px);
       border-radius: 40px;
-      padding: 30px 20px 25px 20px; /* Padding augmenté pour étirer */
-      margin: 10px auto; 
-      width: 100%; 
-      max-width: 350px; /* Largeur augmentée de 320px à 350px */
+      padding: 30px 10px 15px 10px; 
+      margin: 10px auto; width: 100%; max-width: 320px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
     }
 
-    #sc-player { background: transparent !important; transform: scale(0.95); transform-origin: top center; height: 400px; }
+    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
-    /* BOUTON PLAY : PETIT ET EFFET VERRE */
+    /* BOUTON PLAY RÉTRÉCI */
     #sc-player [class*="play-button"] { 
-      background: rgba(255, 255, 255, 0.1) !important; 
-      backdrop-filter: blur(10px) !important; 
-      border: 1px solid rgba(255, 255, 255, 0.2) !important; 
-      border-radius: 50% !important; 
-      transform: scale(0.45) !important; /* Ajusté pour être bien centré */
+      background: linear-gradient(90deg, #ff0000, #8b0000) !important; 
+      border-radius: 50px !important; 
+      transform: scale(0.7) !important; 
       transform-origin: center !important;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
       margin-top: 5px !important;
     }
 
