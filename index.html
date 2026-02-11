@@ -2,281 +2,190 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>SHADE RADIO – 100% HIP-HOP CLASSIC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SHADE RADIO</title>
 
 <meta name="theme-color" content="#8b0000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SHADE RADIO">
 
-<link rel="apple-touch-icon" href="assets/logo.PNG">
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/logo.PNG">
 
 <style>
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
   font-family:Arial, Helvetica, sans-serif;
   -webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
+  height:100%;
   background:#000;
   color:#fff;
-  min-height:100vh;
-  overflow-x:hidden;
+  overflow:hidden;
 }
 
-/* ===== FOND SMOKY PREMIUM ===== */
-body::before{
-  content:"";
+/* ===== SMOKE CINEMATIQUE ===== */
+.smoke{
   position:fixed;
   inset:0;
-  background:
-    radial-gradient(circle at 50% 40%, rgba(180,0,0,0.6), transparent 60%),
-    radial-gradient(circle at 30% 70%, rgba(120,0,0,0.5), transparent 60%),
-    #000;
-  z-index:-1;
+  background:url("https://i.ibb.co/7vDLJFb/smoke.png") repeat;
+  opacity:0.15;
+  animation:smokeMove 60s linear infinite;
+  z-index:0;
 }
 
-/* ===== TOP BAR ===== */
-.topbar{
-  width:100%;
-  background:linear-gradient(90deg,#8b0000,#c40000);
+@keyframes smokeMove{
+  from{background-position:0 0;}
+  to{background-position:1000px -1000px;}
+}
+
+/* ===== LAYOUT APP ===== */
+.app{
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  padding:30px 20px 40px;
   text-align:center;
-  padding:12px;
-  font-size:13px;
-  font-weight:bold;
-  letter-spacing:1px;
 }
 
-/* ===== HERO ===== */
-.hero{
-  text-align:center;
-  padding:60px 20px 30px;
+/* LOGO */
+.logo{
+  width:75%;
+  max-width:300px;
+  filter:drop-shadow(0 0 25px rgba(255,0,0,0.5));
 }
 
-.radio-logo{
-  width:90%;
-  max-width:420px;
-  display:block;
-  margin:0 auto 40px;
-  filter:drop-shadow(0 0 30px rgba(255,0,0,0.4));
+/* POCHETTE */
+#sc-player img{
+  width:140px !important;
+  height:140px !important;
+  border-radius:20px !important;
+  box-shadow:0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* ===== BOUTON LIVE ===== */
+/* SUPPRESSION CADRE GRIS */
+#sc-player,
+#sc-player *{
+  background:transparent !important;
+  box-shadow:none !important;
+  border:none !important;
+}
+
+/* CACHER PLAY NATIF */
+#sc-player button{
+  display:none !important;
+}
+
+/* BOUTON LIVE PRINCIPAL */
 .live-btn{
-  display:inline-block;
+  margin-top:20px;
   padding:18px 50px;
   border-radius:50px;
   background:linear-gradient(90deg,#ff0000,#8b0000);
   font-weight:bold;
   font-size:16px;
-  text-decoration:none;
   color:white;
+  border:none;
+  box-shadow:0 0 30px rgba(255,0,0,0.5);
   transition:0.3s;
-  box-shadow:0 0 25px rgba(255,0,0,0.4);
 }
 
-.live-btn:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 35px rgba(255,0,0,0.7);
+.live-btn:active{
+  transform:scale(0.95);
 }
 
-/* ===== PLAYER ===== */
-.player-wrapper{
-  margin-top:60px;
-  padding-bottom:120px;
-}
-
-#sc-player{
-  background:transparent!important;
-  box-shadow:none!important;
-}
-
-#sc-player img{
-  border-radius:20px!important;
-  box-shadow:0 15px 40px rgba(0,0,0,0.8);
-}
-
-/* Nettoyage */
-#sc-player [class*="progress"],
-#sc-player [class*="time"],
-#sc-player [class*="bitrate"]{
-  display:none!important;
-}
-
-/* ===== ACTIONS ===== */
-.actions-box{
-  margin:40px 20px;
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-
-.btn-custom{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  padding:15px;
-  border-radius:50px;
-  color:white;
-  font-weight:bold;
-  backdrop-filter:blur(6px);
-}
-
-/* ===== LIVE BAR FIXE ===== */
-.bottom-live{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:linear-gradient(90deg,#8b0000,#ff0000);
-  padding:15px;
-  text-align:center;
-  font-weight:bold;
-  letter-spacing:1px;
-  z-index:1000;
-}
-
-/* ===== POPUP INSTALL ===== */
-#install-pwa-popup{
-  position:fixed;
-  bottom:25px;
-  left:50%;
-  transform:translateX(-50%);
-  width:90%;
-  max-width:360px;
-  background:#111;
-  border:1px solid #7a0000;
-  border-radius:20px;
-  padding:20px;
-  z-index:9999;
-  color:white;
-  text-align:center;
-  display:none;
+/* FOOTER */
+.footer{
+  font-size:12px;
+  opacity:0.6;
+  margin-top:20px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  📧 shaderadiolive@gmail.com
-</div>
+<div class="smoke"></div>
 
-<section class="hero">
-  <img src="assets/logo.PNG" alt="SHADE RADIO" class="radio-logo">
+<div class="app">
 
-  <a href="#player" class="live-btn">ÉCOUTER EN LIVE</a>
+  <img src="assets/logo.PNG" class="logo">
 
-  <div class="player-wrapper" id="player">
-    <div id="sc-player"
+  <div id="sc-player"
       is="player"
       lang="fr"
       api-url="https://manager11.streamradio.fr:1700/api/v2"
       server-id="1"
       station-name="SHADE RADIO"
       imagecontainer="top"
-      controlscontainer="bottom"
+      controlscontainer="hidden"
       :show-history="false"
       :show-share="false"
       :show-dj="false"
       :show-image="true"
       :show-bitrate="false"
-      play-button-color="#ffffff"
-      :progress-show="false"
-      progress-bar-color="#ffffff"
       player-width="100%">
-    </div>
   </div>
 
-  <div class="actions-box">
-    <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com'">
-      🎵 Demander un titre
-    </button>
-
-    <button class="btn-custom" onclick="shareRadio()">
-      📲 Partager
-    </button>
-  </div>
-</section>
-
-<div class="bottom-live">
-  🔴 SHADE RADIO – 100% HIP-HOP CLASSIC
-</div>
-
-<div id="install-pwa-popup">
-  <p>Installer l'application SHADE RADIO</p>
-  <div id="ios-instructions" style="display:none;">
-    Appuyez sur le bouton de partage puis sélectionnez
-    <strong>"Sur l'écran d'accueil"</strong>
-  </div>
-  <button id="android-install-btn" style="display:none;background:#c40000;color:white;border:none;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin-top:10px;">
-    Installer maintenant
+  <button class="live-btn" onclick="toggleRadio()" id="liveButton">
+    🔴 ÉCOUTER EN LIVE
   </button>
-  <button onclick="closePopup()" style="background:none;border:none;color:#777;text-decoration:underline;margin-top:15px;cursor:pointer;">
-    Pas maintenant
-  </button>
+
+  <div class="footer">
+    100% HIP-HOP CLASSIC
+  </div>
+
 </div>
 
 <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
 <script>
+let isPlaying=false;
+
+function toggleRadio(){
+  const player=document.querySelector('#sc-player button');
+  if(player){
+    player.click();
+  }
+
+  const btn=document.getElementById("liveButton");
+
+  if(!isPlaying){
+    btn.innerHTML="⏸ COUPER LE LIVE";
+    btn.style.background="linear-gradient(90deg,#555,#222)";
+  }else{
+    btn.innerHTML="🔴 ÉCOUTER EN LIVE";
+    btn.style.background="linear-gradient(90deg,#ff0000,#8b0000)";
+  }
+
+  isPlaying=!isPlaying;
+}
+
 /* WAKE LOCK */
 let wakeLock=null;
-const requestWakeLock=async()=>{
- if('wakeLock'in navigator){
+async function requestWakeLock(){
+ if('wakeLock' in navigator){
    try{
      wakeLock=await navigator.wakeLock.request('screen');
-   }catch(e){}
- }
-};
-window.addEventListener('mousedown',requestWakeLock);
-window.addEventListener('touchstart',requestWakeLock);
-document.addEventListener('visibilitychange',async()=>{
- if(wakeLock!==null && document.visibilityState==='visible'){
-   await requestWakeLock();
- }
-});
-
-/* SHARE */
-function shareRadio(){
- if(navigator.share){
-   navigator.share({
-     title:'SHADE RADIO',
-     text:'Écoute SHADE RADIO 🎧',
-     url:window.location.href
-   });
+   }catch(err){}
  }
 }
+document.addEventListener("click",requestWakeLock);
 
-/* PWA */
+/* PWA INSTALL */
 let deferredPrompt;
-const popup=document.getElementById('install-pwa-popup');
-
-function showPopup(){
- const isStandalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
- if(!isStandalone){
-   popup.style.display='block';
-   if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
-     document.getElementById('ios-instructions').style.display='block';
-   }else{
-     document.getElementById('android-install-btn').style.display='block';
-   }
- }
-}
-setTimeout(showPopup,4000);
-
 window.addEventListener('beforeinstallprompt',(e)=>{
  e.preventDefault();
  deferredPrompt=e;
- showPopup();
 });
-
-function closePopup(){
- popup.style.display='none';
-}
 </script>
 
 </body>
