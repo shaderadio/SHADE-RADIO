@@ -58,68 +58,48 @@
     }
 
     .hamburger-btn div {
-      width: 25px;
-      height: 3px;
+      width: 25px; height: 3px;
       background-color: white;
       margin: 5px 0;
       transition: 0.4s;
       border-radius: 2px;
     }
 
-    /* Animation Croix */
     .open .bar1 { transform: rotate(-45deg) translate(-5px, 6px); }
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
     .menu-overlay {
       position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      height: 100%;
+      top: 0; right: -100%;
+      width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.95);
       backdrop-filter: blur(20px);
       z-index: 999;
       transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center; gap: 30px;
     }
 
     .menu-overlay.active { right: 0; }
 
     .menu-link {
-      color: white;
-      text-decoration: none;
-      font-size: 24px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding: 15px 30px;
-      border-radius: 50px;
+      color: white; text-decoration: none;
+      font-size: 24px; font-weight: bold;
+      text-transform: uppercase; letter-spacing: 2px;
+      padding: 15px 30px; border-radius: 50px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.05);
-      width: 80%;
-      max-width: 300px;
-      text-align: center;
+      width: 80%; max-width: 300px; text-align: center;
       transition: 0.3s;
-    }
-
-    .menu-link:active {
-      background: rgba(255, 0, 0, 0.3);
-      transform: scale(0.95);
     }
 
     .menu-link.tiktok {
       background: linear-gradient(45deg, #00f2ea, #ff0050);
       border: none;
-      color: #fff;
     }
 
-    /* --- FIN MENU STYLE --- */
-
+    /* --- DESIGN LECTEUR (RÉTABLI) --- */
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
     .radio-logo {
@@ -129,8 +109,6 @@
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
       animation: shade-entrance-swing 7s ease-in-out infinite;
       transform-origin: center;
-      position: relative;
-      z-index: 5;
     }
 
     @keyframes shade-entrance-swing {
@@ -148,7 +126,7 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       border-radius: 12px; margin-bottom: 15px; overflow: hidden;
-      margin-right: 60px; /* Espace pour le bouton hamburger */
+      margin-right: 65px;
     }
 
     .live-badge {
@@ -180,10 +158,56 @@
       margin: 10px auto; width: 100%; max-width: 340px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
       position: relative;
-      z-index: 1;
+    }
+
+    /* --- EFFET GLOSSY ET POCHTETTE --- */
+    .player-container { position: relative; width: 100%; }
+
+    .player-container::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 7.5%; 
+      width: 85%; height: 260px; 
+      border-radius: 25px;
+      background: linear-gradient(
+        110deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0) 35%, 
+        rgba(255, 255, 255, 0.4) 48%, 
+        rgba(255, 255, 255, 0.6) 50%, 
+        rgba(255, 255, 255, 0.4) 52%, 
+        rgba(255, 255, 255, 0) 65%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      background-size: 300% 100%;
+      pointer-events: none; 
+      z-index: 10;
+      mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+      animation: gloss-sweep 5s linear infinite;
+    }
+
+    @keyframes gloss-sweep {
+      0% { background-position: 150% 0; }
+      100% { background-position: -150% 0; }
     }
 
     #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
+    
+    /* Correction Bords Arrondis Pochette */
+    #sc-player img { 
+      width: 100% !important; 
+      border-radius: 25px !important; 
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; 
+    }
+
+    #sc-player [class*="play-button"] { 
+      background: linear-gradient(145deg, #ff0000, #550000) !important; 
+      border-radius: 50% !important; 
+      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6) !important;
+    }
   </style>
 </head>
 <body>
@@ -195,9 +219,9 @@
   </div>
 
   <div class="menu-overlay" id="menuOverlay">
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link" onclick="toggleMenu()">🎵 Demander un titre</a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link">🎵 Demander un titre</a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();">📲 Partager la radio</a>
-    <a href="https://www.tiktok.com/@shaderadio?_r=1&_t=ZN-93s1zCzmU8U" target="_blank" class="menu-link tiktok" onclick="toggleMenu()">TikTok Shade</a>
+    <a href="https://www.tiktok.com/@shaderadio?_r=1&_t=ZN-93s1zCzmU8U" target="_blank" class="menu-link tiktok">TikTok Shade</a>
   </div>
 
   <div id="app">
@@ -218,20 +242,14 @@
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script>
-    // FONCTION POUR OUVRIR/FERMER LE MENU
-    function toggleMenu(btn) {
-      const menu = document.getElementById('menuOverlay');
-      const hamburger = document.querySelector('.hamburger-btn');
-      
-      menu.classList.toggle('active');
-      hamburger.classList.toggle('open');
+    function toggleMenu() {
+      document.getElementById('menuOverlay').classList.toggle('active');
+      document.querySelector('.hamburger-btn').classList.toggle('open');
     }
 
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
-      } else {
-        alert("Le partage n'est pas supporté sur ce navigateur.");
       }
     }
 
