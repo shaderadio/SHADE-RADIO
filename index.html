@@ -25,10 +25,10 @@
       background: #000;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* Aligné en haut */
       min-height: 100vh;
       overflow: hidden; 
-      padding-top: env(safe-area-inset-top, 20px); 
+      padding-top: env(safe-area-inset-top, 10px); 
       position: relative;
       perspective: 1200px;
     }
@@ -43,24 +43,46 @@
       z-index: -2;
     }
 
-    /* --- MENU HAMBURGER STYLE --- */
+    /* --- BARRE DU HAUT ALIGNÉE --- */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 420px;
+      padding: 10px 15px;
+      position: relative;
+      z-index: 1001;
+    }
+
+    .header-container {
+      flex: 1; /* Prend toute la place restante */
+      display: flex; 
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px; 
+      overflow: hidden;
+    }
+
+    /* --- MENU HAMBURGER (A COTÉ) --- */
     .hamburger-btn {
-      position: fixed;
-      top: calc(20px + env(safe-area-inset-top));
-      right: 20px;
-      z-index: 1000;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.1);
-      padding: 10px;
+      padding: 8px 10px;
       border-radius: 10px;
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .hamburger-btn div {
-      width: 25px; height: 3px;
+      width: 22px; height: 2px;
       background-color: white;
-      margin: 5px 0;
+      margin: 3px 0;
       transition: 0.4s;
       border-radius: 2px;
     }
@@ -69,18 +91,18 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
+    /* Overlay Menu */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
       width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.95);
       backdrop-filter: blur(20px);
-      z-index: 999;
+      z-index: 9999;
       transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
       display: flex; flex-direction: column;
       justify-content: center; align-items: center; gap: 30px;
     }
-
     .menu-overlay.active { right: 0; }
 
     .menu-link {
@@ -91,48 +113,23 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.05);
       width: 80%; max-width: 300px; text-align: center;
-      transition: 0.3s;
     }
 
-    .menu-link.tiktok {
-      background: linear-gradient(45deg, #00f2ea, #ff0050);
-      border: none;
-    }
+    .menu-link.tiktok { background: linear-gradient(45deg, #00f2ea, #ff0050); border: none; }
 
-    /* --- DESIGN LECTEUR (RÉTABLI) --- */
-    #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
-
-    .radio-logo {
-      width: 300px; 
-      margin: -20px auto 5px;
-      display: block;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
-      animation: shade-entrance-swing 7s ease-in-out infinite;
-      transform-origin: center;
-    }
-
-    @keyframes shade-entrance-swing {
-      0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
-      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
-      35% { transform: rotateY(20deg); filter: brightness(1.2); }
-      55% { transform: rotateY(-20deg); filter: brightness(1.2); }
-      75% { transform: rotateY(20deg); }
-      100% { transform: rotateY(0deg); filter: brightness(1); }
-    }
-
-    .header-container {
-      display: flex; align-items: center;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px; margin-bottom: 15px; overflow: hidden;
-      margin-right: 65px;
+    /* --- DESIGN LECTEUR --- */
+    #app { 
+      width: 100%; 
+      max-width: 420px; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .live-badge {
       background: linear-gradient(90deg, #ff0000, #8b0000);
       color: #fff; font-size: 11px; font-weight: bold;
-      padding: 10px 15px; animation: pulse 1.5s infinite; white-space: nowrap;
+      padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap;
     }
 
     @keyframes pulse {
@@ -145,7 +142,7 @@
     .radio-ticker span {
       display: inline-block; white-space: nowrap; padding-left: 100%;
       animation: shade-scroll 12s linear infinite;
-      color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase;
+      color: #ffffff; font-size: 11px; font-weight: 600; text-transform: uppercase;
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
@@ -154,13 +151,30 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(15px);
       border-radius: 40px;
-      padding: 25px 10px 15px 10px; 
-      margin: 10px auto; width: 100%; max-width: 340px;
+      padding: 20px 10px 10px 10px; 
+      margin-top: 5px; width: 92%; max-width: 340px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
       position: relative;
     }
 
-    /* --- EFFET GLOSSY ET POCHTETTE --- */
+    .radio-logo {
+      width: 260px; 
+      margin: 0 auto 10px;
+      display: block;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
+      animation: shade-entrance-swing 7s ease-in-out infinite;
+    }
+
+    @keyframes shade-entrance-swing {
+      0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
+      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
+      35% { transform: rotateY(20deg); filter: brightness(1.2); }
+      55% { transform: rotateY(-20deg); filter: brightness(1.2); }
+      75% { transform: rotateY(20deg); }
+      100% { transform: rotateY(0deg); filter: brightness(1); }
+    }
+
+    /* --- EFFET GLOSSY ET POCHETTE --- */
     .player-container { position: relative; width: 100%; }
 
     .player-container::after {
@@ -169,33 +183,19 @@
       top: 0; left: 7.5%; 
       width: 85%; height: 260px; 
       border-radius: 25px;
-      background: linear-gradient(
-        110deg, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0) 35%, 
-        rgba(255, 255, 255, 0.4) 48%, 
-        rgba(255, 255, 255, 0.6) 50%, 
-        rgba(255, 255, 255, 0.4) 52%, 
-        rgba(255, 255, 255, 0) 65%,
-        rgba(255, 255, 255, 0) 100%
-      );
+      background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
       background-size: 300% 100%;
-      pointer-events: none; 
-      z-index: 10;
+      pointer-events: none; z-index: 10;
       mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
       animation: gloss-sweep 5s linear infinite;
     }
 
-    @keyframes gloss-sweep {
-      0% { background-position: 150% 0; }
-      100% { background-position: -150% 0; }
-    }
+    @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
 
     #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     
-    /* Correction Bords Arrondis Pochette */
     #sc-player img { 
       width: 100% !important; 
       border-radius: 25px !important; 
@@ -212,23 +212,25 @@
 </head>
 <body>
 
-  <div class="hamburger-btn" onclick="toggleMenu(this)">
-    <div class="bar1"></div>
-    <div class="bar2"></div>
-    <div class="bar3"></div>
-  </div>
-
   <div class="menu-overlay" id="menuOverlay">
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link">🎵 Demander un titre</a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link" onclick="toggleMenu()">🎵 Demander un titre</a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();">📲 Partager la radio</a>
-    <a href="https://www.tiktok.com/@shaderadio?_r=1&_t=ZN-93s1zCzmU8U" target="_blank" class="menu-link tiktok">TikTok Shade</a>
+    <a href="https://www.tiktok.com/@shaderadio?_r=1&_t=ZN-93s1zCzmU8U" target="_blank" class="menu-link tiktok" onclick="toggleMenu()">TikTok Shade</a>
   </div>
 
   <div id="app">
-    <div class="header-container">
-      <div class="live-badge">● LIVE</div>
-      <div class="radio-ticker">
-        <span>100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
+    <div class="top-bar">
+      <div class="header-container">
+        <div class="live-badge">● LIVE</div>
+        <div class="radio-ticker">
+          <span>100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
+        </div>
+      </div>
+      
+      <div class="hamburger-btn" onclick="toggleMenu()">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
       </div>
     </div>
 
