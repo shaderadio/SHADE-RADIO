@@ -52,7 +52,7 @@
       max-width: 420px;
       padding: 10px 15px;
       position: relative;
-      z-index: 10000; /* Passé au dessus de l'overlay pour rester cliquable */
+      z-index: 10000;
     }
 
     .header-container {
@@ -60,20 +60,20 @@
       display: flex; 
       align-items: center;
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       border-radius: 12px; 
       overflow: hidden;
     }
 
-    /* --- HAMBURGER (FIXÉ POUR QUITTER) --- */
+    /* --- HAMBURGER --- */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(255, 255, 255, 0.15);
       padding: 8px 10px;
       border-radius: 10px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -88,7 +88,6 @@
       border-radius: 2px;
     }
 
-    /* Animation de la Croix quand ouvert */
     .open .bar1 { transform: rotate(-45deg) translate(-5px, 6px); }
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
@@ -98,7 +97,7 @@
       top: 0; right: -100%;
       width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(25px);
       z-index: 9999;
       transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
       display: flex; flex-direction: column;
@@ -118,22 +117,24 @@
 
     .menu-link.tiktok { background: linear-gradient(45deg, #00f2ea, #ff0050); border: none; }
 
-    /* --- CADRE SMOKY ENCORE PLUS ALLONGÉ --- */
+    /* --- CADRE SMOKY ALLONGÉ ET EFFET VERRE ÉPAIS --- */
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(15px);
-      border-radius: 45px;
-      /* Padding-bottom augmenté à 100px pour allonger encore le cadre */
-      padding: 25px 10px 100px 10px; 
+      backdrop-filter: blur(20px);
+      border-radius: 50px;
+      /* Allongement encore plus prononcé vers le bas */
+      padding: 25px 10px 160px 10px; 
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      /* Bordure façon verre épais */
+      border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 
-        0 25px 50px rgba(0,0,0,0.8),
-        inset 0 0 15px rgba(255, 255, 255, 0.05), 
-        0 0 15px rgba(255, 255, 255, 0.15); /* Glossy renforcé */
+        0 40px 80px rgba(0,0,0,0.9), /* Ombre portée profonde */
+        inset 0 0 2px 1px rgba(255, 255, 255, 0.2), /* Liseré de bordure interne */
+        inset 0 0 20px rgba(255, 255, 255, 0.05), /* Reflet interne doux */
+        0 0 20px rgba(255, 255, 255, 0.1); /* Halo extérieur */
     }
 
     #app { 
@@ -165,7 +166,7 @@
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
     .radio-logo {
-      width: 260px; 
+      width: 250px; 
       margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
