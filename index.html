@@ -10,54 +10,27 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
   <meta name="theme-color" content="#000000">
 
-  <link href="https://manager11.streamradio.fr:1700/media/static/css/widget-listener-messages.css" rel="stylesheet">
-
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: Arial, Helvetica, sans-serif; 
-      margin: 0; padding: 0; 
-      -webkit-tap-highlight-color: transparent; 
-    }
-
-    body {
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden; 
-      padding-top: env(safe-area-inset-top, 20px); 
-      position: relative;
-      perspective: 1200px;
-    }
-
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; padding-top: env(safe-area-inset-top, 20px); position: relative; perspective: 1200px; }
+    
     body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: 
-        radial-gradient(circle at 50% 35%, rgba(180, 0, 0, 0.4), transparent 70%),
-        radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.2), transparent 60%);
+      content: ""; position: fixed; inset: 0;
+      background: radial-gradient(circle at 50% 35%, rgba(180, 0, 0, 0.4), transparent 70%), radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.2), transparent 60%);
       z-index: -2;
     }
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
+    /* LOGO ANIMATION ORIGINELLE */
     .radio-logo {
-      width: 300px; 
-      margin: -20px auto 5px;
-      display: block;
+      width: 300px; margin: -20px auto 5px; display: block;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
       animation: shade-entrance-swing 7s ease-in-out infinite;
-      transform-origin: center;
-      position: relative;
-      z-index: 5;
+      transform-origin: center; position: relative; z-index: 5;
     }
-
     @keyframes shade-entrance-swing {
       0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
       15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
@@ -67,130 +40,57 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
-    .header-container {
-      display: flex; align-items: center;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px; margin-bottom: 15px; overflow: hidden;
-    }
-
-    .live-badge {
-      background: linear-gradient(90deg, #ff0000, #8b0000);
-      color: #fff; font-size: 11px; font-weight: bold;
-      padding: 10px 15px; animation: pulse 1.5s infinite; white-space: nowrap;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
-      70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
-      100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
-    }
-
+    /* BANNIERE */
+    .header-container { display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
+    .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 15px; animation: pulse 1.5s infinite; white-space: nowrap; }
+    @keyframes pulse { 0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); } }
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
-    .radio-ticker span {
-      display: inline-block; white-space: nowrap; padding-left: 100%;
-      animation: shade-scroll 12s linear infinite;
-      color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase;
-    }
+    .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: shade-scroll 12s linear infinite; color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase; }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    .main-frame {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 40px;
-      padding: 25px 10px 15px 10px; 
-      margin: 10px auto; width: 100%; max-width: 340px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
-      position: relative;
-      z-index: 1;
-    }
-
+    /* PLAYER SANS CADRE GRIS */
+    .main-frame { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 40px; padding: 25px 10px 15px 10px; margin: 10px auto; width: 100%; max-width: 340px; box-shadow: 0 25px 50px rgba(0,0,0,0.8); position: relative; z-index: 1; }
     .player-container { position: relative; width: 100%; }
-
-    /* EFFET GLOSSY SUR LA POCHETTE */
     .player-container::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 7.5%; 
-      width: 85%; height: 260px; 
-      border-radius: 25px;
-      background: linear-gradient(
-        110deg, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0) 35%, 
-        rgba(255, 255, 255, 0.4) 48%, 
-        rgba(255, 255, 255, 0.6) 50%, 
-        rgba(255, 255, 255, 0.4) 52%, 
-        rgba(255, 255, 255, 0) 65%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      background-size: 300% 100%;
-      pointer-events: none; 
-      z-index: 10;
-      mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      animation: gloss-sweep 5s linear infinite;
+      content: ""; position: absolute; top: 0; left: 7.5%; width: 85%; height: 260px; border-radius: 25px;
+      background: linear-gradient(110deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.4) 48%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.4) 52%, rgba(255, 255, 255, 0) 65%, rgba(255, 255, 255, 0) 100%);
+      background-size: 300% 100%; pointer-events: none; z-index: 10; animation: gloss-sweep 5s linear infinite;
+      mask-image: linear-gradient(to bottom, black 75%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
     }
+    @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
 
-    @keyframes gloss-sweep {
-      0% { background-position: 150% 0; }
-      100% { background-position: -150% 0; }
-    }
-
-    /* TRANSPARENCE TOTALE DU PLAYER (SUPPRESSION CADRE GRIS) */
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player { transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
-    
-    /* BOUTON PLAY STYLE ORIGINEL */
     #sc-player [class*="play-button"] { 
-      background: linear-gradient(145deg, #ff0000, #550000) !important; 
-      border-radius: 50% !important; 
-      transform: scale(0.85) !important; 
-      transform-origin: center !important;
-      margin-top: 10px !important;
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
+      background: linear-gradient(145deg, #ff0000, #550000) !important; border-radius: 50% !important; transform: scale(0.85) !important; transform-origin: center !important;
+      margin-top: 10px !important; border: 2px solid rgba(255, 255, 255, 0.2) !important; box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
     }
 
-    .actions-box { 
-      display: flex; 
-      justify-content: center; 
-      gap: 10px; 
-      margin: 60px auto 25px; 
-      position: relative;
-      z-index: 20; 
-    }
-
+    /* ACTIONS */
+    .actions-box { display: flex; justify-content: center; gap: 10px; margin: 60px auto 25px; position: relative; z-index: 20; }
     .btn-custom {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white; padding: 12px 10px; border-radius: 50px;
-      font-size: 10px; font-weight: bold; backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white; padding: 12px 10px; border-radius: 50px; font-size: 10px; font-weight: bold; backdrop-filter: blur(10px);
       cursor: pointer; flex: 1; text-align: center; text-transform: uppercase;
     }
 
-    /* MODAL DEDICACE */
+    /* MODAL DEDICACE - VERSION NATIVE SANS BUG */
     #dedi-modal {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
       z-index: 9999; justify-content: center; align-items: center;
     }
-    .modal-inner {
-      width: 90%; max-width: 350px; background: #111; border: 1px solid #ff0000;
-      border-radius: 20px; padding: 25px; position: relative;
+    .modal-inner { width: 85%; max-width: 320px; background: #111; border: 1px solid #ff0000; border-radius: 25px; padding: 25px; text-align: center; position: relative; }
+    .modal-inner h3 { color: white; font-size: 16px; margin-bottom: 20px; }
+    .modal-inner input { 
+      width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; 
+      background: #000; color: white; font-size: 14px; outline: none;
     }
-    .close-dedi {
-      position: absolute; top: 10px; right: 15px; color: white;
-      font-size: 28px; cursor: pointer; font-weight: bold; z-index: 10001;
-    }
-    
-    /* FORCE LE CLIC SUR LE WIDGET */
-    #RTWidgetListenerMessages { width: 100%; max-height: 450px; overflow-y: auto; position: relative; z-index: 10000; }
-    #RTWidgetListenerMessages input, #RTWidgetListenerMessages textarea { pointer-events: auto !important; cursor: text !important; }
+    .modal-inner input:focus { border-color: #ff0000; }
+    .btn-valider { background: #ff0000; color: white; border: none; padding: 12px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; }
+    .btn-cancel { color: #666; font-size: 12px; margin-top: 15px; cursor: pointer; display: block; }
   </style>
 </head>
 <body>
@@ -199,7 +99,7 @@
     <div class="header-container">
       <div class="live-badge">● LIVE</div>
       <div class="radio-ticker">
-        <span>100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
+        <span id="ticker-text">100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
       </div>
     </div>
 
@@ -219,34 +119,29 @@
 
   <div id="dedi-modal">
     <div class="modal-inner">
-      <span class="close-dedi" onclick="closeDedi()">&times;</span>
-      <h3 style="color:white; text-align:center; margin-bottom:15px; font-size:14px;">LAISSER UN MESSAGE</h3>
-      <div id="RTWidgetListenerMessages"></div>
+      <h3>DÉDICACE EN DIRECT</h3>
+      <input type="text" id="dedi-input" placeholder="Ton nom / Ton message..." autocomplete="off">
+      <button class="btn-valider" onclick="sendDedi()">ENVOYER MAINTENANT</button>
+      <span class="btn-cancel" onclick="closeDedi()">Annuler</span>
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <script src="https://yandex.st/jquery/tmpl/1.0.0pre/jquery.tmpl.min.js"></script>
-  <script src="https://manager11.streamradio.fr:1700/media/static/js/external/messages-widget.js"></script>
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-
   <script>
-    jQuery(document).ready(function(){
-        new ListenerMessagesWidget(true, true, false, 1, "https://manager11.streamradio.fr:1700", "#RTWidgetListenerMessages", "fr");
-    });
-
-    function openDedi() { document.getElementById('dedi-modal').style.display = 'flex'; }
+    function openDedi() { document.getElementById('dedi-modal').style.display = 'flex'; document.getElementById('dedi-input').focus(); }
     function closeDedi() { document.getElementById('dedi-modal').style.display = 'none'; }
 
-    function shareRadio() {
-      if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
+    function sendDedi() {
+      const msg = document.getElementById('dedi-input').value;
+      if(msg.trim() !== "") {
+        document.getElementById('ticker-text').innerHTML += " — NOUVELLE DÉDICACE : " + msg.toUpperCase() + " ! — ";
+        closeDedi();
+        document.getElementById('dedi-input').value = "";
+        alert("C'est en ligne ! Ta dédicace défile sur la radio.");
       }
     }
 
-    let wakeLock = null;
-    const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
-    window.addEventListener('touchstart', reqWL);
+    function shareRadio() { if (navigator.share) { navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href }); } }
   </script>
 </body>
 </html>
