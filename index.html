@@ -35,7 +35,7 @@
       perspective: 1200px;
     }
 
-    /* --- FOND ROUGE TRÈS SOMBRE ACCENTUÉ --- */
+    /* --- FOND ROUGE --- */
     body::before {
       content: "";
       position: fixed;
@@ -47,7 +47,6 @@
       z-index: -2;
     }
 
-    /* --- TOP BAR --- */
     .top-bar {
       display: flex;
       align-items: center;
@@ -121,12 +120,12 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
-    /* --- MAIN FRAME SMOKY ROUGE --- */
+    /* --- CADRE SMOKY ALLONGÉ --- */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
-      padding: 25px 10px 140px 10px; 
+      padding: 25px 10px 160px 10px; /* Retour à la taille allongée */
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
@@ -174,15 +173,19 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
-    /* --- CONTENEUR PLAYER ET EFFET GLOSSY AJUSTÉ --- */
-    .player-container { position: relative; width: 100%; }
+    /* --- PLAYER ET GLOSSY DESCENDUS --- */
+    .player-container { 
+      position: relative; 
+      width: 100%; 
+      margin-top: 20px; /* Descend le bloc pochette/lecteur */
+    }
     .player-container::after {
       content: "";
       position: absolute;
-      top: 0; 
-      left: 12.5%; /* Recentré suite à la réduction */
-      width: 75%;  /* Largeur adaptée au scale 0.75 */
-      height: 210px; /* Hauteur réduite pour la pochette plus petite */
+      top: 0; /* Aligné sur le container qui a déjà la marge */
+      left: 12.5%; 
+      width: 75%; 
+      height: 210px; 
       border-radius: 20px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
       background-size: 300% 100%;
@@ -195,10 +198,9 @@
 
     @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
 
-    /* --- TAILLE DU LECTEUR RÉDUITE --- */
     #sc-player { 
       background: transparent !important; 
-      transform: scale(0.75); /* Taille réduite ici */
+      transform: scale(0.75); 
       transform-origin: top center; 
       height: 340px; 
       position: relative; 
