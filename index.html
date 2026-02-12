@@ -32,6 +32,7 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 10px); 
       position: relative;
+      perspective: 1200px;
     }
 
     body::before {
@@ -45,24 +46,25 @@
       z-index: -2;
     }
 
-    /* --- STRUCTURE APP --- */
+    /* --- CONTENEUR PRINCIPAL --- */
     #app { 
       width: 100%; 
       max-width: 420px; 
-      height: 100vh;
+      height: 100vh; 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      justify-content: space-between; /* Force les bannières aux extrémités */
+      justify-content: space-between;
     }
 
-    /* --- BANNIAIRES --- */
+    /* --- BARS --- */
     .top-bar, .bottom-ad-bar {
       display: flex;
       align-items: center;
       gap: 10px;
       width: 100%;
       padding: 10px 15px;
+      position: relative;
       z-index: 10001;
     }
 
@@ -77,32 +79,78 @@
       overflow: hidden;
     }
 
-    /* --- MAIN FRAME (ALLONGÉ) --- */
+    /* --- MAIN FRAME ALLONGÉ --- */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
       padding: 25px 10px; 
-      flex: 1; /* S'étire pour prendre tout l'espace entre les bannières */
       margin: 5px 0;
       width: 92%; 
       max-width: 340px;
+      flex: 1; /* Allonge le cadre au maximum entre les bannières */
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center; /* Centre le logo et le player dans le grand cadre */
+      justify-content: center;
     }
 
-    /* --- TICKER & BADGE --- */
+    /* --- LOGO ANIMÉ --- */
+    .radio-logo {
+      width: 290px; 
+      margin: 0 auto 5px;
+      display: block;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
+      animation: shade-entrance-swing 7s ease-in-out infinite;
+    }
+
+    @keyframes shade-entrance-swing {
+      0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
+      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
+      35% { transform: rotateY(20deg); filter: brightness(1.2); }
+      55% { transform: rotateY(-20deg); filter: brightness(1.2); }
+      75% { transform: rotateY(20deg); }
+      100% { transform: rotateY(0deg); filter: brightness(1); }
+    }
+
+    /* --- PLAYER & EFFETS --- */
+    .player-container { position: relative; width: 100%; margin-top: 10px; }
+    .player-container::after {
+      content: ""; position: absolute; top: 0; left: 12.5%; width: 75%; height: 210px; border-radius: 20px;
+      background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
+      background-size: 300% 100%; pointer-events: none; z-index: 10;
+      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      animation: gloss-sweep 5s linear infinite;
+    }
+    @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
+
+    #sc-player { background: transparent !important; transform: scale(0.75); transform-origin: top center; height: 340px; position: relative; z-index: 2; }
+    
+    /* SUPPRESSION DU CADRE GRIS ET FORÇAGE DES ARRONDIS */
+    #sc-player, #sc-player *, [is="player"] { 
+      background: transparent !important; 
+      background-color: transparent !important;
+      box-shadow: none !important; 
+      border: none !important; 
+    }
+    
+    #sc-player img { 
+      width: 100% !important; 
+      border-radius: 25px !important; /* Arrondi de la pochette */
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; 
+      display: block !important;
+    }
+
+    /* --- TICKER --- */
     .live-badge {
       background: linear-gradient(90deg, #ff0000, #8b0000);
       color: #fff; font-size: 11px; font-weight: bold;
       padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap;
     }
-
     @keyframes pulse {
       0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
       70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
@@ -117,39 +165,27 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* --- LOGO & PLAYER --- */
-    .radio-logo {
-      width: 280px; 
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
-      margin-bottom: 10px;
-    }
-
-    .player-container { width: 100%; position: relative; }
-    #sc-player { transform: scale(0.8); transform-origin: center; height: 320px; }
-
     /* --- MENU --- */
     .hamburger-btn {
       cursor: pointer; background: rgba(180, 0, 0, 0.25); 
-      padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255, 0, 0, 0.4); 
-      display: flex; flex-direction: column; gap: 4px;
+      padding: 8px 10px; border-radius: 10px; backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 0, 0, 0.4); display: flex; flex-direction: column; justify-content: center;
     }
-    .hamburger-btn div { width: 22px; height: 2px; background: #fff; transition: 0.4s; }
-    .open .bar1 { transform: rotate(-45deg) translate(-4px, 5px); }
+    .hamburger-btn div { width: 22px; height: 2px; background-color: #ffffff; margin: 3px 0; transition: 0.4s; border-radius: 2px; }
+    .open .bar1 { transform: rotate(-45deg) translate(-5px, 6px); }
     .open .bar2 { opacity: 0; }
-    .open .bar3 { transform: rotate(45deg) translate(-4px, -5px); }
+    .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
     .menu-overlay {
       position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);
-      z-index: 9999; transition: 0.5s; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; gap: 20px;
+      background: linear-gradient(135deg, rgba(60, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+      backdrop-filter: blur(15px); z-index: 9999; transition: 0.5s;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
     }
     .menu-overlay.active { right: 0; }
-    .menu-link { color: #fff; text-decoration: none; font-weight: bold; font-size: 18px; border: 1px solid rgba(255,255,255,0.2); padding: 15px 30px; border-radius: 30px; width: 80%; text-align: center; }
+    .menu-link { color: white; text-decoration: none; font-size: 20px; font-weight: bold; padding: 18px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.5); width: 85%; text-align: center; }
 
-    .bottom-ad-bar {
-      padding-bottom: env(safe-area-inset-bottom, 15px);
-    }
+    .bottom-ad-bar { padding-bottom: env(safe-area-inset-bottom, 20px); }
   </style>
 </head>
 <body>
@@ -181,11 +217,11 @@
     </div>
 
     <div class="bottom-ad-bar">
-        <div class="header-container">
-            <div class="radio-ticker">
-              <span>pour faire ta pub sur la radio contact nous par mail en cliquant dans le menu sur "Demande de pub"</span>
-            </div>
+      <div class="header-container">
+        <div class="radio-ticker">
+          <span>pour faire ta pub sur la radio contact nous par mail en cliquant dans le menu sur "Demande de pub"</span>
         </div>
+      </div>
     </div>
   </div>
 
