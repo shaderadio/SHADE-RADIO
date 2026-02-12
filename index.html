@@ -6,7 +6,7 @@
   <title>SHADE RADIO – Live</title>
   
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="assets/logo.PNG">
+  <link rel="apple-touch-icon" href="assets/logo.JPG">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,7 +30,7 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
       position: relative;
-      perspective: 1200px; /* Important pour l'effet 3D de rotation */
+      perspective: 1200px; 
     }
 
     /* GRADIENT ROUGE FIXE EN FOND DE PAGE */
@@ -192,7 +192,6 @@
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
-    // Empêche la mise en veille
     let wakeLock = null;
     const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
     window.addEventListener('touchstart', reqWL);
