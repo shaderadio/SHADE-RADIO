@@ -13,6 +13,10 @@
   <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
   <meta name="theme-color" content="#000000">
 
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="https://yandex.st/jquery/tmpl/1.0.0pre/jquery.tmpl.min.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/external/messages-widget.js"></script>
+
   <style>
     * { 
       box-sizing: border-box; 
@@ -88,7 +92,7 @@
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span {
       display: inline-block; white-space: nowrap; padding-left: 100%;
-      animation: shade-scroll 12s linear infinite;
+      animation: shade-scroll 15s linear infinite;
       color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase;
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
@@ -110,55 +114,12 @@
       width: 100%;
     }
 
-    .player-container::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 7.5%; 
-      width: 85%; height: 260px; 
-      border-radius: 25px;
-      background: linear-gradient(
-        110deg, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0) 35%, 
-        rgba(255, 255, 255, 0.4) 48%, 
-        rgba(255, 255, 255, 0.6) 50%, 
-        rgba(255, 255, 255, 0.4) 52%, 
-        rgba(255, 255, 255, 0) 65%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      background-size: 300% 100%;
-      pointer-events: none; 
-      z-index: 10;
-      mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      animation: gloss-sweep 5s linear infinite;
-    }
-
-    @keyframes gloss-sweep {
-      0% { background-position: 150% 0; }
-      100% { background-position: -150% 0; }
-    }
-
     #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
-    #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
-    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
-    #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
-    #sc-player [class*="play-button"] { 
-      background: linear-gradient(145deg, #ff0000, #550000) !important; 
-      border-radius: 50% !important; 
-      transform: scale(0.85) !important; 
-      transform-origin: center !important;
-      margin-top: 10px !important;
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
-    }
-
     .actions-box { 
       display: flex; 
       justify-content: center; 
-      gap: 12px; 
+      gap: 10px; 
       margin: 60px auto 25px; 
       position: relative;
       z-index: 20; 
@@ -167,11 +128,20 @@
     .btn-custom {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white; padding: 12px 20px; border-radius: 50px;
-      font-size: 12px; font-weight: bold; backdrop-filter: blur(10px);
+      color: white; 
+      padding: 12px 15px; 
+      border-radius: 50px;
+      font-size: 11px; 
+      font-weight: bold; 
+      backdrop-filter: blur(10px);
       white-space: nowrap;
       cursor: pointer;
+      flex: 1; /* Permet aux 3 boutons d'avoir la même largeur */
+      text-align: center;
     }
+
+    /* Masquer le widget technique */
+    #RTWidgetListenerMessages { display: none; }
   </style>
 </head>
 <body>
@@ -193,21 +163,39 @@
     </div>
 
     <div class="actions-box">
-      <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre pour la radio&body=J\'aimerais écouter sur Shade Radio :%0D%0A%0D%0AArtiste : %0D%0ATitre de la musique : '">🎵 Demander un titre</button>
-      <button class="btn-custom" onclick="shareRadio()">📲 Partager la radio</button>
+      <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Titre : '">🎵 TITRE</button>
+      
+      <button class="btn-custom" onclick="ouvrirDedicace()">🎤 DÉDICACE</button>
+      
+      <button class="btn-custom" onclick="shareRadio()">📲 PARTAGER</button>
     </div>
   </div>
 
+  <div id="RTWidgetListenerMessages"></div>
+
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
-  <script>
+  
+  <script type="text/javascript">
+    // Initialisation du système de message StreamRadio
+    jQuery(document).ready(function(){
+        new ListenerMessagesWidget(true, true, false, 1, "https://manager11.streamradio.fr:1700", "#RTWidgetListenerMessages", "fr");
+    });
+
+    function ouvrirDedicace() {
+        // Ouvre le formulaire de dédicace officiel de ton manager
+        window.open("https://manager11.streamradio.fr:1700/external/messages/1", "Dédicace", "width=400,height=600");
+    }
+
     function shareRadio() {
       if (navigator.share) {
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
+
     let wakeLock = null;
     const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
     window.addEventListener('touchstart', reqWL);
   </script>
+
 </body>
 </html>
