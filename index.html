@@ -108,13 +108,21 @@
     .player-container {
       position: relative;
       width: 100%;
-      /* AJOUT DE L'IMAGE LIVE.JPG EN BACKGROUND */
-      background: url('assets/live.JPG') no-repeat center center;
-      background-size: 85% auto; /* Aligné sur la taille de la pochette */
-      border-radius: 25px;
-      min-height: 260px;
     }
 
+    /* L'IMAGE DE REMPLACEMENT : Calibrée exactement comme la pochette */
+    .player-container::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 7.5%; 
+      width: 85%; height: 260px; 
+      background: url('assets/live.JPG') no-repeat center center;
+      background-size: cover;
+      border-radius: 25px;
+      z-index: 1; /* Derrière le lecteur mais devant le fond */
+    }
+
+    /* L'EFFET GLOSSY : Superposé pile sur l'image */
     .player-container::after {
       content: "";
       position: absolute;
