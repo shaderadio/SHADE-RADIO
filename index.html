@@ -14,12 +14,7 @@
   <meta name="theme-color" content="#000000">
 
   <style>
-    * { 
-      box-sizing: border-box; 
-      font-family: Arial, Helvetica, sans-serif; 
-      margin: 0; padding: 0; 
-      -webkit-tap-highlight-color: transparent; 
-    }
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
       background: #000;
@@ -27,147 +22,103 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      overflow: hidden; 
-      padding-top: env(safe-area-inset-top, 20px); 
+      overflow: hidden;
       position: relative;
     }
 
-    /* GRADIENT ROUGE FIXE EN FOND DE PAGE */
-    body::before {
-      content: "";
+    /* FOND ROUGE AMBIANT ACCENTUÉ */
+    .bg-glow {
       position: fixed;
       inset: 0;
       background: 
-        radial-gradient(circle at 50% 35%, rgba(180, 0, 0, 0.4), transparent 70%),
-        radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.2), transparent 60%);
+        radial-gradient(circle at 50% 35%, rgba(255, 0, 0, 0.4), transparent 70%),
+        radial-gradient(circle at 20% 80%, rgba(200, 0, 0, 0.25), transparent 60%);
       z-index: -2;
+    }
+
+    /* EFFET FUMÉE LUMINEUSE DERRIÈRE LE CADRE */
+    .smoke-aura {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 350px; height: 500px;
+      background: radial-gradient(circle, rgba(255, 0, 0, 0.6) 0%, transparent 70%);
+      filter: blur(60px);
+      z-index: -1;
+      animation: smoke-pulse 6s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes smoke-pulse {
+      0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9) rotate(0deg); }
+      50% { opacity: 0.7; transform: translate(-45%, -55%) scale(1.2) rotate(5deg); }
+      100% { opacity: 0.4; transform: translate(-55%, -45%) scale(1) rotate(-5deg); }
     }
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO */
     .radio-logo {
       width: 300px; 
       margin: -20px auto 5px;
       display: block;
-      filter: drop-shadow(0 0 20px rgba(255,0,0,0.5));
-      animation: shade-entrance-swing 6s ease-in-out infinite;
-      transform-origin: center;
-      position: relative;
-      z-index: 2;
+      filter: drop-shadow(0 0 20px rgba(255,0,0,0.6));
+      animation: swing 6s ease-in-out infinite;
     }
 
-    @keyframes shade-entrance-swing {
-      0% { transform: rotateY(0deg); }
-      35% { transform: rotateY(15deg); }
-      70% { transform: rotateY(-15deg); }
-      100% { transform: rotateY(0deg); }
+    @keyframes swing {
+      0%, 100% { transform: rotateY(0deg); }
+      50% { transform: rotateY(15deg); }
     }
 
     .header-container {
       display: flex; align-items: center;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(15px);
       border-radius: 12px; margin-bottom: 15px; overflow: hidden;
     }
 
     .live-badge {
       background: linear-gradient(90deg, #ff0000, #8b0000);
       color: #fff; font-size: 11px; font-weight: bold;
-      padding: 10px 15px; animation: pulse 1.5s infinite; white-space: nowrap;
+      padding: 10px 15px; animation: pulse 1.5s infinite;
     }
 
-    @keyframes pulse {
-      0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
-      70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
-      100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
+    @keyframes pulse { 
+      0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } 
     }
 
-    .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
-    .radio-ticker span {
-      display: inline-block; white-space: nowrap; padding-left: 100%;
-      animation: shade-scroll 12s linear infinite;
-      color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase;
-    }
-    @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+    .radio-ticker { flex: 1; overflow: hidden; color: #fff; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+    .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll 12s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-    /* CADRE PRINCIPAL AVEC FUMÉE ANIMÉE DERRIÈRE */
     .main-frame {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(20, 20, 20, 0.4); /* Plus sombre pour faire ressortir la fumée derrière */
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       border-radius: 40px;
       padding: 25px 10px 15px 10px; 
       margin: 10px auto; width: 100%; max-width: 340px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
-      position: relative;
-      z-index: 1;
-      overflow: visible; /* Permet à la fumée de dépasser légèrement */
+      box-shadow: 0 25px 50px rgba(0,0,0,0.9);
     }
 
-    /* LES COUCHES DE FUMÉE LOCALISÉES */
-    .main-frame::before, .main-frame::after {
-      content: "";
-      position: absolute;
-      top: 10%; left: 10%; width: 80%; height: 60%;
-      z-index: -1;
-      filter: blur(50px);
-      opacity: 0.7;
-      border-radius: 50%;
-    }
-
-    .main-frame::before {
-      background: radial-gradient(circle, #ff0000, transparent);
-      animation: smoke-float 8s ease-in-out infinite alternate;
-    }
-
-    .main-frame::after {
-      background: radial-gradient(circle, #8b0000, transparent);
-      animation: smoke-float 12s ease-in-out infinite alternate-reverse;
-      left: 20%;
-    }
-
-    @keyframes smoke-float {
-      0% { transform: scale(1) translate(-10px, -10px) rotate(0deg); opacity: 0.4; }
-      50% { transform: scale(1.3) translate(20px, 10px) rotate(10deg); opacity: 0.8; }
-      100% { transform: scale(1) translate(-5px, 15px) rotate(-10deg); opacity: 0.5; }
-    }
-
-    /* LECTEUR SC */
-    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
-    #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
-    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
-    #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
+    #sc-player { transform: scale(0.85); transform-origin: top center; height: 380px; }
+    #sc-player img { border-radius: 25px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important; }
     
-    #sc-player [class*="play-button"] { 
-      background: linear-gradient(145deg, #ff0000, #550000) !important; 
-      border-radius: 50% !important; 
-      transform: scale(0.85) !important; 
-      transform-origin: center !important;
-      margin-top: 10px !important;
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
-    }
-
-    .actions-box { 
-      display: flex; 
-      justify-content: center; 
-      gap: 12px; 
-      margin: 30px auto 15px; 
-    }
-
+    .actions-box { display: flex; justify-content: center; gap: 12px; margin: 30px auto 15px; }
     .btn-custom {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: white; padding: 12px 20px; border-radius: 50px;
       font-size: 12px; font-weight: bold; backdrop-filter: blur(10px);
-      white-space: nowrap;
     }
   </style>
 </head>
 <body>
+
+  <div class="bg-glow"></div>
+
+  <div class="smoke-aura"></div>
 
   <div id="app">
     <div class="header-container">
@@ -195,9 +146,6 @@
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
-    let wakeLock = null;
-    const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
-    window.addEventListener('touchstart', reqWL);
   </script>
 </body>
 </html>
