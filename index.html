@@ -29,6 +29,7 @@
       perspective: 1200px; 
     }
 
+    /* EFFET SMOKY */
     body::before {
       content: "";
       position: fixed;
@@ -43,7 +44,7 @@
 
     .radio-logo {
       width: 260px;
-      margin: -10px auto 10px;
+      margin: -15px auto 0px;
       display: block;
       filter: drop-shadow(0 0 15px rgba(255,0,0,0.4));
       animation: shade-entrance-swing 6s ease-in-out infinite;
@@ -55,8 +56,7 @@
       15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
       35% { transform: rotateY(25deg); filter: brightness(1.3) drop-shadow(0 0 25px #ff0000); }
       55% { transform: rotateY(-25deg); filter: brightness(1.3) drop-shadow(0 0 25px #ff0000); }
-      75% { transform: rotateY(25deg); }
-      100% { transform: rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
+      100% { transform: rotateY(0deg); }
     }
 
     .header-container {
@@ -92,46 +92,41 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(15px);
       border-radius: 40px;
-      padding: 20px 10px 15px 10px; 
+      padding: 15px 10px 10px 10px; 
       margin: 10px auto; width: 100%; max-width: 320px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
     }
 
-    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; }
+    #sc-player { 
+      background: transparent !important; 
+      transform: scale(0.85); 
+      transform-origin: top center; 
+      height: 360px; 
+      margin-top: -5px; 
+    }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
-    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
+    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 10px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
-    /* NOUVEAU DESIGN DU BOUTON PLAY */
+    /* BOUTON PLAY TRANSLUCIDE */
     #sc-player [class*="play-button"] { 
-      background: linear-gradient(145deg, #ff0000, #550000) !important; 
+      background: rgba(255, 255, 255, 0.15) !important; /* Fond blanc très transparent */
+      backdrop-filter: blur(8px) !important; /* Effet de flou derrière le bouton */
+      -webkit-backdrop-filter: blur(8px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important; /* Bordure fine translucide */
       border-radius: 50% !important; 
-      transform: scale(0.85) !important; 
+      transform: scale(0.7) !important; 
       transform-origin: center !important;
-      margin-top: 10px !important;
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
-      transition: all 0.3s ease !important;
-      cursor: pointer !important;
-    }
-
-    #sc-player [class*="play-button"]:hover {
-      transform: scale(0.95) !important;
-      box-shadow: 0 0 30px rgba(255, 0, 0, 0.9) !important;
-      filter: brightness(1.2);
-    }
-
-    /* Ajustement de l'icône à l'intérieur du bouton si accessible via CSS */
-    #sc-player [class*="play-button"] svg {
-      filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)) !important;
+      margin-top: 5px !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
     }
 
     .actions-box { 
       display: flex; 
       justify-content: center; 
       gap: 12px; 
-      margin: 35px auto 15px; 
+      margin: 20px auto 15px; 
     }
 
     .btn-custom {
