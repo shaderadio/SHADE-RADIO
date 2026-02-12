@@ -46,7 +46,6 @@
       z-index: -2;
     }
 
-    /* --- STRUCTURE --- */
     #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; height: 100vh; justify-content: space-between; }
 
     .top-bar, .bottom-ad-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 15px; position: relative; z-index: 10001; }
@@ -57,7 +56,7 @@
       backdrop-filter: blur(10px); border-radius: 12px; overflow: hidden;
     }
 
-    /* --- MAIN FRAME ALLONGÉ --- */
+    /* --- MAIN FRAME --- */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px); border-radius: 50px;
@@ -67,26 +66,41 @@
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     }
 
-    /* --- LOGO --- */
     .radio-logo {
-      width: 280px; margin: 10px 0 20px 0;
+      width: 280px; margin: 5px 0 0 0; /* Marge réduite pour remonter le tout */
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
       animation: shade-entrance-swing 7s ease-in-out infinite;
     }
 
-    /* --- PLAYER & GLOSSY --- */
-    .player-container { position: relative; width: 100%; display: flex; justify-content: center; }
+    /* --- PLAYER & GLOSSY AJUSTÉ --- */
+    .player-container { 
+      position: relative; 
+      width: 100%; 
+      display: flex; 
+      justify-content: center;
+      margin-top: -15px; /* Remonte le lecteur vers le logo */
+    }
 
-    /* Recentrage du glossy sur la pochette */
     .player-container::after {
-      content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 255px; height: 255px; border-radius: 25px;
+      content: ""; position: absolute; 
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 190px; height: 190px; /* Taille adaptée au scale(0.75) de la pochette */
+      border-radius: 20px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
       background-size: 300% 100%; pointer-events: none; z-index: 10;
       animation: gloss-sweep 5s linear infinite;
     }
 
-    #sc-player { background: transparent !important; transform: scale(0.75); transform-origin: top center; height: 340px; position: relative; z-index: 2; width: 100%; }
+    #sc-player { 
+      background: transparent !important; 
+      transform: scale(0.75); 
+      transform-origin: top center; 
+      height: 320px; 
+      position: relative; 
+      z-index: 2; 
+      width: 100%; 
+    }
+    
     #sc-player, #sc-player *, [is="player"] { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
 
