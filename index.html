@@ -45,12 +45,10 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO AVEC OMBRE PORTÉE AJOUTÉE */
     .radio-logo {
       width: 300px; 
       margin: -20px auto 5px;
       display: block;
-      /* Double ombre : une rouge pour l'éclat, une noire pour la profondeur */
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
       animation: shade-entrance-swing 7s ease-in-out infinite;
       transform-origin: center;
@@ -112,23 +110,34 @@
       width: 100%;
     }
 
+    /* EFFET GLOSSY ACCENTUÉ AVEC BALAYAGE */
     .player-container::after {
       content: "";
       position: absolute;
       top: 0; left: 7.5%; 
       width: 85%; height: 260px; 
       border-radius: 25px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.1) 25%, transparent 50%, rgba(255, 255, 255, 0.08) 100%);
+      /* Dégradé plus contrasté et large pour le mouvement */
+      background: linear-gradient(
+        110deg, 
+        rgba(255, 255, 255, 0) 20%, 
+        rgba(255, 255, 255, 0.4) 45%, 
+        rgba(255, 255, 255, 0.6) 50%, 
+        rgba(255, 255, 255, 0.4) 55%, 
+        rgba(255, 255, 255, 0) 80%
+      );
+      background-size: 250% 100%;
       pointer-events: none; 
       z-index: 10;
-      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-      animation: gloss-pulse 5s ease-in-out infinite alternate;
+      mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+      animation: gloss-sweep 4s ease-in-out infinite;
     }
 
-    @keyframes gloss-pulse {
-      0% { opacity: 0.7; transform: scale(1) translateY(0); }
-      100% { opacity: 1; transform: scale(1.02) translateY(-2px); filter: brightness(1.1); }
+    @keyframes gloss-sweep {
+      0% { background-position: 200% 0; opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { background-position: -100% 0; opacity: 0.5; }
     }
 
     #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
@@ -147,14 +156,13 @@
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
     }
 
-    /* ACTIONS BOX DESCENDUE POUR ÉVITER LES CONFLITS DE CLIC */
     .actions-box { 
       display: flex; 
       justify-content: center; 
       gap: 12px; 
-      margin: 50px auto 25px; /* Augmenté de 30px à 50px pour descendre les boutons */
+      margin: 50px auto 25px; 
       position: relative;
-      z-index: 20; /* Priorité haute pour le clic */
+      z-index: 20; 
     }
 
     .btn-custom {
