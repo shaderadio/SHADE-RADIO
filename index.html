@@ -110,11 +110,14 @@
       width: 100%;
     }
 
+    /* --- EFFET GLOSSY AJUSTÉ ICI --- */
     .player-container::after {
       content: "";
       position: absolute;
-      top: 0; left: 7.5%; 
-      width: 85%; height: 260px; 
+      top: 15px; /* Descendu pour centrer sur l'image */
+      left: 7.5%; 
+      width: 85%; 
+      height: 235px; /* Hauteur ajustée à la pochette */
       border-radius: 25px;
       background: linear-gradient(
         110deg, 
@@ -129,8 +132,9 @@
       background-size: 300% 100%;
       pointer-events: none; 
       z-index: 10;
-      mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+      /* Masque pour adoucir les bords hauts et bas du reflet */
+      -webkit-mask-image: linear-gradient(to bottom, transparent 2%, black 15%, black 85%, transparent 98%);
+      mask-image: linear-gradient(to bottom, transparent 2%, black 15%, black 85%, transparent 98%);
       animation: gloss-sweep 5s linear infinite;
     }
 
