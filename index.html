@@ -68,14 +68,14 @@
       overflow: hidden;
     }
 
-    /* --- HAMBURGER ROUGE BOOSTÉ --- */
+    /* --- HAMBURGER ROUGE MAIS BARRES BLANCHES --- */
     .hamburger-btn {
       cursor: pointer;
-      background: rgba(180, 0, 0, 0.25); /* Teinte rouge */
+      background: rgba(180, 0, 0, 0.25); 
       padding: 8px 10px;
       border-radius: 10px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 0, 0, 0.4); /* Bordure rouge glossy */
+      border: 1px solid rgba(255, 0, 0, 0.4); 
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -85,13 +85,12 @@
 
     .hamburger-btn div {
       width: 22px; height: 2px;
-      background-color: #ff3333; /* Barres rouges */
+      background-color: #ffffff; /* Retour au blanc d'origine */
       margin: 3px 0;
       transition: 0.4s;
       border-radius: 2px;
     }
 
-    .open .bar1, .open .bar3 { background-color: white; } /* Croix blanche pour lisibilité */
     .open .bar1 { transform: rotate(-45deg) translate(-5px, 6px); }
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
@@ -101,9 +100,8 @@
       position: fixed;
       top: 0; right: -100%;
       width: 100%; height: 100%;
-      /* Opacité à 0.5 (50%) */
       background: linear-gradient(135deg, rgba(40, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
-      backdrop-filter: blur(15px); /* Flou légèrement réduit pour la transparence */
+      backdrop-filter: blur(15px);
       z-index: 9999;
       transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
       display: flex; flex-direction: column;
@@ -119,24 +117,13 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       background: rgba(0, 0, 0, 0.4);
       width: 85%; max-width: 320px; text-align: center;
-      transition: 0.3s;
       display: flex; align-items: center; justify-content: center; gap: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    .menu-link.tiktok {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .menu-link:active {
-      transform: scale(0.95);
-      background: rgba(255, 0, 0, 0.3);
-    }
-
-    /* --- RESTE DU DESIGN --- */
+    /* --- MAIN FRAME SMOKY ROUGE --- */
     .main-frame {
-      background: rgba(255, 255, 255, 0.03);
+      /* Dégradé smoky avec une touche de rouge */
+      background: linear-gradient(180deg, rgba(100, 0, 0, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
       padding: 25px 10px 160px 10px; 
@@ -145,7 +132,7 @@
       max-width: 340px;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.2); 
-      box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 2px 1px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05), 0 0 20px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.05), 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
@@ -225,7 +212,7 @@
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();">
       <i class="fas fa-share-nodes"></i> Partager la radio
     </a>
-    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link tiktok" onclick="toggleMenu()">
+    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="toggleMenu()">
       <i class="fab fa-tiktok"></i> Rejoins-nous sur TikTok
     </a>
   </div>
