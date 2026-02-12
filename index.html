@@ -1,38 +1,73 @@
-/* IMAGE DE REMPLACEMENT : Taille réduite pour être totalement masquée par la pochette */
-    .player-container::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 65%; /* Valeur réduite pour ne pas dépasser sur les côtés */
-      height: 210px; /* Valeur réduite pour ne pas dépasser en bas */
-      background: url('assets/live.JPG') no-repeat center center;
-      background-size: cover;
-      border-radius: 25px; /* Coins arrondis comme demandé */
-      z-index: 1;
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SHADE RADIO – Live</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/logo.JPG">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
+  <meta name="theme-color" content="#000000">
+
+  <style>
+    * { 
+      box-sizing: border-box; 
+      font-family: Arial, Helvetica, sans-serif; 
+      margin: 0; padding: 0; 
+      -webkit-tap-highlight-color: transparent; 
     }
 
-    /* GLOSSY : Aligné exactement sur la nouvelle taille de l'image */
-    .player-container::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 65%; 
-      height: 210px; 
-      border-radius: 25px;
-      background: linear-gradient(
-        110deg, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0) 35%, 
-        rgba(255, 255, 255, 0.4) 48%, 
-        rgba(255, 255, 255, 0.6) 50%, 
-        rgba(255, 255, 255, 0.4) 52%, 
-        rgba(255, 255, 255, 0) 65%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      background-size: 300% 100%;
-      pointer-events: none; 
-      z-index: 10;
-      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-      animation: gloss-sweep 5s linear infinite;
+    body {
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden; 
+      padding-top: env(safe-area-inset-top, 20px); 
+      position: relative;
+      perspective: 1200px;
     }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 50% 35%, rgba(180, 0, 0, 0.4), transparent 70%),
+        radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.2), transparent 60%);
+      z-index: -2;
+    }
+
+    #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
+
+    .radio-logo {
+      width: 300px; 
+      margin: -20px auto 5px;
+      display: block;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
+      animation: shade-entrance-swing 7s ease-in-out infinite;
+      transform-origin: center;
+      position: relative;
+      z-index: 5;
+    }
+
+    @keyframes shade-entrance-swing {
+      0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
+      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
+      35% { transform: rotateY(20deg); filter: brightness(1.2); }
+      55% { transform: rotateY(-20deg); filter: brightness(1.2); }
+      75% { transform: rotateY(20deg); }
+      100% { transform: rotateY(0deg); filter: brightness(1); }
+    }
+
+    .header-container {
+      display: flex; align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px; margin-bottom:
