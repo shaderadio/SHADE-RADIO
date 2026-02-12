@@ -52,7 +52,7 @@
       max-width: 420px;
       padding: 10px 15px;
       position: relative;
-      z-index: 1001;
+      z-index: 10000; /* Passé au dessus de l'overlay pour rester cliquable */
     }
 
     .header-container {
@@ -66,17 +66,18 @@
       overflow: hidden;
     }
 
-    /* --- HAMBURGER --- */
+    /* --- HAMBURGER (FIXÉ POUR QUITTER) --- */
     .hamburger-btn {
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
       padding: 8px 10px;
       border-radius: 10px;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      transition: 0.3s;
     }
 
     .hamburger-btn div {
@@ -87,6 +88,7 @@
       border-radius: 2px;
     }
 
+    /* Animation de la Croix quand ouvert */
     .open .bar1 { transform: rotate(-45deg) translate(-5px, 6px); }
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
@@ -108,7 +110,7 @@
       color: white; text-decoration: none;
       font-size: 24px; font-weight: bold;
       text-transform: uppercase; letter-spacing: 2px;
-      padding: 15px 30px; border-radius: 50px;
+      padding: 18px 30px; border-radius: 50px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.05);
       width: 80%; max-width: 300px; text-align: center;
@@ -116,23 +118,22 @@
 
     .menu-link.tiktok { background: linear-gradient(45deg, #00f2ea, #ff0050); border: none; }
 
-    /* --- CADRE SMOKY ALLONGÉ ET GLOSSY --- */
+    /* --- CADRE SMOKY ENCORE PLUS ALLONGÉ --- */
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(15px);
       border-radius: 45px;
-      /* Allongement du cadre ici */
-      padding: 25px 10px 60px 10px; 
+      /* Padding-bottom augmenté à 100px pour allonger encore le cadre */
+      padding: 25px 10px 100px 10px; 
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
       position: relative;
-      /* Contour Glossy : liseré interne blanc + lueur externe */
       border: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 
         0 25px 50px rgba(0,0,0,0.8),
         inset 0 0 15px rgba(255, 255, 255, 0.05), 
-        0 0 10px rgba(255, 255, 255, 0.1);
+        0 0 15px rgba(255, 255, 255, 0.15); /* Glossy renforcé */
     }
 
     #app { 
