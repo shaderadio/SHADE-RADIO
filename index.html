@@ -108,16 +108,18 @@
     .player-container {
       position: relative;
       width: 100%;
+      display: flex;
+      justify-content: center;
     }
 
-    /* --- EFFET GLOSSY AJUSTÉ ICI --- */
+    /* --- EFFET GLOSSY AJUSTÉ (CENTRAGE TOTAL) --- */
     .player-container::after {
       content: "";
       position: absolute;
-      top: 15px; /* Descendu pour centrer sur l'image */
-      left: 7.5%; 
-      width: 85%; 
-      height: 235px; /* Hauteur ajustée à la pochette */
+      top: 15px; 
+      /* Largeur réduite pour être bien à l'intérieur de la pochette */
+      width: 78%; 
+      height: 235px; 
       border-radius: 25px;
       background: linear-gradient(
         110deg, 
@@ -132,9 +134,15 @@
       background-size: 300% 100%;
       pointer-events: none; 
       z-index: 10;
-      /* Masque pour adoucir les bords hauts et bas du reflet */
-      -webkit-mask-image: linear-gradient(to bottom, transparent 2%, black 15%, black 85%, transparent 98%);
-      mask-image: linear-gradient(to bottom, transparent 2%, black 15%, black 85%, transparent 98%);
+      /* Double masque : horizontal et vertical pour un centrage parfait */
+      -webkit-mask-image: 
+        linear-gradient(to right, transparent 2%, black 15%, black 85%, transparent 98%),
+        linear-gradient(to bottom, transparent 2%, black 15%, black 85%, transparent 98%);
+      mask-image: 
+        linear-gradient(to right, transparent 2%, black 15%, black 85%, transparent 98%),
+        linear-gradient(to bottom, transparent 2%, black 15%, black 85%, transparent 98%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
       animation: gloss-sweep 5s linear infinite;
     }
 
@@ -143,7 +151,7 @@
       100% { background-position: -150% 0; }
     }
 
-    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
+    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; width: 100%; }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
