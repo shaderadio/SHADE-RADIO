@@ -110,10 +110,12 @@
       width: 100%;
     }
 
+    /* --- MODIFICATION ICI --- */
     .player-container::after {
       content: "";
       position: absolute;
-      top: 0; left: 7.5%; 
+      top: 15px; /* Descendu de 0 à 15px */
+      left: 7.5%; 
       width: 85%; height: 260px; 
       border-radius: 25px;
       background: linear-gradient(
@@ -202,12 +204,4 @@
   <script>
     function shareRadio() {
       if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
-      }
-    }
-    let wakeLock = null;
-    const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
-    window.addEventListener('touchstart', reqWL);
-  </script>
-</body>
-</html>
+        navigator.share({ title: 'SHADE RADIO', text
