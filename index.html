@@ -35,13 +35,15 @@
       perspective: 1200px;
     }
 
+    /* --- FOND ROUGE TRÈS SOMBRE ACCENTUÉ --- */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       background: 
-        radial-gradient(circle at 50% 35%, rgba(180, 0, 0, 0.4), transparent 70%),
-        radial-gradient(circle at 20% 80%, rgba(100, 0, 0, 0.2), transparent 60%);
+        radial-gradient(circle at 50% 40%, rgba(220, 0, 0, 0.55), transparent 65%), /* Rouge central plus fort */
+        radial-gradient(circle at 80% 90%, rgba(150, 0, 0, 0.3), transparent 50%),  /* Lueur secondaire */
+        radial-gradient(circle at 10% 20%, rgba(80, 0, 0, 0.4), transparent 40%);
       z-index: -2;
     }
 
@@ -68,7 +70,7 @@
       overflow: hidden;
     }
 
-    /* --- HAMBURGER ROUGE MAIS BARRES BLANCHES --- */
+    /* --- HAMBURGER BARRES BLANCHES --- */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(180, 0, 0, 0.25); 
@@ -80,12 +82,12 @@
       flex-direction: column;
       justify-content: center;
       transition: 0.3s;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
     }
 
     .hamburger-btn div {
       width: 22px; height: 2px;
-      background-color: #ffffff; /* Retour au blanc d'origine */
+      background-color: #ffffff; 
       margin: 3px 0;
       transition: 0.4s;
       border-radius: 2px;
@@ -100,7 +102,7 @@
       position: fixed;
       top: 0; right: -100%;
       width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(40, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+      background: linear-gradient(135deg, rgba(60, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
       backdrop-filter: blur(15px);
       z-index: 9999;
       transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
@@ -115,15 +117,15 @@
       text-transform: uppercase; letter-spacing: 1px;
       padding: 18px 25px; border-radius: 50px;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       width: 85%; max-width: 320px; text-align: center;
       display: flex; align-items: center; justify-content: center; gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
     /* --- MAIN FRAME SMOKY ROUGE --- */
     .main-frame {
-      /* Dégradé smoky avec une touche de rouge */
-      background: linear-gradient(180deg, rgba(100, 0, 0, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%);
+      background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
       padding: 25px 10px 160px 10px; 
@@ -132,7 +134,7 @@
       max-width: 340px;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.2); 
-      box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.05), 0 0 20px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.1);
     }
 
     #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
