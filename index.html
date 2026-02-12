@@ -47,7 +47,6 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* RETOUR DE L'ANIMATION LOGO */
     .radio-logo {
       width: 300px; 
       margin: -20px auto 5px;
@@ -110,7 +109,7 @@
 
     .player-container { position: relative; width: 100%; }
 
-    /* RETOUR DE L'EFFET GLOSSY SUR LA POCHETTE */
+    /* EFFET GLOSSY SUR LA POCHETTE */
     .player-container::after {
       content: "";
       position: absolute;
@@ -140,8 +139,23 @@
       100% { background-position: -150% 0; }
     }
 
-    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
-    #sc-player img { border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
+    /* TRANSPARENCE TOTALE DU PLAYER (SUPPRESSION CADRE GRIS) */
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
+    #sc-player { transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
+    #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
+    #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
+    #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
+    
+    /* BOUTON PLAY STYLE ORIGINEL */
+    #sc-player [class*="play-button"] { 
+      background: linear-gradient(145deg, #ff0000, #550000) !important; 
+      border-radius: 50% !important; 
+      transform: scale(0.85) !important; 
+      transform-origin: center !important;
+      margin-top: 10px !important;
+      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
+    }
 
     .actions-box { 
       display: flex; 
@@ -160,20 +174,23 @@
       cursor: pointer; flex: 1; text-align: center; text-transform: uppercase;
     }
 
-    /* FENETRE DEDICACE CORRIGÉE */
+    /* MODAL DEDICACE */
     #dedi-modal {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
       z-index: 9999; justify-content: center; align-items: center;
     }
     .modal-inner {
       width: 90%; max-width: 350px; background: #111; border: 1px solid #ff0000;
-      border-radius: 20px; padding: 20px; position: relative;
+      border-radius: 20px; padding: 25px; position: relative;
     }
     .close-dedi {
       position: absolute; top: 10px; right: 15px; color: white;
-      font-size: 24px; cursor: pointer; font-weight: bold;
+      font-size: 28px; cursor: pointer; font-weight: bold; z-index: 10001;
     }
-    #RTWidgetListenerMessages { width: 100%; max-height: 450px; overflow-y: auto; }
+    
+    /* FORCE LE CLIC SUR LE WIDGET */
+    #RTWidgetListenerMessages { width: 100%; max-height: 450px; overflow-y: auto; position: relative; z-index: 10000; }
+    #RTWidgetListenerMessages input, #RTWidgetListenerMessages textarea { pointer-events: auto !important; cursor: text !important; }
   </style>
 </head>
 <body>
@@ -214,7 +231,6 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <script>
-    // Initialisation du Widget StreamRadio
     jQuery(document).ready(function(){
         new ListenerMessagesWidget(true, true, false, 1, "https://manager11.streamradio.fr:1700", "#RTWidgetListenerMessages", "fr");
     });
