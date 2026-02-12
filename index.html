@@ -66,28 +66,28 @@
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     }
 
-    /* --- LOGO RESTAURÉ & AGRANDI --- */
+    /* --- LOGO AVEC EFFET BATTEMENT DE COEUR --- */
     .radio-logo {
       width: 310px;
       margin: 15px 0 0 0;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
-      animation: shade-entrance-swing 7s ease-in-out infinite;
+      animation: shade-entrance-swing 7s ease-in-out infinite, logo-beat 1.5s ease-in-out infinite;
       transform-origin: center;
     }
 
-    /* --- PLAYER & GLOSSY RECADRÉ --- */
+    /* --- PLAYER & GLOSSY ALIGNÉ --- */
     .player-container { 
       position: relative; 
       width: 100%; 
       display: flex; 
       justify-content: center;
-      margin-top: -50px; /* Remonté pour supprimer le vide */
+      margin-top: -30px; /* Remonté juste assez pour être proche du logo */
     }
 
     .player-container::after {
       content: ""; position: absolute; 
-      top: 5px; left: 50%; transform: translateX(-50%);
-      width: 205px; height: 190px; /* Taille calée sur la pochette du player scale 0.65 */
+      top: 0px; left: 50%; transform: translateX(-50%);
+      width: 205px; height: 195px; /* Taille optimisée pour la pochette du player */
       border-radius: 20px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
       background-size: 300% 100%; pointer-events: none; z-index: 10;
@@ -98,7 +98,7 @@
       background: transparent !important; 
       transform: scale(0.65); 
       transform-origin: top center; 
-      height: 290px; 
+      height: 300px; 
       position: relative; 
       z-index: 2; 
       width: 100%; 
@@ -129,12 +129,18 @@
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
     @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
+    
+    @keyframes logo-beat {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.05); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.05); }
+      70% { transform: scale(1); }
+    }
+
     @keyframes shade-entrance-swing { 
-      0% { opacity: 0; transform: scale(0.8) rotateX(-20deg); } 
-      10% { opacity: 1; transform: scale(1.05) rotateX(0deg); }
-      20% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
+      0% { opacity: 0; transform: translateY(-20px) scale(0.8); } 
+      10% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .hamburger-btn { cursor: pointer; background: rgba(180, 0, 0, 0.25); padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255, 0, 0, 0.4); display: flex; flex-direction: column; gap: 4px; }
