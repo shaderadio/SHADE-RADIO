@@ -6,7 +6,7 @@
   <title>SHADE RADIO – Live</title>
   
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="assets/logo.PNG">
+  <link rel="apple-touch-icon" href="assets/logo.JPG">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -110,7 +110,6 @@
       width: 100%;
     }
 
-    /* EFFET GLOSSY FLUIDE SANS COUPURE */
     .player-container::after {
       content: "";
       position: absolute;
@@ -127,12 +126,12 @@
         rgba(255, 255, 255, 0) 65%,
         rgba(255, 255, 255, 0) 100%
       );
-      background-size: 300% 100%; /* Plus large pour une transition invisible */
+      background-size: 300% 100%;
       pointer-events: none; 
       z-index: 10;
       mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      animation: gloss-sweep 5s linear infinite; /* Passage en 'linear' pour la fluidité totale */
+      animation: gloss-sweep 5s linear infinite;
     }
 
     @keyframes gloss-sweep {
@@ -160,7 +159,7 @@
       display: flex; 
       justify-content: center; 
       gap: 12px; 
-      margin: 60px auto 25px; /* Un peu plus d'espace pour la sécurité */
+      margin: 60px auto 25px; 
       position: relative;
       z-index: 20; 
     }
