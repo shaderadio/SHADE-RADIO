@@ -29,7 +29,6 @@
       perspective: 1200px; 
     }
 
-    /* EFFET SMOKY */
     body::before {
       content: "";
       position: fixed;
@@ -42,10 +41,9 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO AGRANDI */
     .radio-logo {
-      width: 260px; /* Taille augmentée ici */
-      margin: -10px auto 10px; /* Marges ajustées pour compenser la taille */
+      width: 260px;
+      margin: -10px auto 10px;
       display: block;
       filter: drop-shadow(0 0 15px rgba(255,0,0,0.4));
       animation: shade-entrance-swing 6s ease-in-out infinite;
@@ -105,12 +103,28 @@
     #sc-player [class*="title"] { color: #fff !important; font-size: 22px !important; font-weight: 800 !important; margin-top: 15px !important; }
     #sc-player [class*="artist"] { color: rgba(255,255,255,0.5) !important; font-size: 15px !important; }
     
+    /* NOUVEAU DESIGN DU BOUTON PLAY */
     #sc-player [class*="play-button"] { 
-      background: linear-gradient(90deg, #ff0000, #8b0000) !important; 
-      border-radius: 50px !important; 
-      transform: scale(0.7) !important; 
+      background: linear-gradient(145deg, #ff0000, #550000) !important; 
+      border-radius: 50% !important; 
+      transform: scale(0.85) !important; 
       transform-origin: center !important;
-      margin-top: 5px !important;
+      margin-top: 10px !important;
+      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
+      transition: all 0.3s ease !important;
+      cursor: pointer !important;
+    }
+
+    #sc-player [class*="play-button"]:hover {
+      transform: scale(0.95) !important;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.9) !important;
+      filter: brightness(1.2);
+    }
+
+    /* Ajustement de l'icône à l'intérieur du bouton si accessible via CSS */
+    #sc-player [class*="play-button"] svg {
+      filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)) !important;
     }
 
     .actions-box { 
