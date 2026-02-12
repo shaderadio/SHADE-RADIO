@@ -25,7 +25,7 @@
       background: #000;
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Aligné en haut */
+      align-items: flex-start;
       min-height: 100vh;
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 10px); 
@@ -43,7 +43,7 @@
       z-index: -2;
     }
 
-    /* --- BARRE DU HAUT ALIGNÉE --- */
+    /* --- TOP BAR --- */
     .top-bar {
       display: flex;
       align-items: center;
@@ -56,7 +56,7 @@
     }
 
     .header-container {
-      flex: 1; /* Prend toute la place restante */
+      flex: 1;
       display: flex; 
       align-items: center;
       background: rgba(255, 255, 255, 0.05);
@@ -66,7 +66,7 @@
       overflow: hidden;
     }
 
-    /* --- MENU HAMBURGER (A COTÉ) --- */
+    /* --- HAMBURGER --- */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(255, 255, 255, 0.1);
@@ -91,7 +91,6 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
-    /* Overlay Menu */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
@@ -117,7 +116,25 @@
 
     .menu-link.tiktok { background: linear-gradient(45deg, #00f2ea, #ff0050); border: none; }
 
-    /* --- DESIGN LECTEUR --- */
+    /* --- CADRE SMOKY ALLONGÉ ET GLOSSY --- */
+    .main-frame {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      border-radius: 45px;
+      /* Allongement du cadre ici */
+      padding: 25px 10px 60px 10px; 
+      margin-top: 5px; 
+      width: 92%; 
+      max-width: 340px;
+      position: relative;
+      /* Contour Glossy : liseré interne blanc + lueur externe */
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 
+        0 25px 50px rgba(0,0,0,0.8),
+        inset 0 0 15px rgba(255, 255, 255, 0.05), 
+        0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
     #app { 
       width: 100%; 
       max-width: 420px; 
@@ -146,17 +163,6 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    .main-frame {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 40px;
-      padding: 20px 10px 10px 10px; 
-      margin-top: 5px; width: 92%; max-width: 340px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
-      position: relative;
-    }
-
     .radio-logo {
       width: 260px; 
       margin: 0 auto 10px;
@@ -174,7 +180,7 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
-    /* --- EFFET GLOSSY ET POCHETTE --- */
+    /* --- EFFET GLOSSY POCHETTE --- */
     .player-container { position: relative; width: 100%; }
 
     .player-container::after {
