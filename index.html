@@ -46,8 +46,8 @@
       z-index: -2;
     }
 
-    /* --- TOP BAR --- */
-    .top-bar {
+    /* --- BARS (TOP & BOTTOM) --- */
+    .top-bar, .bottom-ad-bar {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -69,6 +69,7 @@
       overflow: hidden;
     }
 
+    /* --- MENU --- */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(180, 0, 0, 0.25); 
@@ -120,12 +121,12 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
-    /* --- MAIN FRAME SMOKY ALLONGÉ --- */
+    /* --- MAIN FRAME --- */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
-      padding: 25px 10px 160px 10px; 
+      padding: 25px 10px 50px 10px; 
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
@@ -134,17 +135,12 @@
       box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.1);
     }
 
-    #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
+    #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; height: 100vh; }
 
-    .live-badge, .logo-badge {
+    .live-badge {
       background: linear-gradient(90deg, #ff0000, #8b0000);
       color: #fff; font-size: 11px; font-weight: bold;
       padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .logo-badge img {
-        height: 18px; width: 18px; border-radius: 3px;
     }
 
     @keyframes pulse {
@@ -162,9 +158,7 @@
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
     .radio-logo {
-      width: 290px; 
-      margin: 0 auto 5px;
-      display: block;
+      width: 290px; margin: 0 auto 5px; display: block;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
       animation: shade-entrance-swing 7s ease-in-out infinite;
     }
@@ -178,65 +172,44 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
-    /* --- PLAYER ET EFFET GLOSSY --- */
+    /* --- PLAYER --- */
     .player-container { position: relative; width: 100%; margin-top: 20px; }
     .player-container::after {
-      content: "";
-      position: absolute;
-      top: 0; 
-      left: 12.5%; 
-      width: 75%; 
-      height: 210px; 
-      border-radius: 20px;
+      content: ""; position: absolute; top: 0; left: 12.5%; width: 75%; height: 210px; border-radius: 20px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
-      background-size: 300% 100%;
-      pointer-events: none; 
-      z-index: 10;
+      background-size: 300% 100%; pointer-events: none; z-index: 10;
       mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       animation: gloss-sweep 5s linear infinite;
     }
-
     @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
 
-    #sc-player { 
-      background: transparent !important; 
-      transform: scale(0.75); 
-      transform-origin: top center; 
-      height: 340px; 
-      position: relative; 
-      z-index: 2; 
-    }
-
-    /* SUPPRESSION DU CADRE GRIS ET FORÇAGE DES ARRONDIS */
-    #sc-player, #sc-player *, [is="player"], .sc-player-container { 
-      background: transparent !important; 
-      background-color: transparent !important;
-      box-shadow: none !important; 
-      border: none !important; 
+    #sc-player { background: transparent !important; transform: scale(0.75); transform-origin: top center; height: 340px; position: relative; z-index: 2; }
+    
+    /* RESET PLAYER DESIGN */
+    #sc-player, #sc-player *, [is="player"] { 
+        background: transparent !important; 
+        box-shadow: none !important; 
+        border: none !important; 
     }
     
     #sc-player img { 
-      width: 100% !important; 
-      border-radius: 25px !important; 
-      box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; 
-      display: block !important;
+        width: 100% !important; 
+        border-radius: 25px !important; 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; 
+        display: block !important;
     }
 
     #sc-player [class*="play-button"] { 
       background: linear-gradient(145deg, #ff0000, #550000) !important; 
-      border-radius: 50% !important; 
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
+      border-radius: 50% !important; border: 2px solid rgba(255, 255, 255, 0.2) !important;
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6) !important;
     }
 
-    /* BANNIÈRE PUB DU BAS */
+    /* POSITION BANNIERE BAS */
     .bottom-ad-bar {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        padding: 0 5px;
-        margin-top: -40px; /* Positionnement au dessus du padding du cadre */
+        margin-top: auto;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
     }
   </style>
 </head>
@@ -267,30 +240,23 @@
       </div>
       
       <div class="hamburger-btn" onclick="toggleMenu()">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
+        <div class="bar1"></div><div class="bar2"></div><div class="bar3"></div>
       </div>
     </div>
 
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
-      
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
       </div>
+    </div>
 
-      <div class="bottom-ad-bar">
+    <div class="bottom-ad-bar">
         <div class="header-container">
-            <div class="logo-badge">
-                <img src="assets/logo.JPG" alt="logo">
-            </div>
             <div class="radio-ticker">
               <span>pour faire ta pub sur la radio contact nous par mail en cliquant dans le menu sur "Demande de pub"</span>
             </div>
-          </div>
-      </div>
-
+        </div>
     </div>
   </div>
 
