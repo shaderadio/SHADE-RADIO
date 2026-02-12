@@ -111,7 +111,7 @@
     </div>
 
     <div class="actions-box">
-      <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=Titre'">🎵 Titre</button>
+      <button class="btn-custom" onclick="window.location.href='mailto:shaderadiolive@gmail.com?subject=DEMANDE DE MORCEAU EN PLAYLIST&body=ARTISTE:%20%0D%0ATITRE:%20'">🎵 Titre</button>
       <button class="btn-custom" onclick="openDedi()">🎤 Dédicace</button>
       <button class="btn-custom" onclick="shareRadio()">📲 Partager</button>
     </div>
@@ -120,7 +120,7 @@
   <div id="dedi-modal">
     <div class="modal-inner">
       <h3>DÉDICACE EN DIRECT</h3>
-      <input type="text" id="dedi-input" placeholder="Ton message / dédicace..." autocomplete="off">
+      <input type="text" id="dedi-input" placeholder="Ton nom / Ton message..." autocomplete="off">
       <button class="btn-valider" onclick="sendDedi()">ENVOYER</button>
       <span class="btn-cancel" onclick="closeDedi()">Annuler</span>
     </div>
@@ -144,9 +144,7 @@
       const ticker = document.getElementById('ticker-text');
 
       if(msg.trim() !== "") {
-        // On ajoute la dédicace au texte actuel
         ticker.innerHTML += " — DÉDICACE : " + msg.toUpperCase() + " ! — ";
-        
         closeDedi();
         document.getElementById('dedi-input').value = "";
 
