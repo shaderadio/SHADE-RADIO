@@ -33,34 +33,6 @@
       perspective: 1200px; 
     }
 
-    /* EFFET GLASS SHINE (BRILLANCE QUI TRAVERSE) */
-    .glass-shine {
-      position: fixed;
-      top: 0;
-      left: -150%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(
-        to right, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.05) 40%, 
-        rgba(255, 255, 255, 0.15) 50%, 
-        rgba(255, 255, 255, 0.05) 60%, 
-        transparent 100%
-      );
-      transform: skewX(-25deg);
-      z-index: 1; /* Passe derrière le contenu principal mais devant le fond */
-      animation: glass-sweep 6s Math.random infinite;
-      pointer-events: none;
-    }
-
-    @keyframes glass-sweep {
-      0% { left: -150%; opacity: 0; }
-      20% { opacity: 1; }
-      40% { left: 150%; opacity: 0; }
-      100% { left: 150%; opacity: 0; }
-    }
-
     /* GRADIENT ROUGE FIXE EN FOND DE PAGE */
     body::before {
       content: "";
@@ -74,27 +46,58 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO AVEC ROTATION 3D */
-    .radio-logo {
-      width: 300px; 
+    /* CONTENEUR DU LOGO POUR L'EFFET DE BRILLANCE */
+    .logo-wrapper {
+      position: relative;
+      width: 300px;
       margin: -20px auto 5px;
+      overflow: hidden; /* Coupe le reflet qui dépasse */
+      border-radius: 20px;
+      animation: shade-entrance-swing 7s ease-in-out infinite;
+      z-index: 5;
+    }
+
+    .radio-logo {
+      width: 100%;
       display: block;
       filter: drop-shadow(0 0 20px rgba(255,0,0,0.5));
-      animation: shade-entrance-swing 7s ease-in-out infinite;
-      transform-origin: center;
-      position: relative;
-      z-index: 5;
+    }
+
+    /* L'EFFET DE BRILLANCE (REFLET VERRE) SUR LE LOGO */
+    .logo-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0) 30%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 70%,
+        transparent
+      );
+      animation: logo-shine 4s infinite;
+    }
+
+    @keyframes logo-shine {
+      0% { left: -150%; }
+      30% { left: 150%; }
+      100% { left: 150%; }
     }
 
     @keyframes shade-entrance-swing {
       0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
-      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
-      35% { transform: rotateY(20deg); filter: brightness(1.2) drop-shadow(0 0 25px #ff0000); }
-      55% { transform: rotateY(-20deg); filter: brightness(1.2) drop-shadow(0 0 25px #ff0000); }
+      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
+      35% { transform: rotateY(20deg); filter: brightness(1.2); }
+      55% { transform: rotateY(-20deg); filter: brightness(1.2); }
       75% { transform: rotateY(20deg); }
-      100% { transform: rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
+      100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
+    /* HEADER & TICKER */
     .header-container {
       display: flex; align-items: center;
       background: rgba(255, 255, 255, 0.05);
@@ -123,7 +126,7 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* CADRE PRINCIPAL */
+    /* CADRE PRINCIPAL AVEC FUMÉE */
     .main-frame {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -171,8 +174,6 @@
 </head>
 <body>
 
-  <div class="glass-shine"></div>
-
   <div id="app">
     <div class="header-container">
       <div class="live-badge">● LIVE</div>
@@ -182,7 +183,10 @@
     </div>
 
     <div class="main-frame">
-      <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
+      <div class="logo-wrapper">
+        <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
+      </div>
+      
       <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
     </div>
 
