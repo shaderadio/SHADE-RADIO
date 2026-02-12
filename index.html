@@ -70,7 +70,6 @@
       overflow: hidden;
     }
 
-    /* --- HAMBURGER --- */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(180, 0, 0, 0.25); 
@@ -97,7 +96,6 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
-    /* --- MENU OVERLAY --- */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
@@ -128,7 +126,7 @@
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
-      padding: 25px 10px 160px 10px; 
+      padding: 25px 10px 140px 10px; 
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
@@ -159,9 +157,8 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
-    /* --- LOGO AGRANDI --- */
     .radio-logo {
-      width: 290px; /* Taille augmentée */
+      width: 290px; 
       margin: 0 auto 5px;
       display: block;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
@@ -177,24 +174,36 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
+    /* --- CONTENEUR PLAYER ET EFFET GLOSSY AJUSTÉ --- */
     .player-container { position: relative; width: 100%; }
     .player-container::after {
       content: "";
       position: absolute;
-      top: 0; left: 7.5%; 
-      width: 85%; height: 260px; 
-      border-radius: 25px;
+      top: 0; 
+      left: 12.5%; /* Recentré suite à la réduction */
+      width: 75%;  /* Largeur adaptée au scale 0.75 */
+      height: 210px; /* Hauteur réduite pour la pochette plus petite */
+      border-radius: 20px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
       background-size: 300% 100%;
-      pointer-events: none; z-index: 10;
-      mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+      pointer-events: none; 
+      z-index: 10;
+      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       animation: gloss-sweep 5s linear infinite;
     }
 
     @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
 
-    #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
+    /* --- TAILLE DU LECTEUR RÉDUITE --- */
+    #sc-player { 
+      background: transparent !important; 
+      transform: scale(0.75); /* Taille réduite ici */
+      transform-origin: top center; 
+      height: 340px; 
+      position: relative; 
+      z-index: 2; 
+    }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
 
