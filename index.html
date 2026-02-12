@@ -30,6 +30,7 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 20px); 
       position: relative;
+      perspective: 1200px; /* Important pour l'effet 3D de rotation */
     }
 
     /* GRADIENT ROUGE FIXE EN FOND DE PAGE */
@@ -45,23 +46,25 @@
 
     #app { width: 100%; max-width: 420px; padding: 0 15px; position: relative; z-index: 10; }
 
-    /* LOGO */
+    /* LOGO AVEC ROTATION 3D RÉANIMÉE */
     .radio-logo {
       width: 300px; 
       margin: -20px auto 5px;
       display: block;
       filter: drop-shadow(0 0 20px rgba(255,0,0,0.5));
-      animation: shade-entrance-swing 6s ease-in-out infinite;
+      animation: shade-entrance-swing 7s ease-in-out infinite;
       transform-origin: center;
       position: relative;
-      z-index: 2;
+      z-index: 5;
     }
 
     @keyframes shade-entrance-swing {
-      0% { transform: rotateY(0deg); }
-      35% { transform: rotateY(15deg); }
-      70% { transform: rotateY(-15deg); }
-      100% { transform: rotateY(0deg); }
+      0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
+      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
+      35% { transform: rotateY(20deg); filter: brightness(1.2) drop-shadow(0 0 25px #ff0000); }
+      55% { transform: rotateY(-20deg); filter: brightness(1.2) drop-shadow(0 0 25px #ff0000); }
+      75% { transform: rotateY(20deg); }
+      100% { transform: rotateY(0deg); filter: brightness(1) drop-shadow(0 0 15px rgba(255,0,0,0.4)); }
     }
 
     .header-container {
@@ -103,17 +106,15 @@
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
       position: relative;
       z-index: 1;
-      overflow: visible; /* Permet à la fumée de dépasser légèrement */
     }
 
-    /* LES COUCHES DE FUMÉE LOCALISÉES */
     .main-frame::before, .main-frame::after {
       content: "";
       position: absolute;
-      top: 10%; left: 10%; width: 80%; height: 60%;
+      top: 15%; left: 10%; width: 80%; height: 50%;
       z-index: -1;
-      filter: blur(50px);
-      opacity: 0.7;
+      filter: blur(45px);
+      opacity: 0.6;
       border-radius: 50%;
     }
 
@@ -129,12 +130,12 @@
     }
 
     @keyframes smoke-float {
-      0% { transform: scale(1) translate(-10px, -10px) rotate(0deg); opacity: 0.4; }
-      50% { transform: scale(1.3) translate(20px, 10px) rotate(10deg); opacity: 0.8; }
-      100% { transform: scale(1) translate(-5px, 15px) rotate(-10deg); opacity: 0.5; }
+      0% { transform: scale(1) translate(-10px, -5px); opacity: 0.4; }
+      50% { transform: scale(1.2) translate(15px, 10px); opacity: 0.7; }
+      100% { transform: scale(1) translate(-5px, 5px); opacity: 0.4; }
     }
 
-    /* LECTEUR SC */
+    /* LECTEUR */
     #sc-player { background: transparent !important; transform: scale(0.85); transform-origin: top center; height: 380px; position: relative; z-index: 2; }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
@@ -151,12 +152,7 @@
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
     }
 
-    .actions-box { 
-      display: flex; 
-      justify-content: center; 
-      gap: 12px; 
-      margin: 30px auto 15px; 
-    }
+    .actions-box { display: flex; justify-content: center; gap: 12px; margin: 30px auto 15px; }
 
     .btn-custom {
       background: rgba(255, 255, 255, 0.05);
@@ -179,6 +175,7 @@
 
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
+      
       <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
     </div>
 
@@ -195,6 +192,7 @@
         navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
+    // Empêche la mise en veille
     let wakeLock = null;
     const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
     window.addEventListener('touchstart', reqWL);
