@@ -41,8 +41,8 @@
       position: fixed;
       inset: 0;
       background: 
-        radial-gradient(circle at 50% 40%, rgba(220, 0, 0, 0.55), transparent 65%), /* Rouge central plus fort */
-        radial-gradient(circle at 80% 90%, rgba(150, 0, 0, 0.3), transparent 50%),  /* Lueur secondaire */
+        radial-gradient(circle at 50% 40%, rgba(220, 0, 0, 0.55), transparent 65%), 
+        radial-gradient(circle at 80% 90%, rgba(150, 0, 0, 0.3), transparent 50%), 
         radial-gradient(circle at 10% 20%, rgba(80, 0, 0, 0.4), transparent 40%);
       z-index: -2;
     }
@@ -70,7 +70,7 @@
       overflow: hidden;
     }
 
-    /* --- HAMBURGER BARRES BLANCHES --- */
+    /* --- HAMBURGER --- */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(180, 0, 0, 0.25); 
@@ -97,7 +97,7 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
-    /* --- MENU OVERLAY TRANSPARENT 50% --- */
+    /* --- MENU OVERLAY --- */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
@@ -159,9 +159,10 @@
     }
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
 
+    /* --- LOGO AGRANDI --- */
     .radio-logo {
-      width: 250px; 
-      margin: 0 auto 10px;
+      width: 290px; /* Taille augmentée */
+      margin: 0 auto 5px;
       display: block;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
       animation: shade-entrance-swing 7s ease-in-out infinite;
