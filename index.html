@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
   
-  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/logo.PNG">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
+  <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
+  <meta name="theme-color" content="#000000">
+
   <style>
     * { 
       box-sizing: border-box; 
@@ -95,7 +99,7 @@
       backdrop-filter: blur(15px);
       border-radius: 40px;
       padding: 25px 10px 15px 10px; 
-      margin: 10px auto; width: 100%; max-width: 340px; /* Légèrement élargi pour le logo */
+      margin: 10px auto; width: 100%; max-width: 340px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.8);
     }
 
@@ -115,12 +119,6 @@
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2) !important;
       transition: all 0.3s ease !important;
       cursor: pointer !important;
-    }
-
-    #sc-player [class*="play-button"]:hover {
-      transform: scale(0.95) !important;
-      box-shadow: 0 0 30px rgba(255, 0, 0, 0.9) !important;
-      filter: brightness(1.2);
     }
 
     .actions-box { 
