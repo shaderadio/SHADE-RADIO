@@ -119,12 +119,11 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
 
-    /* --- CADRE SMOKY RESTAURÉ --- */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
-      padding: 25px 10px 220px 10px; /* Retour au padding d'origine */
+      padding: 25px 10px 220px 10px; 
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
@@ -210,12 +209,50 @@
       border-radius: 50% !important; 
       border: 2px solid rgba(255, 255, 255, 0.2) !important;
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6) !important;
+      z-index: 5;
     }
 
-    /* --- BANNIÈRE PUB POSITIONNÉE EN BAS DU CADRE --- */
+    /* --- DISQUE D'OR TOURNANT --- */
+    .gold-vinyl {
+      position: absolute;
+      bottom: 24px; /* Alignement sur le bouton play */
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      z-index: 1;
+      background: radial-gradient(circle, #f7d774 0%, #b8860b 40%, #5e4a06 70%, #1a1a1a 100%);
+      box-shadow: 0 0 25px rgba(184, 134, 11, 0.5);
+      animation: vinyl-rotate 3s linear infinite;
+      border: 1px solid rgba(0,0,0,0.3);
+    }
+
+    /* Effet de sillons sur le disque */
+    .gold-vinyl::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: repeating-radial-gradient(circle, transparent 0, transparent 2px, rgba(0,0,0,0.1) 3px);
+    }
+
+    /* Reflet métallique dynamique */
+    .gold-vinyl::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.4) 45deg, transparent 90deg, transparent 180deg, rgba(255,255,255,0.4) 225deg, transparent 270deg);
+      opacity: 0.6;
+    }
+
+    @keyframes vinyl-rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     .ad-banner {
       position: absolute;
-      bottom: 25px; /* Décalée du bas du cadre */
+      bottom: 25px; 
       left: 50%;
       transform: translateX(-50%);
       width: 85%;
@@ -281,6 +318,8 @@
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
       <div class="player-container">
+        <div class="gold-vinyl"></div>
+        
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
       </div>
 
