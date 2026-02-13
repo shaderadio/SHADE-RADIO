@@ -32,7 +32,6 @@
       overflow: hidden; 
       padding-top: env(safe-area-inset-top, 10px); 
       position: relative;
-      perspective: 1200px;
     }
 
     body::before {
@@ -60,51 +59,60 @@
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px); border-radius: 50px;
-      padding: 10px; margin: 5px 0; width: 92%; max-width: 340px; flex: 1;
+      padding: 5px; margin: 5px 0; width: 94%; max-width: 340px; flex: 1;
       position: relative; border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.1);
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
       overflow: hidden;
     }
 
-    /* --- LOGO AVEC LUMIÈRE ET BATTEMENT --- */
-    .logo-container { position: relative; width: 310px; margin: 15px 0 0 0; }
+    /* --- LOGO ANIMATIONS --- */
+    .logo-container { 
+      position: relative; 
+      width: 310px; 
+      margin: 15px 0 0 0; 
+      overflow: hidden;
+      border-radius: 20px;
+    }
 
     .radio-logo {
       width: 100%;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
-      animation: shade-entrance-swing 7s ease-in-out infinite, logo-beat 1.5s ease-in-out infinite;
+      animation: logo-beat 3s ease-in-out infinite;
       transform-origin: center;
     }
 
-    /* Effet lumière qui traverse */
+    /* Lumière qui traverse le logo */
     .logo-container::after {
       content: "";
       position: absolute;
       top: 0; left: -150%;
       width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-      transform: skewX(-20deg);
-      animation: logo-shine 4s infinite;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: skewX(-25deg);
+      animation: logo-shine 3s ease-in-out infinite;
       pointer-events: none;
     }
 
-    /* --- PLAYER & GLOSSY REHAUSSÉS --- */
+    /* --- PLAYER & GLOSSY --- */
     .player-container { 
       position: relative; 
       width: 100%; 
       display: flex; 
       justify-content: center;
-      margin-top: -70px; /* REMONTÉ AU MAXIMUM */
+      margin-top: -95px; /* REMONTÉ À FOND */
     }
 
     .player-container::after {
-      content: ""; position: absolute; 
-      top: 15px; left: 50%; transform: translateX(-50%);
-      width: 205px; height: 185px; 
+      content: ""; 
+      position: absolute; 
+      top: 10px; left: 50%; transform: translateX(-50%);
+      width: 202px; height: 188px; /* Calibré sur la pochette */
       border-radius: 20px;
-      background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.2) 48%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.2) 52%, rgba(255,255,255,0) 65%, rgba(255,255,255,0) 100%);
-      background-size: 300% 100%; pointer-events: none; z-index: 10;
+      background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 35%, rgba(255,255,255,0.3) 48%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 52%, rgba(255,255,255,0.05) 65%, rgba(255,255,255,0) 100%);
+      background-size: 300% 100%; 
+      pointer-events: none; 
+      z-index: 10;
       animation: gloss-sweep 5s linear infinite;
     }
 
@@ -112,7 +120,7 @@
       background: transparent !important; 
       transform: scale(0.65); 
       transform-origin: top center; 
-      height: 280px; 
+      height: 260px; 
       position: relative; 
       z-index: 2; 
       width: 100%; 
@@ -124,7 +132,7 @@
     /* --- MENU OVERLAY --- */
     .menu-overlay {
       position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(60, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+      background: linear-gradient(135deg, rgba(60, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
       backdrop-filter: blur(15px); z-index: 9999; transition: 0.5s;
       display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
     }
@@ -136,27 +144,23 @@
       display: flex; align-items: center; justify-content: center; gap: 12px;
     }
 
-    /* --- TICKERS & ANIMATIONS --- */
+    /* --- TICKERS --- */
     .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap; }
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: shade-scroll 12s linear infinite; color: #ffffff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
 
+    /* --- KEYFRAMES --- */
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
     @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
     
     @keyframes logo-beat {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
+      50% { transform: scale(1.03); }
     }
 
     @keyframes logo-shine {
       0% { left: -150%; }
-      30%, 100% { left: 150%; }
-    }
-
-    @keyframes shade-entrance-swing { 
-      0% { opacity: 0; transform: translateY(-10px); } 
-      10% { opacity: 1; transform: translateY(0); }
+      40%, 100% { left: 150%; }
     }
 
     .hamburger-btn { cursor: pointer; background: rgba(180, 0, 0, 0.25); padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255, 0, 0, 0.4); display: flex; flex-direction: column; gap: 4px; }
@@ -166,6 +170,7 @@
     .open .bar3 { transform: rotate(45deg) translate(-4px, -5px); }
 
     .bottom-ad-bar { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
   </style>
 </head>
 <body>
