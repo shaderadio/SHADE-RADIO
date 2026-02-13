@@ -171,7 +171,6 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
-    /* --- LECTEUR REMONTÉ --- */
     .player-container { 
       position: relative; 
       width: 100%; 
@@ -180,13 +179,13 @@
       margin-top: 15px; 
     }
 
-    /* --- RÉAJUSTEMENT PRÉCIS DE L'EFFET GLOSSY --- */
+    /* --- EFFET GLOSSY REMONTÉ ET ARRONDIS AJUSTÉS --- */
     .player-container::after {
       content: "";
       position: absolute;
-      top: -2px; /* Réglage millimétré pour coller à la pochette */
+      top: -4px; /* Remonté pour un alignement parfait */
       width: 221px; height: 221px; 
-      border-radius: 18px;
+      border-radius: 32px; /* Arrondi augmenté pour suivre la pochette */
       background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%);
       background-size: 200% 100%;
       pointer-events: none; z-index: 10;
@@ -204,7 +203,13 @@
       z-index: 2; 
     }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
-    #sc-player img { width: 100% !important; border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
+    
+    /* --- POCHETTE PLUS ARRONDIE --- */
+    #sc-player img { 
+      width: 100% !important; 
+      border-radius: 40px !important; /* Arrondis augmentés ici */
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; 
+    }
 
     #sc-player [class*="play-button"] { 
       background: linear-gradient(145deg, #ff0000, #550000) !important; 
