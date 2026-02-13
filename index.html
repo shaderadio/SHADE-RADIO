@@ -94,31 +94,34 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
-    /* --- MENU OVERLAY MODIFIÉ --- */
+    /* --- MENU OVERLAY : VRAIE TRANSPARENCE --- */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
       width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(30, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
-      backdrop-filter: blur(20px);
+      /* Couleur de fond ultra légère pour laisser passer les gradients du body */
+      background: rgba(0, 0, 0, 0.3); 
+      /* Flou important pour l'effet verre */
+      backdrop-filter: blur(25px) saturate(150%);
+      -webkit-backdrop-filter: blur(25px) saturate(150%);
       z-index: 9999;
-      transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+      transition: 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
       display: flex; flex-direction: column;
       justify-content: center; align-items: center; gap: 15px;
     }
     .menu-overlay.active { right: 0; }
 
     .menu-logo {
-      width: 140px; /* Petit format pour le menu */
-      margin-bottom: 20px;
-      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+      width: 130px; 
+      margin-bottom: 30px;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
       opacity: 0;
-      transform: translateY(-20px);
-      transition: 0.5s 0.3s ease-out;
+      transform: scale(0.8);
+      transition: 0.6s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .menu-overlay.active .menu-logo {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
     }
 
     .menu-link {
@@ -126,15 +129,16 @@
       font-size: 18px; font-weight: bold;
       text-transform: uppercase; letter-spacing: 1px;
       padding: 16px 25px; border-radius: 50px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.05);
-      width: 85%; max-width: 300px; text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      width: 80%; max-width: 300px; text-align: center;
       display: flex; align-items: center; justify-content: center; gap: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       transition: 0.3s;
     }
-    .menu-link:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
+    .menu-link:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.95); }
 
+    /* --- RESTE DU DESIGN --- */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
