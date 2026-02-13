@@ -123,13 +123,16 @@
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
       border-radius: 50px;
-      padding: 25px 10px 220px 10px; 
+      padding: 25px 10px 40px 10px; /* Ajusté pour la nouvelle bannière */
       margin-top: 5px; 
       width: 92%; 
       max-width: 340px;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
@@ -176,16 +179,16 @@
       width: 100%; 
       display: flex; 
       justify-content: center;
-      margin-top: 15px; 
+      margin-top: 15px;
+      height: 230px; /* Fixé pour éviter que la bannière bouge */
     }
 
-    /* --- EFFET GLOSSY REMONTÉ ET ARRONDIS AJUSTÉS --- */
     .player-container::after {
       content: "";
       position: absolute;
-      top: -4px; /* Remonté pour un alignement parfait */
+      top: -4px; 
       width: 221px; height: 221px; 
-      border-radius: 32px; /* Arrondi augmenté pour suivre la pochette */
+      border-radius: 32px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%);
       background-size: 200% 100%;
       pointer-events: none; z-index: 10;
@@ -204,10 +207,9 @@
     }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     
-    /* --- POCHETTE PLUS ARRONDIE --- */
     #sc-player img { 
       width: 100% !important; 
-      border-radius: 40px !important; /* Arrondis augmentés ici */
+      border-radius: 40px !important; 
       box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; 
     }
 
@@ -216,6 +218,35 @@
       border-radius: 50% !important; 
       border: 2px solid rgba(255, 255, 255, 0.2) !important;
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.6) !important;
+    }
+
+    /* --- NOUVELLE BANNIÈRE PUB --- */
+    .ad-banner {
+      width: 90%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+      display: flex;
+    }
+    .ad-ticker {
+      flex: 1;
+      padding: 6px 0;
+      overflow: hidden;
+      display: flex;
+    }
+    .ad-ticker span {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: shade-scroll 15s linear infinite; /* Un peu plus lent pour la lecture */
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
   </style>
 </head>
@@ -254,8 +285,15 @@
 
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
+      
       <div class="player-container">
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
+      </div>
+
+      <div class="ad-banner">
+        <div class="ad-ticker">
+          <span>Pour diffuser votre publicité, contactez nous via l'onglet demande de pub dans le menu.</span>
+        </div>
       </div>
     </div>
   </div>
