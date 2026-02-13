@@ -204,19 +204,23 @@
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 40px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
 
+    /* --- BOUTON PLAY AMÉLIORÉ --- */
     #sc-player [class*="play-button"] { 
-      background: linear-gradient(145deg, #ff0000, #550000) !important; 
+      background: #ffffff !important; /* Fond blanc pour bien ressortir sur le disque */
       border-radius: 50% !important; 
-      border: 2px solid rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6) !important;
+      border: 3px solid #ff0000 !important; /* Bordure rouge pour le rappel logo */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 0, 0, 0.4) !important; /* Ombre forte */
       z-index: 5;
+      transition: transform 0.2s;
     }
+
+    #sc-player [class*="play-button"]:active { transform: scale(0.9); }
 
     /* --- IMAGE DISQUE PERSONNALISÉE --- */
     .custom-vinyl {
       position: absolute;
-      top: 191px; /* MODIFIÉ : Réglage manuel pour descendre le disque précisément */
-      width: 155px; /* Un peu plus grand pour l'effet réaliste */
+      top: 191px; 
+      width: 155px; 
       height: 155px;
       z-index: 1;
       animation: vinyl-rotate 6s linear infinite; 
@@ -298,7 +302,7 @@
       <div class="player-container">
         <img src="assets/disque.PNG" class="custom-vinyl" alt="Vinyl">
         
-        <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
+        <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ff0000" :progress-show="false" player-width="100%"></div>
       </div>
 
       <div class="ad-banner">
