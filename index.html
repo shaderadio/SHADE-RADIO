@@ -171,21 +171,20 @@
       100% { transform: rotateY(0deg); filter: brightness(1); }
     }
 
-    /* --- LECTEUR ET POCHETTE DESCENDUS --- */
+    /* --- LECTEUR DESCENDU ENCORE PLUS BAS --- */
     .player-container { 
       position: relative; 
       width: 100%; 
       display: flex; 
       justify-content: center;
-      margin-top: 70px; /* Descente franche du bloc complet */
-      transform: translateY(10px); /* Ajustement précis vers le bas */
+      margin-top: 120px; /* Descente majeure */
     }
 
-    /* --- EFFET GLOSSY REMONTÉ --- */
+    /* --- EFFET GLOSSY PLUS HAUT --- */
     .player-container::after {
       content: "";
       position: absolute;
-      top: -4px; /* Remonté pour compenser l'arrondi du haut */
+      top: -6px; /* Remonté davantage pour bien couvrir le bord haut */
       width: 221px; height: 221px; 
       border-radius: 18px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%);
