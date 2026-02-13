@@ -26,6 +26,7 @@
       height: 100%;
       overflow: hidden;
       background: #000;
+      width: 100%;
     }
 
     body {
@@ -34,7 +35,6 @@
       align-items: flex-start;
       padding-top: env(safe-area-inset-top, 10px); 
       position: relative;
-      perspective: 1200px;
     }
 
     /* FOND ROUGE SMOKY D'ORIGINE */
@@ -52,22 +52,32 @@
     #app { 
       width: 100%; 
       max-width: 420px; 
-      height: 100vh;
+      height: 100%;
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      justify-content: space-between;
-      padding-bottom: env(safe-area-inset-bottom, 10px);
     }
 
-    .top-bar, .bottom-bar {
+    /* TOP BAR */
+    .top-bar {
       display: flex;
       align-items: center;
       gap: 10px;
       width: 100%;
       padding: 10px 15px;
       z-index: 10001;
-      flex-shrink: 0; /* Empêche la bannière de disparaître */
+    }
+
+    /* BANNIÈRE DU BAS FORCEE EN POSITION FIXE POUR ÊTRE TOUJOURS VISIBLE */
+    .bottom-bar {
+      position: fixed;
+      bottom: env(safe-area-inset-bottom, 15px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 420px;
+      padding: 0 15px;
+      z-index: 10001;
     }
 
     .header-container {
@@ -81,33 +91,22 @@
       overflow: hidden;
     }
 
-    /* HAMBURGER D'ORIGINE */
+    /* HAMBURGER ET MENU */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(180, 0, 0, 0.25); 
       padding: 8px 10px;
       border-radius: 10px;
-      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 0, 0, 0.4); 
       display: flex;
       flex-direction: column;
-      justify-content: center;
       z-index: 100001;
     }
-
-    .hamburger-btn div {
-      width: 22px; height: 2px;
-      background-color: #ffffff; 
-      margin: 3px 0;
-      transition: 0.4s;
-      border-radius: 2px;
-    }
-
+    .hamburger-btn div { width: 22px; height: 2px; background-color: #ffffff; margin: 3px 0; transition: 0.4s; border-radius: 2px; }
     .open .bar1 { transform: rotate(-45deg) translate(-5px, 6px); }
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
-    /* MENU OVERLAY TRANSPARENT */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
@@ -115,24 +114,14 @@
       background: linear-gradient(135deg, rgba(60, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
       backdrop-filter: blur(15px);
       z-index: 9999;
-      transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+      transition: 0.5s;
       display: flex; flex-direction: column;
       justify-content: center; align-items: center; gap: 20px;
     }
     .menu-overlay.active { right: 0; }
+    .menu-link { color: white; text-decoration: none; font-size: 20px; font-weight: bold; padding: 18px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.5); width: 85%; max-width: 320px; text-align: center; }
 
-    .menu-link {
-      color: white; text-decoration: none;
-      font-size: 20px; font-weight: bold;
-      text-transform: uppercase; letter-spacing: 1px;
-      padding: 18px 25px; border-radius: 50px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(0, 0, 0, 0.5);
-      width: 85%; max-width: 320px; text-align: center;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-    }
-
-    /* MAIN FRAME SMOKY */
+    /* MAIN FRAME */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
@@ -140,89 +129,81 @@
       padding: 20px 10px; 
       width: 92%; 
       max-width: 340px;
-      flex: 1; 
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 0 40px 80px rgba(0,0,0,0.9);
-      overflow: hidden;
     }
 
     .radio-logo {
       width: 240px; 
-      margin-bottom: 10px;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
       animation: shade-entrance-swing 7s ease-in-out infinite;
     }
 
-    @keyframes shade-entrance-swing {
-      0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
-      15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
-      35% { transform: rotateY(20deg); filter: brightness(1.2); }
-      55% { transform: rotateY(-20deg); filter: brightness(1.2); }
-      75% { transform: rotateY(20deg); }
-      100% { transform: rotateY(0deg); filter: brightness(1); }
-    }
-
-    /* PLAYER & GLOSSY CENTRÉ */
+    /* --- FIX DU GLOSSY : CENTRAGE ABSOLU SUR LA POCHETTE --- */
     .player-container { 
       position: relative; 
       width: 100%; 
       display: flex; 
       justify-content: center; 
-      margin-top: -20px;
-    }
-
-    /* Glossy réaligné sur la pochette scalée */
-    .player-container::after {
-      content: "";
-      position: absolute;
-      top: 0; 
-      left: 50%; 
-      transform: translateX(-50%);
-      width: 156px; height: 156px; /* Taille exacte pour le scale 0.65 */
-      border-radius: 20px;
-      background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 100%);
-      background-size: 300% 100%;
-      pointer-events: none; z-index: 10;
-      animation: gloss-sweep 5s linear infinite;
+      margin-top: -10px; /* Ajuste selon ton besoin */
     }
 
     #sc-player { 
       background: transparent !important; 
       transform: scale(0.65); 
       transform-origin: top center; 
-      height: 310px; /* Hauteur réduite pour laisser de la place à la bannière */
+      height: 320px;
     }
 
+    /* Le Glossy est maintenant lié directement au centre du container pour ne pas bouger */
+    .player-container::after {
+      content: "";
+      position: absolute;
+      top: 0; /* Aligné sur le haut du player scalé */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 168px; /* Largeur visuelle de la pochette à 0.65 */
+      height: 168px;
+      border-radius: 25px;
+      background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 100%);
+      background-size: 300% 100%;
+      pointer-events: none; 
+      z-index: 10;
+      animation: gloss-sweep 5s linear infinite;
+    }
+
+    /* SUPPRESSION CARRE GRIS */
     #sc-player, #sc-player *, [is="player"] { 
       background: transparent !important; 
       background-color: transparent !important;
       box-shadow: none !important; 
       border: none !important; 
     }
-
     #sc-player img { border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
 
-    /* TICKERS & BADGE */
+    /* TICKERS */
     .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; }
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: shade-scroll 12s linear infinite; color: #ffffff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
 
     @keyframes shade-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
     @keyframes gloss-sweep { 0% { background-position: 150% 0; } 100% { background-position: -150% 0; } }
+    @keyframes shade-entrance-swing { 0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); } 15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); } 35% { transform: rotateY(20deg); filter: brightness(1.2); } 55% { transform: rotateY(-20deg); filter: brightness(1.2); } 75% { transform: rotateY(20deg); } 100% { transform: rotateY(0deg); filter: brightness(1); } }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
   </style>
 </head>
 <body>
 
   <div class="menu-overlay" id="menuOverlay">
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre" class="menu-link" onclick="toggleMenu()"><i class="fas fa-music"></i> Demander un titre</a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="toggleMenu()"><i class="fas fa-ad"></i> Demande de pub</a>
-    <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();"><i class="fas fa-share-nodes"></i> Partager la radio</a>
-    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="toggleMenu()"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre" class="menu-link" onclick="toggleMenu()">Demander un titre</a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="toggleMenu()">Demande de pub</a>
+    <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();">Partager la radio</a>
+    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="toggleMenu()">TikTok</a>
   </div>
 
   <div id="app">
