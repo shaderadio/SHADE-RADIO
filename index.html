@@ -212,37 +212,62 @@
       z-index: 5;
     }
 
-    /* --- DISQUE D'OR TOURNANT --- */
+    /* --- DISQUE D'OR RÉALISTE ET CENTRÉ --- */
     .gold-vinyl {
       position: absolute;
-      bottom: 24px; /* Alignement sur le bouton play */
-      width: 90px;
-      height: 90px;
+      bottom: 12px; /* Ajusté pour centrer exactement derrière le bouton play */
+      width: 130px; /* Plus gros */
+      height: 130px;
       border-radius: 50%;
       z-index: 1;
-      background: radial-gradient(circle, #f7d774 0%, #b8860b 40%, #5e4a06 70%, #1a1a1a 100%);
-      box-shadow: 0 0 25px rgba(184, 134, 11, 0.5);
-      animation: vinyl-rotate 3s linear infinite;
-      border: 1px solid rgba(0,0,0,0.3);
+      /* Dégradé métallique complexe */
+      background: radial-gradient(circle, 
+        #8b6d1b 0%, 
+        #f7d774 15%, 
+        #b8860b 35%, 
+        #5e4a06 50%, 
+        #b8860b 65%, 
+        #f7d774 85%, 
+        #1a1a1a 100%
+      );
+      box-shadow: 
+        0 0 35px rgba(184, 134, 11, 0.4),
+        inset 0 0 20px rgba(0,0,0,0.5);
+      animation: vinyl-rotate 4s linear infinite;
+      border: 2px solid rgba(0,0,0,0.4);
     }
 
-    /* Effet de sillons sur le disque */
+    /* Effet de sillons plus marqué */
     .gold-vinyl::before {
       content: "";
       position: absolute;
-      inset: 5px;
+      inset: 2px;
       border-radius: 50%;
-      background: repeating-radial-gradient(circle, transparent 0, transparent 2px, rgba(0,0,0,0.1) 3px);
+      background: repeating-radial-gradient(
+        circle, 
+        transparent 0, 
+        transparent 1.5px, 
+        rgba(0,0,0,0.15) 2px
+      );
     }
 
-    /* Reflet métallique dynamique */
+    /* Reflet métallique de type "anisotrope" */
     .gold-vinyl::after {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.4) 45deg, transparent 90deg, transparent 180deg, rgba(255,255,255,0.4) 225deg, transparent 270deg);
-      opacity: 0.6;
+      background: conic-gradient(
+        from 0deg, 
+        transparent 0deg, 
+        rgba(255,255,255,0.3) 40deg, 
+        transparent 80deg, 
+        transparent 180deg, 
+        rgba(255,255,255,0.3) 220deg, 
+        transparent 260deg
+      );
+      opacity: 0.7;
+      mix-blend-mode: overlay;
     }
 
     @keyframes vinyl-rotate {
