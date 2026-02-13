@@ -212,62 +212,15 @@
       z-index: 5;
     }
 
-    /* --- DISQUE D'OR RÉALISTE ET CENTRÉ --- */
-    .gold-vinyl {
+    /* --- IMAGE DISQUE PERSONNALISÉE --- */
+    .custom-vinyl {
       position: absolute;
-      bottom: 12px; /* Ajusté pour centrer exactement derrière le bouton play */
-      width: 130px; /* Plus gros */
-      height: 130px;
-      border-radius: 50%;
+      bottom: 3px; /* Centrage précis derrière le bouton Play */
+      width: 145px; /* Taille optimale */
+      height: 145px;
       z-index: 1;
-      /* Dégradé métallique complexe */
-      background: radial-gradient(circle, 
-        #8b6d1b 0%, 
-        #f7d774 15%, 
-        #b8860b 35%, 
-        #5e4a06 50%, 
-        #b8860b 65%, 
-        #f7d774 85%, 
-        #1a1a1a 100%
-      );
-      box-shadow: 
-        0 0 35px rgba(184, 134, 11, 0.4),
-        inset 0 0 20px rgba(0,0,0,0.5);
-      animation: vinyl-rotate 4s linear infinite;
-      border: 2px solid rgba(0,0,0,0.4);
-    }
-
-    /* Effet de sillons plus marqué */
-    .gold-vinyl::before {
-      content: "";
-      position: absolute;
-      inset: 2px;
-      border-radius: 50%;
-      background: repeating-radial-gradient(
-        circle, 
-        transparent 0, 
-        transparent 1.5px, 
-        rgba(0,0,0,0.15) 2px
-      );
-    }
-
-    /* Reflet métallique de type "anisotrope" */
-    .gold-vinyl::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 0deg, 
-        transparent 0deg, 
-        rgba(255,255,255,0.3) 40deg, 
-        transparent 80deg, 
-        transparent 180deg, 
-        rgba(255,255,255,0.3) 220deg, 
-        transparent 260deg
-      );
-      opacity: 0.7;
-      mix-blend-mode: overlay;
+      animation: vinyl-rotate 6s linear infinite; /* Rotation fluide */
+      filter: drop-shadow(0 0 15px rgba(0,0,0,0.5));
     }
 
     @keyframes vinyl-rotate {
@@ -343,7 +296,7 @@
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
       <div class="player-container">
-        <div class="gold-vinyl"></div>
+        <img src="assets/disque.PNG" class="custom-vinyl" alt="Vinyl">
         
         <div id="sc-player" is="player" lang="fr" api-url="https://manager11.streamradio.fr:1700/api/v2" server-id="1" station-name="SHADE RADIO" imagecontainer="top" controlscontainer="bottom" :show-history="false" :show-share="false" :show-dj="false" :show-image="true" :show-bitrate="false" play-button-color="#ffffff" :progress-show="false" player-width="100%"></div>
       </div>
