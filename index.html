@@ -37,7 +37,7 @@
       position: relative;
     }
 
-    /* FOND ROUGE SMOKY D'ORIGINE */
+    /* TON FOND ROUGE SMOKY D'ORIGINE - RÉTABLI */
     body::before {
       content: "";
       position: fixed;
@@ -52,13 +52,13 @@
     #app { 
       width: 100%; 
       max-width: 420px; 
-      height: 100%;
+      height: 100vh;
       display: flex; 
       flex-direction: column; 
       align-items: center; 
+      padding-bottom: env(safe-area-inset-bottom, 15px);
     }
 
-    /* TOP BAR */
     .top-bar {
       display: flex;
       align-items: center;
@@ -66,18 +66,14 @@
       width: 100%;
       padding: 10px 15px;
       z-index: 10001;
+      flex-shrink: 0;
     }
 
-    /* BANNIÈRE DU BAS FORCEE EN POSITION FIXE POUR ÊTRE TOUJOURS VISIBLE */
     .bottom-bar {
-      position: fixed;
-      bottom: env(safe-area-inset-bottom, 15px);
-      left: 50%;
-      transform: translateX(-50%);
       width: 100%;
-      max-width: 420px;
-      padding: 0 15px;
+      padding: 10px 15px;
       z-index: 10001;
+      flex-shrink: 0;
     }
 
     .header-container {
@@ -91,7 +87,7 @@
       overflow: hidden;
     }
 
-    /* HAMBURGER ET MENU */
+    /* TON HAMBURGER D'ORIGINE */
     .hamburger-btn {
       cursor: pointer;
       background: rgba(180, 0, 0, 0.25); 
@@ -107,6 +103,7 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
+    /* TON MENU OVERLAY 50% D'ORIGINE */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
@@ -119,9 +116,9 @@
       justify-content: center; align-items: center; gap: 20px;
     }
     .menu-overlay.active { right: 0; }
-    .menu-link { color: white; text-decoration: none; font-size: 20px; font-weight: bold; padding: 18px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.5); width: 85%; max-width: 320px; text-align: center; }
+    .menu-link { color: white; text-decoration: none; font-size: 20px; font-weight: bold; padding: 18px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.5); width: 85%; max-width: 320px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; }
 
-    /* MAIN FRAME */
+    /* CADRE SMOKY ALLONGÉ */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
@@ -129,45 +126,41 @@
       padding: 20px 10px; 
       width: 92%; 
       max-width: 340px;
-      margin-top: 10px;
+      margin: 10px 0;
+      flex: 1; /* S'allonge jusqu'en bas */
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 0 40px 80px rgba(0,0,0,0.9);
+      overflow: hidden;
     }
 
     .radio-logo {
       width: 240px; 
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8));
       animation: shade-entrance-swing 7s ease-in-out infinite;
+      flex-shrink: 0;
     }
 
-    /* --- FIX DU GLOSSY : CENTRAGE ABSOLU SUR LA POCHETTE --- */
+    /* PLAYER CONTAINER ET GLOSSY CENTRÉ */
     .player-container { 
       position: relative; 
       width: 100%; 
       display: flex; 
       justify-content: center; 
-      margin-top: -10px; /* Ajuste selon ton besoin */
+      margin-top: -15px;
     }
 
-    #sc-player { 
-      background: transparent !important; 
-      transform: scale(0.65); 
-      transform-origin: top center; 
-      height: 320px;
-    }
-
-    /* Le Glossy est maintenant lié directement au centre du container pour ne pas bouger */
+    /* Reflet centré pile sur la pochette à 0.65 */
     .player-container::after {
       content: "";
       position: absolute;
-      top: 0; /* Aligné sur le haut du player scalé */
+      top: 0; 
       left: 50%;
       transform: translateX(-50%);
-      width: 168px; /* Largeur visuelle de la pochette à 0.65 */
+      width: 168px; 
       height: 168px;
       border-radius: 25px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.4) 52%, rgba(255,255,255,0) 100%);
@@ -177,7 +170,13 @@
       animation: gloss-sweep 5s linear infinite;
     }
 
-    /* SUPPRESSION CARRE GRIS */
+    #sc-player { 
+      background: transparent !important; 
+      transform: scale(0.65); 
+      transform-origin: top center; 
+      height: 320px;
+    }
+
     #sc-player, #sc-player *, [is="player"] { 
       background: transparent !important; 
       background-color: transparent !important;
@@ -186,7 +185,7 @@
     }
     #sc-player img { border-radius: 25px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
 
-    /* TICKERS */
+    /* TICKERS & ANIMATIONS */
     .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; }
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: shade-scroll 12s linear infinite; color: #ffffff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
@@ -200,10 +199,10 @@
 <body>
 
   <div class="menu-overlay" id="menuOverlay">
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre" class="menu-link" onclick="toggleMenu()">Demander un titre</a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="toggleMenu()">Demande de pub</a>
-    <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();">Partager la radio</a>
-    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="toggleMenu()">TikTok</a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre" class="menu-link" onclick="toggleMenu()"><i class="fas fa-music"></i> Demander un titre</a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="toggleMenu()"><i class="fas fa-ad"></i> Demande de pub</a>
+    <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();"><i class="fas fa-share-nodes"></i> Partager la radio</a>
+    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="toggleMenu()"><i class="fab fa-tiktok"></i> TikTok</a>
   </div>
 
   <div id="app">
