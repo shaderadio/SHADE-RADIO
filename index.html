@@ -204,21 +204,17 @@
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 40px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
 
-    /* --- BOUTON PLAY NOIR AMÉLIORÉ --- */
+    /* --- BOUTON PLAY BLEU MARINE --- */
     #sc-player [class*="play-button"] { 
-      background: #000000 !important; /* Bouton Noir */
+      background: #001f3f !important; /* Bleu Marine profond */
       border-radius: 50% !important; 
-      border: 1px solid rgba(255, 255, 255, 0.6) !important; /* Fine bordure blanche */
-      /* Double ombre : une noire pour la profondeur, une blanche diffuse pour faire ressortir le bouton du disque */
-      box-shadow: 0 10px 20px rgba(0,0,0,0.9), 0 0 12px rgba(255,255,255,0.3) !important; 
+      border: 2px solid rgba(255, 255, 255, 0.8) !important; /* Contour blanc clair pour détacher du disque */
+      box-shadow: 0 0 20px rgba(0, 31, 63, 0.6), 0 0 10px rgba(255, 255, 255, 0.2) !important; 
       z-index: 5;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s;
     }
 
-    #sc-player [class*="play-button"]:active { 
-      transform: scale(0.9); 
-      box-shadow: 0 5px 10px rgba(0,0,0,0.9), 0 0 20px rgba(255,255,255,0.5) !important;
-    }
+    #sc-player [class*="play-button"]:active { transform: scale(0.9); }
 
     /* --- IMAGE DISQUE PERSONNALISÉE --- */
     .custom-vinyl {
