@@ -215,12 +215,12 @@
     /* --- IMAGE DISQUE PERSONNALISÉE --- */
     .custom-vinyl {
       position: absolute;
-      bottom: 3px; /* Centrage précis derrière le bouton Play */
-      width: 145px; /* Taille optimale */
-      height: 145px;
+      top: 125px; /* MODIFIÉ : Réglage manuel pour descendre le disque précisément */
+      width: 155px; /* Un peu plus grand pour l'effet réaliste */
+      height: 155px;
       z-index: 1;
-      animation: vinyl-rotate 6s linear infinite; /* Rotation fluide */
-      filter: drop-shadow(0 0 15px rgba(0,0,0,0.5));
+      animation: vinyl-rotate 6s linear infinite; 
+      filter: drop-shadow(0 0 15px rgba(0,0,0,0.6));
     }
 
     @keyframes vinyl-rotate {
