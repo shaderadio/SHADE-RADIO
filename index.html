@@ -59,7 +59,7 @@
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px); border-radius: 50px;
-      padding: 5px; margin: 5px 0; width: 94%; max-width: 340px; flex: 1;
+      padding: 0px; margin: 5px 0; width: 94%; max-width: 340px; flex: 1;
       position: relative; border: 2px solid rgba(255, 255, 255, 0.2); 
       box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255, 0, 0, 0.1);
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
@@ -73,16 +73,16 @@
       margin: 15px 0 0 0; 
       overflow: hidden;
       border-radius: 20px;
+      z-index: 5;
     }
 
     .radio-logo {
       width: 100%;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
-      animation: logo-beat 3s ease-in-out infinite;
+      animation: logo-beat 2.5s ease-in-out infinite;
       transform-origin: center;
     }
 
-    /* Lumière qui traverse le logo */
     .logo-container::after {
       content: "";
       position: absolute;
@@ -90,24 +90,24 @@
       width: 100%; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
       transform: skewX(-25deg);
-      animation: logo-shine 3s ease-in-out infinite;
+      animation: logo-shine 3.5s ease-in-out infinite;
       pointer-events: none;
     }
 
-    /* --- PLAYER & GLOSSY --- */
+    /* --- PLAYER & GLOSSY (REHHAUSSÉ) --- */
     .player-container { 
       position: relative; 
       width: 100%; 
       display: flex; 
       justify-content: center;
-      margin-top: -95px; /* REMONTÉ À FOND */
+      margin-top: -120px; /* REMONTÉ AU COLLAGE */
     }
 
     .player-container::after {
       content: ""; 
       position: absolute; 
-      top: 10px; left: 50%; transform: translateX(-50%);
-      width: 202px; height: 188px; /* Calibré sur la pochette */
+      top: 5px; left: 50%; transform: translateX(-50%);
+      width: 202px; height: 190px; 
       border-radius: 20px;
       background: linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 35%, rgba(255,255,255,0.3) 48%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 52%, rgba(255,255,255,0.05) 65%, rgba(255,255,255,0) 100%);
       background-size: 300% 100%; 
@@ -120,7 +120,7 @@
       background: transparent !important; 
       transform: scale(0.65); 
       transform-origin: top center; 
-      height: 260px; 
+      height: 250px; 
       position: relative; 
       z-index: 2; 
       width: 100%; 
@@ -132,7 +132,7 @@
     /* --- MENU OVERLAY --- */
     .menu-overlay {
       position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(60, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
+      background: rgba(0,0,0,0.9);
       backdrop-filter: blur(15px); z-index: 9999; transition: 0.5s;
       display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;
     }
@@ -140,7 +140,7 @@
     .menu-link {
       color: white; text-decoration: none; font-size: 20px; font-weight: bold; text-transform: uppercase;
       padding: 18px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(0, 0, 0, 0.5); width: 85%; max-width: 320px; text-align: center;
+      background: rgba(180, 0, 0, 0.2); width: 85%; max-width: 320px; text-align: center;
       display: flex; align-items: center; justify-content: center; gap: 12px;
     }
 
@@ -155,12 +155,12 @@
     
     @keyframes logo-beat {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
+      50% { transform: scale(1.05); }
     }
 
     @keyframes logo-shine {
       0% { left: -150%; }
-      40%, 100% { left: 150%; }
+      35%, 100% { left: 150%; }
     }
 
     .hamburger-btn { cursor: pointer; background: rgba(180, 0, 0, 0.25); padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255, 0, 0, 0.4); display: flex; flex-direction: column; gap: 4px; }
