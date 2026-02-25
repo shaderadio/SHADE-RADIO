@@ -101,7 +101,7 @@
       background: rgba(0, 0, 0, 0.3); 
       backdrop-filter: blur(25px) saturate(150%);
       -webkit-backdrop-filter: blur(25px) saturate(150%);
-      z-index: 9999;
+      z-index: 10002;
       transition: 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
       display: flex; flex-direction: column;
       justify-content: center; align-items: center; gap: 15px;
@@ -498,10 +498,10 @@
   <div class="menu-overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
 
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link" onclick="toggleMenu()">
+    <a href="/cdn-cgi/l/email-protection#7b08131a1f1e091a1f121417120d1e3b1c161a12175518141644080e19111e180f463f1e161a151f1e5b1f1e5b0f120f091e5d19141f02463a090f12080f1e5b415b5e4b3f5e4b3a2f120f091e5b415b" class="menu-link" onclick="toggleMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="toggleMenu()">
+    <a href="/cdn-cgi/l/email-protection#82f1eae3e6e7f0e3e6ebedeeebf4e7c2e5efe3ebeeace1edefbdf1f7e0e8e7e1f6bfc6e7efe3ece6e7a2e6e7a2f2f7e0" class="menu-link" onclick="toggleMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); toggleMenu();">
@@ -584,7 +584,7 @@
     </div>
   </div>
 
-  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -720,12 +720,3 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
-    }
-
-    // ===== WAKE LOCK =====
-    let wakeLock = null;
-    const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
-    window.addEventListener('touchstart', reqWL);
-  </script>
-</body>
-</html>
