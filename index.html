@@ -116,25 +116,25 @@
   <div class="overlay" id="chatOverlay">
     <div class="chat-header">
       <div class="chat-header-left">
-        <div class="chat-avatar">🎙️</div>
+        <div class="chat-avatar">&#127897;</div>
         <div>
           <div class="chat-title">Chat Auditeurs</div>
-          <div class="chat-sub">Shade Radio – Live</div>
+          <div class="chat-sub">Shade Radio - Live</div>
         </div>
       </div>
-      <button class="close-btn" onclick="closeChat()">✕</button>
+      <button class="close-btn" onclick="closeChat()">X</button>
     </div>
     <div class="pseudo-screen" id="pseudoScreen">
-      <div style="font-size:50px">🎧</div>
+      <div style="font-size:50px">&#127911;</div>
       <h2>Rejoins le chat !</h2>
       <p>Choisis un pseudo pour discuter avec les autres auditeurs.</p>
-      <input class="pseudo-input" id="pseudoInput" type="text" placeholder="Ton pseudo…" maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter') joinChat()">
-      <button class="btn-join" onclick="joinChat()">Rejoindre →</button>
+      <input class="pseudo-input" id="pseudoInput" type="text" placeholder="Ton pseudo..." maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter') joinChat()">
+      <button class="btn-join" onclick="joinChat()">Rejoindre</button>
     </div>
     <div class="chat-body" id="chatBody">
       <div class="messages-list" id="messagesList"></div>
       <div class="chat-input-row">
-        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message…" maxlength="200" autocomplete="off" onkeydown="if(event.key==='Enter') sendMessage()">
+        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off" onkeydown="if(event.key==='Enter') sendMessage()">
         <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
@@ -144,9 +144,9 @@
   <div id="app">
     <div class="top-bar">
       <div class="header-container">
-        <div class="live-badge">● LIVE</div>
+        <div class="live-badge">&#9679; LIVE</div>
         <div class="radio-ticker">
-          <span>100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
+          <span>100% Hip-Hop Classic - Shade Radio - Retrouvez-nous tous les soirs des 21h sur TikTok</span>
         </div>
       </div>
       <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
@@ -169,7 +169,7 @@
       </div>
       <div class="ad-banner">
         <div class="ad-ticker">
-          <span>Pour diffuser votre publicité, contactez nous via l'onglet demande de pub dans le menu.</span>
+          <span>Pour diffuser votre publicite, contactez nous via l'onglet demande de pub dans le menu.</span>
         </div>
       </div>
     </div>
@@ -178,21 +178,22 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPA_URL = 'https://rxhyapahjaypeudletdy.supabase.co';
-    const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
-    const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    var SUPA_URL = 'https://rxhyapahjaypeudletdy.supabase.co';
+    var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
+    var sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-    let myPseudo    = localStorage.getItem('shade_pseudo') || null;
-    let chatSub     = null;
-    let unreadCount = 0;
-    const EXPIRY_MS = 24 * 60 * 60 * 1000;
+    var myPseudo    = localStorage.getItem('shade_pseudo') || null;
+    var chatSub     = null;
+    var unreadCount = 0;
+    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
 
     /* =====================
-       SON NOTIFICATION — Web Audio API (aucun fichier externe requis)
-       Fonctionne sur iOS Safari, Android Chrome, et desktop.
-       L'AudioContext est déverrouillé au premier geste utilisateur.
+       AUDIO — Web Audio API
+       Fonctionne sur iOS Safari, Android Chrome, desktop.
+       Le contexte est cree et debloque au premier geste.
     ===================== */
-    let audioCtx = null;
+    var audioCtx     = null;
+    var audioUnlocked = false;
 
     function getAudioCtx() {
       if (!audioCtx) {
@@ -201,44 +202,71 @@
       return audioCtx;
     }
 
+    /* Joue un buffer silencieux pour debloquer l'audio sur iOS */
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      try {
+        var ctx = getAudioCtx();
+        var buf    = ctx.createBuffer(1, 1, 22050);
+        var source = ctx.createBufferSource();
+        source.buffer = buf;
+        source.connect(ctx.destination);
+        source.start(0);
+        source.disconnect();
+        ctx.resume().then(function() {
+          audioUnlocked = true;
+        }).catch(function(){});
+      } catch(e) {}
+    }
+
     function playNotifSound() {
       try {
-        const ctx   = getAudioCtx();
-        // Deux notes courtes "ding ding" — La5 (880 Hz) puis Do#6 (1100 Hz)
-        const notes = [880, 1100];
-        notes.forEach(function(freq, i) {
-          const osc  = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = 'sine';
-          const t = ctx.currentTime + i * 0.14;
-          osc.frequency.setValueAtTime(freq, t);
-          // Enveloppe : attaque rapide, relâchement doux
-          gain.gain.setValueAtTime(0, t);
-          gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
-          osc.start(t);
-          osc.stop(t + 0.38);
-        });
+        var ctx = getAudioCtx();
+
+        function doPlay() {
+          var freqs = [880, 1100];
+          for (var i = 0; i < freqs.length; i++) {
+            (function(freq, idx) {
+              var osc  = ctx.createOscillator();
+              var gain = ctx.createGain();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.type = 'sine';
+              var t = ctx.currentTime + idx * 0.15;
+              osc.frequency.setValueAtTime(freq, t);
+              gain.gain.setValueAtTime(0.0001, t);
+              gain.gain.linearRampToValueAtTime(0.4, t + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+              osc.start(t);
+              osc.stop(t + 0.41);
+            })(freqs[i], i);
+          }
+        }
+
+        if (ctx.state === 'suspended') {
+          ctx.resume().then(doPlay).catch(function(e) {
+            console.warn('Audio resume failed:', e);
+          });
+        } else {
+          doPlay();
+        }
       } catch(e) {
-        console.warn('Audio indisponible :', e);
+        console.warn('Audio error:', e);
       }
     }
 
     /* =====================
-       BADGE NOTIFICATION
+       BADGE
     ===================== */
     function showBadge(n) {
-      const badge     = document.getElementById('chatBadge');
-      const menuBadge = document.getElementById('chatMenuBadge');
+      var badge     = document.getElementById('chatBadge');
+      var menuBadge = document.getElementById('chatMenuBadge');
       if (n > 0) {
-        const label = n > 99 ? '99+' : String(n);
+        var label = n > 99 ? '99+' : String(n);
         badge.textContent     = label;
         menuBadge.textContent = label;
         badge.style.display     = 'flex';
         menuBadge.style.display = 'flex';
-        // Re-trigger pop animation
         badge.style.animation = 'none';
         badge.offsetHeight;
         badge.style.animation = 'badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
@@ -257,9 +285,9 @@
        MENU
     ===================== */
     function toggleMenu() {
-      const menu   = document.getElementById('menuOverlay');
-      const btn    = document.getElementById('hamburgerBtn');
-      const isOpen = menu.classList.contains('open');
+      var menu   = document.getElementById('menuOverlay');
+      var btn    = document.getElementById('hamburgerBtn');
+      var isOpen = menu.classList.contains('open');
       if (isOpen) {
         menu.classList.remove('open');
         btn.classList.remove('open');
@@ -276,7 +304,7 @@
 
     function shareRadio() {
       if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Ecoute SHADE RADIO ! 🎧', url: window.location.href });
+        navigator.share({ title: 'SHADE RADIO', text: 'Ecoute SHADE RADIO !', url: window.location.href });
       }
     }
 
@@ -296,12 +324,11 @@
 
     function closeChat() {
       document.getElementById('chatOverlay').classList.remove('open');
-      // On conserve la subscription pour continuer à détecter les messages
     }
 
     function joinChat() {
-      const input  = document.getElementById('pseudoInput');
-      const pseudo = input.value.trim();
+      var input  = document.getElementById('pseudoInput');
+      var pseudo = input.value.trim();
       if (!pseudo) { input.focus(); return; }
       myPseudo = pseudo;
       localStorage.setItem('shade_pseudo', pseudo);
@@ -320,56 +347,48 @@
     }
 
     async function loadMessages() {
-      const since = new Date(Date.now() - EXPIRY_MS).toISOString();
-      const { data, error } = await sb
-        .from('messages')
-        .select('*')
-        .gte('created_at', since)
-        .order('created_at', { ascending: true })
-        .limit(200);
-      if (error) { console.error(error); return; }
-      const list = document.getElementById('messagesList');
+      var since = new Date(Date.now() - EXPIRY_MS).toISOString();
+      var res = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
+      if (res.error) { console.error(res.error); return; }
+      var list = document.getElementById('messagesList');
       list.innerHTML = '';
-      if (data.length === 0) {
-        const notice = document.createElement('div');
+      if (res.data.length === 0) {
+        var notice = document.createElement('div');
         notice.className   = 'expired-notice';
-        notice.textContent = 'Aucun message récent. Soyez le premier à écrire !';
+        notice.textContent = 'Aucun message recent. Soyez le premier a ecrire !';
         list.appendChild(notice);
       } else {
-        data.forEach(renderBubble);
+        res.data.forEach(renderBubble);
       }
       scrollBottom();
     }
 
     function subscribeMessages() {
       chatSub = sb.channel('chat')
-        .on('postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'messages' },
-          function(payload) {
-            const msg = payload.new;
-            if (!isRecent(msg.created_at)) return;
-            const chatOpen = document.getElementById('chatOverlay').classList.contains('open');
-            if (chatOpen) {
-              renderBubble(msg);
-              scrollBottom();
-            } else {
-              // Ne pas compter ses propres messages
-              if (msg.pseudo !== myPseudo) {
-                unreadCount++;
-                showBadge(unreadCount);
-                playNotifSound(); // 🔔 ding ding !
-              }
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function(payload) {
+          var msg = payload.new;
+          if (!isRecent(msg.created_at)) return;
+          var chatOpen = document.getElementById('chatOverlay').classList.contains('open');
+          if (chatOpen) {
+            renderBubble(msg);
+            scrollBottom();
+          } else {
+            if (msg.pseudo !== myPseudo) {
+              unreadCount++;
+              showBadge(unreadCount);
+              playNotifSound();
             }
           }
-        ).subscribe();
+        })
+        .subscribe();
     }
 
     function renderBubble(msg) {
-      const list = document.getElementById('messagesList');
-      const isMe = msg.pseudo === myPseudo;
-      const div  = document.createElement('div');
+      var list = document.getElementById('messagesList');
+      var isMe = msg.pseudo === myPseudo;
+      var div  = document.createElement('div');
       div.className = 'bubble ' + (isMe ? 'me' : 'them');
-      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      var time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
       div.innerHTML =
         (!isMe ? '<div class="bubble-pseudo">' + esc(msg.pseudo) + '</div>' : '') +
         '<div>' + esc(msg.message) + '</div>' +
@@ -378,16 +397,16 @@
     }
 
     async function sendMessage() {
-      const input   = document.getElementById('msgInput');
-      const message = input.value.trim();
+      var input   = document.getElementById('msgInput');
+      var message = input.value.trim();
       if (!message || !myPseudo) return;
       input.value = '';
-      const { error } = await sb.from('messages').insert([{ pseudo: myPseudo, message }]);
-      if (error) console.error(error);
+      var res = await sb.from('messages').insert([{ pseudo: myPseudo, message: message }]);
+      if (res.error) console.error(res.error);
     }
 
     function scrollBottom() {
-      const list = document.getElementById('messagesList');
+      var list = document.getElementById('messagesList');
       list.scrollTop = list.scrollHeight;
     }
 
@@ -395,29 +414,24 @@
       return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    // Lance la subscription dès le chargement (badge même chat fermé)
+    /* =====================
+       INIT
+    ===================== */
     subscribeMessages();
 
-    /* =====================
-       WAKE LOCK + déverrouillage AudioContext
-       Les navigateurs mobiles exigent un geste utilisateur
-       avant d'autoriser la lecture audio.
-    ===================== */
-    let wakeLock = null;
-
-    function unlockAll() {
-      // Wake lock
+    /* Deverrouillage audio + wake lock au premier geste */
+    function onFirstGesture() {
+      unlockAudio();
       try {
         if ('wakeLock' in navigator) {
-          navigator.wakeLock.request('screen').then(function(wl) { wakeLock = wl; }).catch(function(){});
+          navigator.wakeLock.request('screen').catch(function(){});
         }
       } catch(e) {}
-      // AudioContext (iOS Safari notamment)
-      try { getAudioCtx(); } catch(e) {}
     }
 
-    window.addEventListener('touchstart', unlockAll, { once: true });
-    window.addEventListener('click',      unlockAll, { once: true });
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click',      onFirstGesture, { once: true });
+
   </script>
 </body>
 </html>
