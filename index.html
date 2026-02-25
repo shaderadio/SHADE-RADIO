@@ -138,6 +138,7 @@
       transition: 0.3s;
       box-shadow: 0 0 15px rgba(255,0,0,0.2);
       flex-shrink: 0;
+      position: relative; /* needed for badge */
     }
 
     .hamburger-btn span {
@@ -153,6 +154,49 @@
     .hamburger-btn.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
     .hamburger-btn.open span:nth-child(2) { opacity: 0; }
     .hamburger-btn.open span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+
+    /* ===========================
+       NOTIFICATION BADGE (hamburger)
+    =========================== */
+    #chatBadge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #ff0000;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: none;           /* caché par défaut */
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid #000;
+      animation: badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+      z-index: 10;
+    }
+    @keyframes badge-pop {
+      from { transform: scale(0); }
+      to   { transform: scale(1); }
+    }
+
+    /* Badge sur le lien Chat dans le menu */
+    .chat-menu-badge {
+      background: #ff0000;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      margin-left: 6px;
+    }
 
     /* ===========================
        MAIN FRAME (player card)
@@ -469,6 +513,15 @@
     }
     .messages-list::-webkit-scrollbar { display: none; }
 
+    /* Message "info" pour les messages expirés */
+    .expired-notice {
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 11px;
+      padding: 6px 0;
+      font-style: italic;
+    }
+
     .bubble {
       max-width: 76%;
       padding: 9px 14px;
@@ -556,8 +609,10 @@
       <i class="fab fa-tiktok"></i> Rejoins-nous sur TikTok
     </a>
 
-    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); setTimeout(openChat, 450);">
+    <!-- Lien chat avec badge intégré dans le menu -->
+    <a href="javascript:void(0)" class="menu-link" id="chatMenuLink" onclick="closeMenu(); setTimeout(openChat, 450);">
       <i class="fas fa-comments"></i> Chat Auditeurs
+      <span class="chat-menu-badge" id="chatMenuBadge"></span>
     </a>
   </div>
 
@@ -617,8 +672,10 @@
         </div>
       </div>
 
+      <!-- Bouton hamburger avec badge notification -->
       <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
         <span></span><span></span><span></span>
+        <div id="chatBadge"></div>
       </div>
     </div>
 
@@ -666,8 +723,37 @@
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
     const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-    let myPseudo = localStorage.getItem('shade_pseudo') || null;
-    let chatSub  = null;
+    let myPseudo   = localStorage.getItem('shade_pseudo') || null;
+    let chatSub    = null;
+    let unreadCount = 0;   // compteur de messages non lus
+    const EXPIRY_MS = 24 * 60 * 60 * 1000; // 24h en millisecondes
+
+    /* =====================
+       BADGE NOTIFICATION
+    ===================== */
+    function showBadge(n) {
+      const badge     = document.getElementById('chatBadge');
+      const menuBadge = document.getElementById('chatMenuBadge');
+      if (n > 0) {
+        const label = n > 99 ? '99+' : String(n);
+        badge.textContent      = label;
+        menuBadge.textContent  = label;
+        badge.style.display      = 'flex';
+        menuBadge.style.display  = 'flex';
+        // Re-trigger animation
+        badge.style.animation = 'none';
+        badge.offsetHeight; // reflow
+        badge.style.animation = '';
+      } else {
+        badge.style.display     = 'none';
+        menuBadge.style.display = 'none';
+      }
+    }
+
+    function resetBadge() {
+      unreadCount = 0;
+      showBadge(0);
+    }
 
     /* =====================
        MENU
@@ -702,6 +788,7 @@
     function openChat() {
       const overlay = document.getElementById('chatOverlay');
       overlay.classList.add('open');
+      resetBadge(); // on réinitialise le badge quand on ouvre le chat
       if (myPseudo) {
         showMessages();
       } else {
@@ -712,7 +799,8 @@
 
     function closeChat() {
       document.getElementById('chatOverlay').classList.remove('open');
-      if (chatSub) { sb.removeChannel(chatSub); chatSub = null; }
+      // On garde la subscription active pour continuer à compter les messages
+      // même quand le chat est fermé — on ne détruit PAS chatSub ici.
     }
 
     function joinChat() {
@@ -728,19 +816,35 @@
       document.getElementById('pseudoScreen').style.display = 'none';
       document.getElementById('chatBody').classList.add('show');
       loadMessages();
-      subscribeMessages();
+      // Lance la subscription si pas déjà active
+      if (!chatSub) subscribeMessages();
+    }
+
+    /* Filtre côté client : ignore les messages de plus de 24h */
+    function isRecent(dateStr) {
+      return (Date.now() - new Date(dateStr).getTime()) < EXPIRY_MS;
     }
 
     async function loadMessages() {
+      const since = new Date(Date.now() - EXPIRY_MS).toISOString();
       const { data, error } = await sb
         .from('messages')
         .select('*')
+        .gte('created_at', since)        // on demande directement les 24 dernières heures
         .order('created_at', { ascending: true })
-        .limit(50);
+        .limit(200);
       if (error) { console.error(error); return; }
       const list = document.getElementById('messagesList');
       list.innerHTML = '';
-      data.forEach(renderBubble);
+
+      if (data.length === 0) {
+        const notice = document.createElement('div');
+        notice.className = 'expired-notice';
+        notice.textContent = 'Aucun message récent. Soyez le premier à écrire !';
+        list.appendChild(notice);
+      } else {
+        data.forEach(renderBubble);
+      }
       scrollBottom();
     }
 
@@ -748,7 +852,25 @@
       chatSub = sb.channel('chat')
         .on('postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'messages' },
-          payload => { renderBubble(payload.new); scrollBottom(); }
+          payload => {
+            const msg = payload.new;
+            // Filtre : on n'affiche que les messages récents (sécurité)
+            if (!isRecent(msg.created_at)) return;
+
+            const chatOpen = document.getElementById('chatOverlay').classList.contains('open');
+            if (chatOpen) {
+              // Chat ouvert → on affiche directement
+              renderBubble(msg);
+              scrollBottom();
+            } else {
+              // Chat fermé → on incrémente le badge
+              // Pas de notification pour ses propres messages
+              if (msg.pseudo !== myPseudo) {
+                unreadCount++;
+                showBadge(unreadCount);
+              }
+            }
+          }
         ).subscribe();
     }
 
@@ -783,6 +905,13 @@
     function esc(t) {
       return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+
+    /* =====================
+       SUBSCRIPTION GLOBALE
+       Lance l'écoute dès le chargement de la page
+       (même sans ouvrir le chat) pour les notifications
+    ===================== */
+    subscribeMessages();
 
     /* =====================
        WAKE LOCK
