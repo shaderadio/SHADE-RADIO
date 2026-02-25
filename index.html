@@ -17,6 +17,8 @@
     body { background: #000; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow: hidden; padding-top: env(safe-area-inset-top, 10px); position: relative; perspective: 1200px; }
     body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(220,0,0,0.55), transparent 65%), radial-gradient(circle at 80% 90%, rgba(150,0,0,0.3), transparent 50%), radial-gradient(circle at 10% 20%, rgba(80,0,0,0.4), transparent 40%); z-index: -1; pointer-events: none; }
     #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
+
+    /* TOP BAR */
     .top-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 15px; }
     .header-container { flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; overflow: hidden; }
     .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap; }
@@ -24,6 +26,8 @@
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 12s linear infinite; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
     @keyframes scroll-text { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+    /* HAMBURGER */
     .hamburger-btn { cursor: pointer; background: rgba(180,0,0,0.25); padding: 8px 10px; border-radius: 10px; backdrop-filter: blur(10px); border: 1px solid rgba(255,0,0,0.4); display: flex; flex-direction: column; justify-content: center; transition: 0.3s; box-shadow: 0 0 15px rgba(255,0,0,0.2); flex-shrink: 0; position: relative; }
     .hamburger-btn span { display: block; width: 22px; height: 2px; background: #fff; margin: 3px 0; border-radius: 2px; transition: 0.4s; }
     .hamburger-btn.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
@@ -32,6 +36,8 @@
     #chatBadge { position: absolute; top: -6px; right: -6px; background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #000; z-index: 10; }
     @keyframes badge-pop { from { transform: scale(0); } to { transform: scale(1); } }
     .chat-menu-badge { background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; margin-left: 6px; }
+
+    /* MAIN FRAME */
     .main-frame { background: linear-gradient(180deg, rgba(120,0,0,0.18) 0%, rgba(255,255,255,0.03) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 220px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,0,0,0.1); }
     .radio-logo { width: 290px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3)); animation: logo-swing 7s ease-in-out infinite; }
     @keyframes logo-swing { 0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); } 15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); } 35% { transform: rotateY(20deg); filter: brightness(1.2); } 55% { transform: rotateY(-20deg); filter: brightness(1.2); } 75% { transform: rotateY(20deg); } 100% { transform: rotateY(0deg); filter: brightness(1); } }
@@ -48,14 +54,20 @@
     .ad-banner { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 10px; overflow: hidden; display: flex; }
     .ad-ticker { flex: 1; padding: 7px 0; overflow: hidden; display: flex; }
     .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* OVERLAYS */
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; visibility: hidden; }
     .overlay.open { pointer-events: all; visibility: visible; }
+
+    /* MENU */
     #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
     #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
     #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
     .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
     .menu-link:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
+
+    /* CHAT */
     #chatOverlay { z-index: 300; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
     #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
@@ -64,6 +76,8 @@
     .chat-title { color: #fff; font-weight: bold; font-size: 15px; }
     .chat-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
     .close-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    /* PSEUDO SCREEN */
     .pseudo-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; width: 100%; }
     .pseudo-screen h2 { color: #fff; font-size: 22px; text-align: center; }
     .pseudo-screen p { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; }
@@ -71,22 +85,75 @@
     .pseudo-input::placeholder { color: rgba(255,255,255,0.35); }
     .btn-join { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 14px 44px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(255,0,0,0.4); transition: transform 0.2s; }
     .btn-join:active { transform: scale(0.95); }
+
+    /* MESSAGES */
     .chat-body { flex: 1; display: none; flex-direction: column; overflow: hidden; width: 100%; }
     .chat-body.show { display: flex; }
-    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; }
+    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
     .messages-list::-webkit-scrollbar { display: none; }
     .expired-notice { text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; padding: 6px 0; font-style: italic; }
-    .bubble { max-width: 76%; padding: 9px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; word-break: break-word; animation: pop-in 0.22s ease; }
+
+    /* BUBBLE */
+    .bubble-wrap { display: flex; flex-direction: column; max-width: 76%; animation: pop-in 0.22s ease; }
+    .bubble-wrap.me { align-self: flex-end; align-items: flex-end; }
+    .bubble-wrap.them { align-self: flex-start; align-items: flex-start; }
     @keyframes pop-in { from { opacity: 0; transform: scale(0.85) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    .bubble.them { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
-    .bubble.me { background: linear-gradient(135deg, #ff0000, #8b0000); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-    .bubble-pseudo { font-size: 11px; font-weight: bold; color: rgba(255,255,255,0.5); margin-bottom: 3px; }
+    .bubble { padding: 9px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; word-break: break-word; position: relative; cursor: pointer; }
+    .bubble-wrap.them .bubble { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-bottom-left-radius: 4px; }
+    .bubble-wrap.me .bubble { background: linear-gradient(135deg, #ff0000, #8b0000); color: #fff; border-bottom-right-radius: 4px; }
+    .bubble-pseudo { font-size: 11px; font-weight: bold; margin-bottom: 3px; }
     .bubble-time { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 3px; text-align: right; }
+
+    /* REACTIONS */
+    .reactions-bar { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .reaction-pill { display: flex; align-items: center; gap: 3px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 2px 7px; font-size: 13px; cursor: pointer; transition: background 0.15s, transform 0.15s; user-select: none; }
+    .reaction-pill:active { transform: scale(0.92); }
+    .reaction-pill.mine { background: rgba(255,0,0,0.25); border-color: rgba(255,0,0,0.4); }
+    .reaction-pill span.count { font-size: 11px; color: rgba(255,255,255,0.7); }
+
+    /* EMOJI PICKER (apparait au tap sur bulle) */
+    .emoji-picker { position: absolute; bottom: calc(100% + 6px); background: rgba(30,30,30,0.97); border: 1px solid rgba(255,255,255,0.15); border-radius: 30px; padding: 6px 10px; display: none; gap: 8px; z-index: 50; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+    .emoji-picker.show { display: flex; }
+    .bubble-wrap.me .emoji-picker { right: 0; }
+    .bubble-wrap.them .emoji-picker { left: 0; }
+    .emoji-pick-btn { font-size: 20px; cursor: pointer; transition: transform 0.15s; background: none; border: none; padding: 2px; }
+    .emoji-pick-btn:active { transform: scale(1.35); }
+
+    /* TYPING INDICATOR */
+    .typing-indicator { padding: 4px 14px 6px; min-height: 22px; color: rgba(255,255,255,0.4); font-size: 12px; font-style: italic; flex-shrink: 0; }
+    .typing-dots { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 4px; }
+    .typing-dots span { width: 5px; height: 5px; background: rgba(255,255,255,0.4); border-radius: 50%; animation: dot-bounce 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot-bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-5px); opacity: 1; } }
+
+    /* INPUT ROW */
     .chat-input-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
     .chat-input { flex: 1; padding: 11px 16px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 15px; outline: none; }
     .chat-input::placeholder { color: rgba(255,255,255,0.35); }
     .send-btn { background: linear-gradient(135deg, #ff0000, #8b0000); border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(255,0,0,0.4); transition: transform 0.2s; flex-shrink: 0; }
     .send-btn:active { transform: scale(0.9); }
+
+    /* HISTORIQUE OVERLAY */
+    #historyOverlay { z-index: 250; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
+    #historyOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .history-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+    .history-title { color: #fff; font-weight: bold; font-size: 17px; }
+    .history-body { flex: 1; overflow-y: auto; width: 100%; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .history-body::-webkit-scrollbar { display: none; }
+    .track-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; }
+    .track-num { width: 28px; height: 28px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #fff; flex-shrink: 0; }
+    .track-info { flex: 1; min-width: 0; }
+    .track-title { color: #fff; font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-artist { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; }
+    .track-time { color: rgba(255,255,255,0.3); font-size: 11px; flex-shrink: 0; }
+    .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 14px; margin-top: 40px; }
+    .history-add-form { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
+    .history-add-form p { color: rgba(255,255,255,0.5); font-size: 12px; text-align: center; }
+    .history-inputs { display: flex; gap: 8px; }
+    .history-input { flex: 1; padding: 10px 14px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 13px; outline: none; }
+    .history-input::placeholder { color: rgba(255,255,255,0.3); }
+    .history-add-btn { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 10px; border-radius: 25px; font-size: 13px; font-weight: bold; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -110,6 +177,31 @@
       <i class="fas fa-comments"></i> Chat Auditeurs
       <span class="chat-menu-badge" id="chatMenuBadge"></span>
     </a>
+    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); setTimeout(openHistory, 450);">
+      <i class="fas fa-clock-rotate-left"></i> Historique des titres
+    </a>
+  </div>
+
+  <!-- HISTORIQUE OVERLAY -->
+  <div class="overlay" id="historyOverlay">
+    <div class="history-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="chat-avatar" style="font-size:16px;">&#127925;</div>
+        <span class="history-title">Derniers titres joues</span>
+      </div>
+      <button class="close-btn" onclick="closeHistory()">X</button>
+    </div>
+    <div class="history-body" id="historyBody">
+      <div class="history-add-form">
+        <p>Animateur — ajouter un titre joue</p>
+        <div class="history-inputs">
+          <input class="history-input" id="histArtist" placeholder="Artiste" maxlength="60">
+          <input class="history-input" id="histTitle" placeholder="Titre" maxlength="80">
+        </div>
+        <button class="history-add-btn" onclick="addTrack()">+ Ajouter</button>
+      </div>
+      <div id="trackList"></div>
+    </div>
   </div>
 
   <!-- CHAT OVERLAY -->
@@ -119,7 +211,7 @@
         <div class="chat-avatar">&#127897;</div>
         <div>
           <div class="chat-title">Chat Auditeurs</div>
-          <div class="chat-sub">Shade Radio - Live</div>
+          <div class="chat-sub" id="chatSub">Shade Radio - Live</div>
         </div>
       </div>
       <button class="close-btn" onclick="closeChat()">X</button>
@@ -133,8 +225,11 @@
     </div>
     <div class="chat-body" id="chatBody">
       <div class="messages-list" id="messagesList"></div>
+      <div class="typing-indicator" id="typingIndicator"></div>
       <div class="chat-input-row">
-        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off" onkeydown="if(event.key==='Enter') sendMessage()">
+        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off"
+          onkeydown="if(event.key==='Enter') sendMessage()"
+          oninput="onTyping()">
         <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
@@ -182,130 +277,168 @@
     var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
     var sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-    var myPseudo    = localStorage.getItem('shade_pseudo') || null;
-    var chatSub     = null;
-    var unreadCount = 0;
-    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
+    var myPseudo     = localStorage.getItem('shade_pseudo') || null;
+    var myColor      = localStorage.getItem('shade_color')  || null;
+    var chatSub      = null;
+    var reactionSub  = null;
+    var typingSub    = null;
+    var unreadCount  = 0;
+    var EXPIRY_MS    = 24 * 60 * 60 * 1000;
+    var typingTimer  = null;
+    var isTyping     = false;
+    var openPicker   = null; // bulle dont le picker est ouvert
+
+    var EMOJIS = ['fire','heart','joy','thumbsup','astonished'];
+    var EMOJI_CHARS = { fire:'fire', heart:'heart', joy:'joy', thumbsup:'thumbsup', astonished:'astonished' };
+    var EMOJI_MAP = { fire:'🔥', heart:'❤️', joy:'😂', thumbsup:'👍', astonished:'😮' };
+
+    // Palette de couleurs pour les pseudos
+    var PSEUDO_COLORS = [
+      '#ff6b6b','#ffa94d','#ffe066','#69db7c','#4dabf7',
+      '#da77f2','#f783ac','#63e6be','#a9e34b','#74c0fc'
+    ];
+
+    function getPseudoColor(pseudo) {
+      // Couleur deterministe basee sur le pseudo
+      var hash = 0;
+      for (var i = 0; i < pseudo.length; i++) {
+        hash = pseudo.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return PSEUDO_COLORS[Math.abs(hash) % PSEUDO_COLORS.length];
+    }
 
     /* =====================
-       AUDIO — Web Audio API
-       Fonctionne sur iOS Safari, Android Chrome, desktop.
-       Le contexte est cree et debloque au premier geste.
+       AUDIO
     ===================== */
-    var audioCtx     = null;
+    var audioCtx = null;
     var audioUnlocked = false;
 
     function getAudioCtx() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       return audioCtx;
     }
 
-    /* Joue un buffer silencieux pour debloquer l'audio sur iOS */
     function unlockAudio() {
       if (audioUnlocked) return;
       try {
         var ctx = getAudioCtx();
-        var buf    = ctx.createBuffer(1, 1, 22050);
-        var source = ctx.createBufferSource();
-        source.buffer = buf;
-        source.connect(ctx.destination);
-        source.start(0);
-        source.disconnect();
-        ctx.resume().then(function() {
-          audioUnlocked = true;
-        }).catch(function(){});
+        var buf = ctx.createBuffer(1, 1, 22050);
+        var src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+        ctx.resume().then(function() { audioUnlocked = true; }).catch(function(){});
       } catch(e) {}
     }
 
     function playNotifSound() {
       try {
         var ctx = getAudioCtx();
-
         function doPlay() {
-          var freqs = [880, 1100];
-          for (var i = 0; i < freqs.length; i++) {
-            (function(freq, idx) {
-              var osc  = ctx.createOscillator();
-              var gain = ctx.createGain();
-              osc.connect(gain);
-              gain.connect(ctx.destination);
-              osc.type = 'sine';
-              var t = ctx.currentTime + idx * 0.15;
-              osc.frequency.setValueAtTime(freq, t);
-              gain.gain.setValueAtTime(0.0001, t);
-              gain.gain.linearRampToValueAtTime(0.4, t + 0.02);
-              gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
-              osc.start(t);
-              osc.stop(t + 0.41);
-            })(freqs[i], i);
-          }
-        }
-
-        if (ctx.state === 'suspended') {
-          ctx.resume().then(doPlay).catch(function(e) {
-            console.warn('Audio resume failed:', e);
+          [880, 1100].forEach(function(freq, i) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            var t = ctx.currentTime + i * 0.15;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.0001, t);
+            gain.gain.linearRampToValueAtTime(0.4, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+            osc.start(t); osc.stop(t + 0.41);
           });
-        } else {
-          doPlay();
         }
-      } catch(e) {
-        console.warn('Audio error:', e);
-      }
+        if (ctx.state === 'suspended') ctx.resume().then(doPlay).catch(function(){});
+        else doPlay();
+      } catch(e) {}
     }
 
     /* =====================
        BADGE
     ===================== */
     function showBadge(n) {
-      var badge     = document.getElementById('chatBadge');
-      var menuBadge = document.getElementById('chatMenuBadge');
+      var badge = document.getElementById('chatBadge');
+      var mb    = document.getElementById('chatMenuBadge');
       if (n > 0) {
-        var label = n > 99 ? '99+' : String(n);
-        badge.textContent     = label;
-        menuBadge.textContent = label;
-        badge.style.display     = 'flex';
-        menuBadge.style.display = 'flex';
-        badge.style.animation = 'none';
-        badge.offsetHeight;
+        var l = n > 99 ? '99+' : String(n);
+        badge.textContent = l; mb.textContent = l;
+        badge.style.display = 'flex'; mb.style.display = 'flex';
+        badge.style.animation = 'none'; badge.offsetHeight;
         badge.style.animation = 'badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
       } else {
-        badge.style.display     = 'none';
-        menuBadge.style.display = 'none';
+        badge.style.display = 'none'; mb.style.display = 'none';
       }
     }
-
-    function resetBadge() {
-      unreadCount = 0;
-      showBadge(0);
-    }
+    function resetBadge() { unreadCount = 0; showBadge(0); }
 
     /* =====================
        MENU
     ===================== */
     function toggleMenu() {
-      var menu   = document.getElementById('menuOverlay');
-      var btn    = document.getElementById('hamburgerBtn');
-      var isOpen = menu.classList.contains('open');
-      if (isOpen) {
-        menu.classList.remove('open');
-        btn.classList.remove('open');
-      } else {
-        menu.classList.add('open');
-        btn.classList.add('open');
-      }
+      var menu = document.getElementById('menuOverlay');
+      var btn  = document.getElementById('hamburgerBtn');
+      if (menu.classList.contains('open')) { menu.classList.remove('open'); btn.classList.remove('open'); }
+      else { menu.classList.add('open'); btn.classList.add('open'); }
     }
-
     function closeMenu() {
       document.getElementById('menuOverlay').classList.remove('open');
       document.getElementById('hamburgerBtn').classList.remove('open');
     }
-
     function shareRadio() {
-      if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Ecoute SHADE RADIO !', url: window.location.href });
+      if (navigator.share) navigator.share({ title: 'SHADE RADIO', text: 'Ecoute SHADE RADIO !', url: window.location.href });
+    }
+
+    /* =====================
+       HISTORIQUE
+    ===================== */
+    function openHistory() {
+      document.getElementById('historyOverlay').classList.add('open');
+      loadHistory();
+    }
+    function closeHistory() {
+      document.getElementById('historyOverlay').classList.remove('open');
+    }
+
+    async function loadHistory() {
+      var tl = document.getElementById('trackList');
+      tl.innerHTML = '<div class="history-empty">Chargement...</div>';
+      var res = await sb.from('track_history').select('*').order('played_at', { ascending: false }).limit(5);
+      if (res.error || !res.data.length) {
+        tl.innerHTML = '<div class="history-empty">Aucun titre enregistre pour le moment.</div>';
+        return;
       }
+      tl.innerHTML = '';
+      res.data.forEach(function(track, i) {
+        var d   = document.createElement('div');
+        d.className = 'track-card';
+        var ago = timeAgo(track.played_at);
+        d.innerHTML =
+          '<div class="track-num">' + (i + 1) + '</div>' +
+          '<div class="track-info">' +
+            '<div class="track-title">' + esc(track.title) + '</div>' +
+            '<div class="track-artist">' + esc(track.artist) + '</div>' +
+          '</div>' +
+          '<div class="track-time">' + ago + '</div>';
+        tl.appendChild(d);
+      });
+    }
+
+    async function addTrack() {
+      var artist = document.getElementById('histArtist').value.trim();
+      var title  = document.getElementById('histTitle').value.trim();
+      if (!artist || !title) return;
+      await sb.from('track_history').insert([{ artist: artist, title: title }]);
+      document.getElementById('histArtist').value = '';
+      document.getElementById('histTitle').value  = '';
+      loadHistory();
+    }
+
+    function timeAgo(dateStr) {
+      var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+      if (diff < 60)  return 'a l\'instant';
+      if (diff < 3600) return Math.floor(diff / 60) + ' min';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+      return Math.floor(diff / 86400) + 'j';
     }
 
     /* =====================
@@ -314,16 +447,15 @@
     function openChat() {
       document.getElementById('chatOverlay').classList.add('open');
       resetBadge();
-      if (myPseudo) {
-        showMessages();
-      } else {
+      if (myPseudo) showMessages();
+      else {
         document.getElementById('pseudoScreen').style.display = 'flex';
         document.getElementById('chatBody').classList.remove('show');
       }
     }
-
     function closeChat() {
       document.getElementById('chatOverlay').classList.remove('open');
+      stopTyping();
     }
 
     function joinChat() {
@@ -331,7 +463,9 @@
       var pseudo = input.value.trim();
       if (!pseudo) { input.focus(); return; }
       myPseudo = pseudo;
+      myColor  = getPseudoColor(pseudo);
       localStorage.setItem('shade_pseudo', pseudo);
+      localStorage.setItem('shade_color',  myColor);
       showMessages();
     }
 
@@ -340,6 +474,8 @@
       document.getElementById('chatBody').classList.add('show');
       loadMessages();
       if (!chatSub) subscribeMessages();
+      if (!reactionSub) subscribeReactions();
+      if (!typingSub) subscribeTyping();
     }
 
     function isRecent(dateStr) {
@@ -352,55 +488,195 @@
       if (res.error) { console.error(res.error); return; }
       var list = document.getElementById('messagesList');
       list.innerHTML = '';
-      if (res.data.length === 0) {
-        var notice = document.createElement('div');
-        notice.className   = 'expired-notice';
-        notice.textContent = 'Aucun message recent. Soyez le premier a ecrire !';
-        list.appendChild(notice);
+      if (!res.data.length) {
+        var n = document.createElement('div'); n.className = 'expired-notice';
+        n.textContent = 'Aucun message recent. Soyez le premier a ecrire !';
+        list.appendChild(n);
       } else {
-        res.data.forEach(renderBubble);
+        // Charger les reactions en meme temps
+        var ids = res.data.map(function(m){ return m.id; });
+        var rRes = await sb.from('reactions').select('*').in('message_id', ids);
+        var reactionsMap = {};
+        if (rRes.data) {
+          rRes.data.forEach(function(r) {
+            if (!reactionsMap[r.message_id]) reactionsMap[r.message_id] = [];
+            reactionsMap[r.message_id].push(r);
+          });
+        }
+        res.data.forEach(function(msg) {
+          renderBubble(msg, reactionsMap[msg.id] || []);
+        });
       }
       scrollBottom();
     }
 
     function subscribeMessages() {
-      chatSub = sb.channel('chat')
+      chatSub = sb.channel('chat-messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function(payload) {
           var msg = payload.new;
           if (!isRecent(msg.created_at)) return;
           var chatOpen = document.getElementById('chatOverlay').classList.contains('open');
-          if (chatOpen) {
-            renderBubble(msg);
-            scrollBottom();
-          } else {
-            if (msg.pseudo !== myPseudo) {
-              unreadCount++;
-              showBadge(unreadCount);
-              playNotifSound();
-            }
-          }
-        })
-        .subscribe();
+          if (chatOpen) { renderBubble(msg, []); scrollBottom(); }
+          else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); }
+        }).subscribe();
     }
 
-    function renderBubble(msg) {
+    function subscribeReactions() {
+      reactionSub = sb.channel('chat-reactions')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, function(payload) {
+          // Recharger les reactions du message concerne
+          var msgId = payload.new ? payload.new.message_id : (payload.old ? payload.old.message_id : null);
+          if (msgId) refreshReactions(msgId);
+        }).subscribe();
+    }
+
+    async function refreshReactions(msgId) {
+      var res = await sb.from('reactions').select('*').eq('message_id', msgId);
+      if (res.error) return;
+      var wrap = document.querySelector('[data-msg-id="' + msgId + '"]');
+      if (!wrap) return;
+      var bar = wrap.querySelector('.reactions-bar');
+      if (bar) renderReactionsBar(bar, msgId, res.data);
+    }
+
+    /* =====================
+       TYPING
+    ===================== */
+    function subscribeTyping() {
+      typingSub = sb.channel('chat-typing')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'typing' }, function() {
+          updateTypingDisplay();
+        }).subscribe();
+    }
+
+    async function updateTypingDisplay() {
+      var cutoff = new Date(Date.now() - 4000).toISOString();
+      var res = await sb.from('typing').select('pseudo').gt('updated_at', cutoff);
+      var ind = document.getElementById('typingIndicator');
+      if (!res.data || !res.data.length) { ind.innerHTML = ''; return; }
+      var others = res.data.map(function(r){ return r.pseudo; }).filter(function(p){ return p !== myPseudo; });
+      if (!others.length) { ind.innerHTML = ''; return; }
+      var name = others.length === 1 ? others[0] : others.length + ' personnes';
+      var verb = others.length === 1 ? ' est en train d\'ecrire' : ' sont en train d\'ecrire';
+      ind.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-weight:bold;">' + esc(name) + '</span>' + verb +
+        '<span class="typing-dots"><span></span><span></span><span></span></span>';
+    }
+
+    function onTyping() {
+      if (!myPseudo) return;
+      if (!isTyping) {
+        isTyping = true;
+        sb.from('typing').upsert({ pseudo: myPseudo, updated_at: new Date().toISOString() }).then(function(){});
+      }
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(stopTyping, 3000);
+    }
+
+    function stopTyping() {
+      if (!myPseudo || !isTyping) return;
+      isTyping = false;
+      clearTimeout(typingTimer);
+      sb.from('typing').delete().eq('pseudo', myPseudo).then(function(){});
+    }
+
+    /* =====================
+       REACTIONS
+    ===================== */
+    function renderReactionsBar(bar, msgId, reactions) {
+      bar.innerHTML = '';
+      // Compter par emoji
+      var counts = {};
+      var myReactions = {};
+      reactions.forEach(function(r) {
+        counts[r.emoji] = (counts[r.emoji] || 0) + 1;
+        if (r.pseudo === myPseudo) myReactions[r.emoji] = true;
+      });
+      Object.keys(counts).forEach(function(emoji) {
+        if (!counts[emoji]) return;
+        var pill = document.createElement('div');
+        pill.className = 'reaction-pill' + (myReactions[emoji] ? ' mine' : '');
+        pill.innerHTML = EMOJI_MAP[emoji] + ' <span class="count">' + counts[emoji] + '</span>';
+        pill.onclick = function(e) { e.stopPropagation(); toggleReaction(msgId, emoji); };
+        bar.appendChild(pill);
+      });
+    }
+
+    async function toggleReaction(msgId, emoji) {
+      if (!myPseudo) return;
+      // Verifier si deja reagi
+      var check = await sb.from('reactions').select('id').eq('message_id', msgId).eq('pseudo', myPseudo).eq('emoji', emoji);
+      if (check.data && check.data.length) {
+        await sb.from('reactions').delete().eq('id', check.data[0].id);
+      } else {
+        await sb.from('reactions').insert([{ message_id: msgId, pseudo: myPseudo, emoji: emoji }]);
+      }
+      refreshReactions(msgId);
+    }
+
+    /* =====================
+       BUBBLE
+    ===================== */
+    function renderBubble(msg, reactions) {
       var list = document.getElementById('messagesList');
       var isMe = msg.pseudo === myPseudo;
-      var div  = document.createElement('div');
-      div.className = 'bubble ' + (isMe ? 'me' : 'them');
-      var time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      div.innerHTML =
-        (!isMe ? '<div class="bubble-pseudo">' + esc(msg.pseudo) + '</div>' : '') +
+      var color = getPseudoColor(msg.pseudo);
+      var time  = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      var wrap = document.createElement('div');
+      wrap.className = 'bubble-wrap ' + (isMe ? 'me' : 'them');
+      wrap.setAttribute('data-msg-id', msg.id);
+
+      // Picker emoji
+      var picker = document.createElement('div');
+      picker.className = 'emoji-picker';
+      Object.keys(EMOJI_MAP).forEach(function(key) {
+        var btn = document.createElement('button');
+        btn.className = 'emoji-pick-btn';
+        btn.textContent = EMOJI_MAP[key];
+        btn.onclick = function(e) { e.stopPropagation(); closePicker(); toggleReaction(msg.id, key); };
+        picker.appendChild(btn);
+      });
+
+      // Bulle
+      var bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML =
+        (!isMe ? '<div class="bubble-pseudo" style="color:' + color + ';">' + esc(msg.pseudo) + '</div>' : '') +
         '<div>' + esc(msg.message) + '</div>' +
         '<div class="bubble-time">' + time + '</div>';
-      list.appendChild(div);
+      bubble.appendChild(picker);
+
+      // Tap sur la bulle = ouvrir/fermer picker
+      bubble.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (openPicker && openPicker !== picker) { openPicker.classList.remove('show'); }
+        picker.classList.toggle('show');
+        openPicker = picker.classList.contains('show') ? picker : null;
+      });
+
+      // Barre de reactions
+      var bar = document.createElement('div');
+      bar.className = 'reactions-bar';
+      if (reactions && reactions.length) renderReactionsBar(bar, msg.id, reactions);
+
+      wrap.appendChild(bubble);
+      wrap.appendChild(bar);
+      list.appendChild(wrap);
     }
+
+    function closePicker() {
+      if (openPicker) { openPicker.classList.remove('show'); openPicker = null; }
+    }
+
+    // Fermer le picker en cliquant ailleurs
+    document.addEventListener('click', function() { closePicker(); });
 
     async function sendMessage() {
       var input   = document.getElementById('msgInput');
       var message = input.value.trim();
       if (!message || !myPseudo) return;
       input.value = '';
+      stopTyping();
       var res = await sb.from('messages').insert([{ pseudo: myPseudo, message: message }]);
       if (res.error) console.error(res.error);
     }
@@ -411,7 +687,7 @@
     }
 
     function esc(t) {
-      return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     /* =====================
@@ -419,19 +695,12 @@
     ===================== */
     subscribeMessages();
 
-    /* Deverrouillage audio + wake lock au premier geste */
     function onFirstGesture() {
       unlockAudio();
-      try {
-        if ('wakeLock' in navigator) {
-          navigator.wakeLock.request('screen').catch(function(){});
-        }
-      } catch(e) {}
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
     }
-
     document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
     document.addEventListener('click',      onFirstGesture, { once: true });
-
   </script>
 </body>
 </html>
