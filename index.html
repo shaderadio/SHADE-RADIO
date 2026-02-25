@@ -94,14 +94,11 @@
     .open .bar2 { opacity: 0; }
     .open .bar3 { transform: rotate(45deg) translate(-5px, -6px); }
 
-    /* --- MENU OVERLAY : VRAIE TRANSPARENCE --- */
     .menu-overlay {
       position: fixed;
       top: 0; right: -100%;
       width: 100%; height: 100%;
-      /* Couleur de fond ultra légère pour laisser passer les gradients du body */
       background: rgba(0, 0, 0, 0.3); 
-      /* Flou important pour l'effet verre */
       backdrop-filter: blur(25px) saturate(150%);
       -webkit-backdrop-filter: blur(25px) saturate(150%);
       z-index: 9999;
@@ -135,10 +132,223 @@
       display: flex; align-items: center; justify-content: center; gap: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       transition: 0.3s;
+      cursor: pointer;
     }
     .menu-link:active { background: rgba(255, 255, 255, 0.2); transform: scale(0.95); }
 
-    /* --- RESTE DU DESIGN --- */
+    /* ===== CHAT OVERLAY ===== */
+    .chat-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(25px) saturate(150%);
+      -webkit-backdrop-filter: blur(25px) saturate(150%);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: 0.4s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+      padding-top: env(safe-area-inset-top, 10px);
+    }
+    .chat-overlay.active { transform: translateY(0); }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .chat-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-avatar {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #ff0000, #8b0000);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .chat-title { color: white; font-weight: bold; font-size: 15px; }
+    .chat-subtitle { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 2px; }
+
+    .chat-close-btn {
+      background: rgba(255,255,255,0.1);
+      border: none; color: white;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Pseudo setup screen */
+    .pseudo-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      gap: 20px;
+    }
+
+    .pseudo-screen h2 {
+      color: white;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .pseudo-screen p {
+      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .pseudo-input-wrap {
+      width: 100%;
+      max-width: 300px;
+      position: relative;
+    }
+
+    .pseudo-input-wrap input {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 16px;
+      outline: none;
+      text-align: center;
+    }
+
+    .pseudo-input-wrap input::placeholder { color: rgba(255,255,255,0.35); }
+
+    .btn-join {
+      background: linear-gradient(90deg, #ff0000, #8b0000);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 20px rgba(255,0,0,0.4);
+      transition: 0.2s;
+    }
+    .btn-join:active { transform: scale(0.95); }
+
+    /* Messages area */
+    .chat-body {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-body.visible { display: flex; }
+
+    .messages-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px 15px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      scroll-behavior: smooth;
+    }
+
+    .messages-list::-webkit-scrollbar { display: none; }
+
+    .msg-bubble {
+      max-width: 75%;
+      padding: 9px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-break: break-word;
+      animation: bubble-in 0.25s ease;
+    }
+
+    @keyframes bubble-in {
+      from { opacity: 0; transform: scale(0.85) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .msg-bubble.other {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg-bubble.mine {
+      background: linear-gradient(135deg, #ff0000, #8b0000);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-pseudo {
+      font-size: 11px;
+      font-weight: bold;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 3px;
+    }
+
+    .msg-time {
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .chat-input-bar input {
+      flex: 1;
+      padding: 11px 16px;
+      border-radius: 25px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .chat-input-bar input::placeholder { color: rgba(255,255,255,0.35); }
+
+    .send-btn {
+      background: linear-gradient(135deg, #ff0000, #8b0000);
+      border: none;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 10px rgba(255,0,0,0.4);
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+    .send-btn:active { transform: scale(0.9); }
+
+    /* ===== RESTE DU DESIGN ===== */
     .main-frame {
       background: linear-gradient(180deg, rgba(120, 0, 0, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%);
       backdrop-filter: blur(20px);
@@ -284,6 +494,7 @@
 </head>
 <body>
 
+  <!-- MENU OVERLAY -->
   <div class="menu-overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
 
@@ -299,6 +510,46 @@
     <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="toggleMenu()">
       <i class="fab fa-tiktok"></i> Rejoins-nous sur TikTok
     </a>
+    <!-- Bouton Chat -->
+    <a href="javascript:void(0)" class="menu-link" onclick="toggleMenu(); openChat();">
+      <i class="fas fa-comments"></i> Chat Auditeurs
+    </a>
+  </div>
+
+  <!-- CHAT OVERLAY -->
+  <div class="chat-overlay" id="chatOverlay">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">🎙️</div>
+        <div>
+          <div class="chat-title">Chat Auditeurs</div>
+          <div class="chat-subtitle">Shade Radio – Live</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" onclick="closeChat()">✕</button>
+    </div>
+
+    <!-- Écran choix de pseudo -->
+    <div class="pseudo-screen" id="pseudoScreen">
+      <div style="font-size:48px">🎧</div>
+      <h2>Rejoins le chat !</h2>
+      <p>Choisis un pseudo pour commencer à discuter avec les autres auditeurs.</p>
+      <div class="pseudo-input-wrap">
+        <input type="text" id="pseudoInput" placeholder="Ton pseudo..." maxlength="20" autocomplete="off">
+      </div>
+      <button class="btn-join" onclick="joinChat()">Rejoindre →</button>
+    </div>
+
+    <!-- Zone messages -->
+    <div class="chat-body" id="chatBody">
+      <div class="messages-list" id="messagesList"></div>
+      <div class="chat-input-bar">
+        <input type="text" id="msgInput" placeholder="Ton message..." maxlength="200" autocomplete="off" onkeydown="if(event.key==='Enter') sendMessage()">
+        <button class="send-btn" onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div id="app">
@@ -334,7 +585,20 @@
   </div>
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+    // ===== SUPABASE CONFIG =====
+    const SUPABASE_URL = 'https://rxhyapahjaypeudletdy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let myPseudo = localStorage.getItem('shade_pseudo') || null;
+    let chatSubscription = null;
+
+    // ===== MENU =====
     function toggleMenu() {
       document.getElementById('menuOverlay').classList.toggle('active');
       document.querySelector('.hamburger-btn').classList.toggle('open');
@@ -346,6 +610,119 @@
       }
     }
 
+    // ===== CHAT =====
+    function openChat() {
+      const overlay = document.getElementById('chatOverlay');
+      overlay.classList.add('active');
+
+      if (myPseudo) {
+        showChatBody();
+        loadMessages();
+        subscribeToMessages();
+      } else {
+        document.getElementById('pseudoScreen').style.display = 'flex';
+        document.getElementById('chatBody').classList.remove('visible');
+      }
+    }
+
+    function closeChat() {
+      document.getElementById('chatOverlay').classList.remove('active');
+      if (chatSubscription) {
+        supabase.removeChannel(chatSubscription);
+        chatSubscription = null;
+      }
+    }
+
+    function joinChat() {
+      const input = document.getElementById('pseudoInput');
+      const pseudo = input.value.trim();
+      if (!pseudo) {
+        input.focus();
+        return;
+      }
+      myPseudo = pseudo;
+      localStorage.setItem('shade_pseudo', pseudo);
+      showChatBody();
+      loadMessages();
+      subscribeToMessages();
+    }
+
+    function showChatBody() {
+      document.getElementById('pseudoScreen').style.display = 'none';
+      document.getElementById('chatBody').classList.add('visible');
+    }
+
+    async function loadMessages() {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .limit(50);
+
+      if (error) { console.error(error); return; }
+
+      const list = document.getElementById('messagesList');
+      list.innerHTML = '';
+      data.forEach(msg => appendMessage(msg));
+      scrollToBottom();
+    }
+
+    function subscribeToMessages() {
+      chatSubscription = supabase
+        .channel('messages-channel')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+          appendMessage(payload.new);
+          scrollToBottom();
+        })
+        .subscribe();
+    }
+
+    function appendMessage(msg) {
+      const list = document.getElementById('messagesList');
+      const isMine = msg.pseudo === myPseudo;
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble ' + (isMine ? 'mine' : 'other');
+
+      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      bubble.innerHTML = `
+        ${!isMine ? `<div class="msg-pseudo">${escapeHtml(msg.pseudo)}</div>` : ''}
+        <div>${escapeHtml(msg.message)}</div>
+        <div class="msg-time">${time}</div>
+      `;
+
+      list.appendChild(bubble);
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('msgInput');
+      const message = input.value.trim();
+      if (!message || !myPseudo) return;
+
+      input.value = '';
+
+      const { error } = await supabase
+        .from('messages')
+        .insert([{ pseudo: myPseudo, message: message }]);
+
+      if (error) console.error(error);
+    }
+
+    function scrollToBottom() {
+      const list = document.getElementById('messagesList');
+      list.scrollTop = list.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // ===== WAKE LOCK =====
     let wakeLock = null;
     const reqWL = async () => { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
     window.addEventListener('touchstart', reqWL);
