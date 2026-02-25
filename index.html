@@ -17,8 +17,6 @@
     body { background: #000; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow: hidden; padding-top: env(safe-area-inset-top, 10px); position: relative; perspective: 1200px; }
     body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(220,0,0,0.55), transparent 65%), radial-gradient(circle at 80% 90%, rgba(150,0,0,0.3), transparent 50%), radial-gradient(circle at 10% 20%, rgba(80,0,0,0.4), transparent 40%); z-index: -1; pointer-events: none; }
     #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
-
-    /* TOP BAR */
     .top-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 15px; }
     .header-container { flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; overflow: hidden; }
     .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap; }
@@ -26,8 +24,6 @@
     .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
     .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 12s linear infinite; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
     @keyframes scroll-text { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-
-    /* HAMBURGER */
     .hamburger-btn { cursor: pointer; background: rgba(180,0,0,0.25); padding: 8px 10px; border-radius: 10px; backdrop-filter: blur(10px); border: 1px solid rgba(255,0,0,0.4); display: flex; flex-direction: column; justify-content: center; transition: 0.3s; box-shadow: 0 0 15px rgba(255,0,0,0.2); flex-shrink: 0; position: relative; }
     .hamburger-btn span { display: block; width: 22px; height: 2px; background: #fff; margin: 3px 0; border-radius: 2px; transition: 0.4s; }
     .hamburger-btn.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
@@ -36,8 +32,6 @@
     #chatBadge { position: absolute; top: -6px; right: -6px; background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #000; z-index: 10; }
     @keyframes badge-pop { from { transform: scale(0); } to { transform: scale(1); } }
     .chat-menu-badge { background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; margin-left: 6px; }
-
-    /* MAIN FRAME */
     .main-frame { background: linear-gradient(180deg, rgba(120,0,0,0.18) 0%, rgba(255,255,255,0.03) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 220px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,0,0,0.1); }
     .radio-logo { width: 290px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3)); animation: logo-swing 7s ease-in-out infinite; }
     @keyframes logo-swing { 0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); } 15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); } 35% { transform: rotateY(20deg); filter: brightness(1.2); } 55% { transform: rotateY(-20deg); filter: brightness(1.2); } 75% { transform: rotateY(20deg); } 100% { transform: rotateY(0deg); filter: brightness(1); } }
@@ -54,20 +48,14 @@
     .ad-banner { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 10px; overflow: hidden; display: flex; }
     .ad-ticker { flex: 1; padding: 7px 0; overflow: hidden; display: flex; }
     .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-
-    /* OVERLAYS */
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; visibility: hidden; }
     .overlay.open { pointer-events: all; visibility: visible; }
-
-    /* MENU */
     #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
     #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
     #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
     .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
     .menu-link:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
-
-    /* CHAT */
     #chatOverlay { z-index: 300; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
     #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
@@ -129,20 +117,23 @@
     .history-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
     .history-body { flex: 1; overflow-y: auto; width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .history-body::-webkit-scrollbar { display: none; }
-
-    /* TRACK CARD avec pochette */
-    .track-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; transition: background 0.2s; }
-    .track-card:first-child { border-color: rgba(255,0,0,0.35); background: rgba(255,0,0,0.08); }
-    .track-artwork { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: rgba(255,255,255,0.08); }
-    .track-artwork-placeholder { width: 56px; height: 56px; border-radius: 10px; flex-shrink: 0; background: linear-gradient(135deg, rgba(255,0,0,0.3), rgba(80,0,0,0.5)); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .track-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; }
+    .track-card.now-playing { border-color: rgba(255,0,0,0.4); background: rgba(255,0,0,0.07); }
+    .track-artwork-wrap { position: relative; flex-shrink: 0; }
+    .track-artwork { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.08); display: block; }
+    .track-artwork-placeholder { width: 58px; height: 58px; border-radius: 10px; background: linear-gradient(135deg, rgba(255,0,0,0.3), rgba(80,0,0,0.5)); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .now-dot { position: absolute; bottom: -3px; right: -3px; width: 14px; height: 14px; background: #ff0000; border-radius: 50%; border: 2px solid #000; animation: pulse-dot 1.2s infinite; }
+    @keyframes pulse-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
     .track-info { flex: 1; min-width: 0; }
-    .track-now { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #ff4444; margin-bottom: 3px; }
+    .track-now-label { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #ff4444; margin-bottom: 3px; }
     .track-title { color: #fff; font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .track-artist { color: rgba(255,255,255,0.55); font-size: 12px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .track-time { color: rgba(255,255,255,0.3); font-size: 11px; flex-shrink: 0; margin-left: 4px; }
+    .track-artist { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+    .track-time { color: rgba(255,255,255,0.3); font-size: 10px; }
+    .track-duration { color: rgba(255,255,255,0.2); font-size: 10px; }
     .history-loading { text-align: center; color: rgba(255,255,255,0.35); font-size: 13px; padding: 40px 0; }
-    .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 40px 0; }
-    .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; }
+    .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 40px 0; line-height: 1.6; }
+    .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
     .history-refresh-btn:active { background: rgba(255,255,255,0.14); }
   </style>
 </head>
@@ -184,7 +175,7 @@
       </div>
       <button class="close-btn" onclick="closeHistory()">&#10005;</button>
     </div>
-    <div class="history-body" id="historyBody">
+    <div class="history-body">
       <div class="history-loading" id="historyLoading">Chargement...</div>
       <div id="trackList"></div>
       <button class="history-refresh-btn" onclick="loadHistory()">
@@ -217,8 +208,7 @@
       <div class="typing-indicator" id="typingIndicator"></div>
       <div class="chat-input-row">
         <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off"
-          onkeydown="if(event.key==='Enter') sendMessage()"
-          oninput="onTyping()">
+          onkeydown="if(event.key==='Enter') sendMessage()" oninput="onTyping()">
         <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
@@ -262,12 +252,10 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    var SUPA_URL = 'https://rxhyapahjaypeudletdy.supabase.co';
-    var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
+    var SUPA_URL   = 'https://rxhyapahjaypeudletdy.supabase.co';
+    var SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
+    var RADIO_BASE = 'https://manager11.streamradio.fr:1700';
     var sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
-
-    var RADIO_API  = 'https://manager11.streamradio.fr:1700/api/v2';
-    var STATION_ID = '1';
 
     var myPseudo    = localStorage.getItem('shade_pseudo') || null;
     var chatSub     = null;
@@ -278,81 +266,51 @@
     var typingTimer = null;
     var isTyping    = false;
     var openPicker  = null;
-
-    var EMOJI_MAP = { fire:'🔥', heart:'❤️', joy:'😂', thumbsup:'👍', astonished:'😮' };
+    var EMOJI_MAP   = { fire:'🔥', heart:'❤️', joy:'😂', thumbsup:'👍', astonished:'😮' };
     var PSEUDO_COLORS = ['#ff6b6b','#ffa94d','#ffe066','#69db7c','#4dabf7','#da77f2','#f783ac','#63e6be','#a9e34b','#74c0fc'];
 
-    function getPseudoColor(pseudo) {
-      var hash = 0;
-      for (var i = 0; i < pseudo.length; i++) hash = pseudo.charCodeAt(i) + ((hash << 5) - hash);
-      return PSEUDO_COLORS[Math.abs(hash) % PSEUDO_COLORS.length];
+    function getPseudoColor(p) {
+      var h = 0;
+      for (var i = 0; i < p.length; i++) h = p.charCodeAt(i) + ((h << 5) - h);
+      return PSEUDO_COLORS[Math.abs(h) % PSEUDO_COLORS.length];
     }
 
-    /* =====================
-       AUDIO
-    ===================== */
+    /* AUDIO */
     var audioCtx = null, audioUnlocked = false;
     function getAudioCtx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
     function unlockAudio() {
       if (audioUnlocked) return;
-      try {
-        var ctx = getAudioCtx();
-        var buf = ctx.createBuffer(1,1,22050); var src = ctx.createBufferSource();
-        src.buffer = buf; src.connect(ctx.destination); src.start(0);
-        ctx.resume().then(function(){ audioUnlocked = true; }).catch(function(){});
-      } catch(e) {}
+      try { var ctx = getAudioCtx(), buf = ctx.createBuffer(1,1,22050), src = ctx.createBufferSource(); src.buffer=buf; src.connect(ctx.destination); src.start(0); ctx.resume().then(function(){ audioUnlocked=true; }).catch(function(){}); } catch(e) {}
     }
     function playNotifSound() {
       try {
         var ctx = getAudioCtx();
-        function doPlay() {
-          [880,1100].forEach(function(freq,i) {
-            var osc = ctx.createOscillator(), gain = ctx.createGain();
-            osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine';
-            var t = ctx.currentTime + i * 0.15;
-            osc.frequency.setValueAtTime(freq, t);
-            gain.gain.setValueAtTime(0.0001, t); gain.gain.linearRampToValueAtTime(0.4, t+0.02); gain.gain.exponentialRampToValueAtTime(0.0001, t+0.4);
-            osc.start(t); osc.stop(t+0.41);
-          });
-        }
-        if (ctx.state === 'suspended') ctx.resume().then(doPlay).catch(function(){});
-        else doPlay();
+        function doPlay() { [880,1100].forEach(function(f,i){ var o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.type='sine'; var t=ctx.currentTime+i*0.15; o.frequency.setValueAtTime(f,t); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.4); o.start(t); o.stop(t+0.41); }); }
+        if (ctx.state==='suspended') ctx.resume().then(doPlay).catch(function(){}); else doPlay();
       } catch(e) {}
     }
 
-    /* =====================
-       BADGE
-    ===================== */
+    /* BADGE */
     function showBadge(n) {
-      var b = document.getElementById('chatBadge'), mb = document.getElementById('chatMenuBadge');
-      if (n > 0) {
-        var l = n > 99 ? '99+' : String(n);
-        b.textContent = l; mb.textContent = l;
-        b.style.display = 'flex'; mb.style.display = 'flex';
-        b.style.animation = 'none'; b.offsetHeight;
-        b.style.animation = 'badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
-      } else { b.style.display = 'none'; mb.style.display = 'none'; }
+      var b=document.getElementById('chatBadge'), mb=document.getElementById('chatMenuBadge');
+      if (n>0) { var l=n>99?'99+':String(n); b.textContent=l; mb.textContent=l; b.style.display='flex'; mb.style.display='flex'; b.style.animation='none'; b.offsetHeight; b.style.animation='badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)'; }
+      else { b.style.display='none'; mb.style.display='none'; }
     }
-    function resetBadge() { unreadCount = 0; showBadge(0); }
+    function resetBadge() { unreadCount=0; showBadge(0); }
 
-    /* =====================
-       MENU
-    ===================== */
-    function toggleMenu() {
-      var m = document.getElementById('menuOverlay'), b = document.getElementById('hamburgerBtn');
-      if (m.classList.contains('open')) { m.classList.remove('open'); b.classList.remove('open'); }
-      else { m.classList.add('open'); b.classList.add('open'); }
-    }
+    /* MENU */
+    function toggleMenu() { var m=document.getElementById('menuOverlay'),b=document.getElementById('hamburgerBtn'); if(m.classList.contains('open')){m.classList.remove('open');b.classList.remove('open');}else{m.classList.add('open');b.classList.add('open');} }
     function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); document.getElementById('hamburgerBtn').classList.remove('open'); }
-    function shareRadio() { if (navigator.share) navigator.share({ title:'SHADE RADIO', text:'Ecoute SHADE RADIO !', url:window.location.href }); }
+    function shareRadio() { if(navigator.share) navigator.share({title:'SHADE RADIO',text:'Ecoute SHADE RADIO !',url:window.location.href}); }
 
     /* =====================
-       HISTORIQUE — API StreamRadio + pochettes iTunes
+       HISTORIQUE — /api/v2/forecast/
+       On filtre les titres dont start_time est dans le passé,
+       on trie du plus récent au plus ancien, on prend les 5 premiers.
+       Les pochettes viennent directement du serveur StreamRadio.
+       Fallback iTunes si la pochette du serveur ne charge pas.
     ===================== */
-    function openHistory() {
-      document.getElementById('historyOverlay').classList.add('open');
-      loadHistory();
-    }
+    function openHistory() { document.getElementById('historyOverlay').classList.add('open'); loadHistory(); }
     function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
 
     async function loadHistory() {
@@ -362,325 +320,241 @@
       tl.innerHTML = '';
 
       try {
-        // Recuperer l'historique depuis l'API StreamRadio
-        var res = await fetch(RADIO_API + '/station/' + STATION_ID + '/history');
+        var res  = await fetch(RADIO_BASE + '/api/v2/forecast/');
         var data = await res.json();
 
-        // L'API peut renvoyer differents formats — on s'adapte
-        var tracks = [];
-        if (Array.isArray(data)) {
-          tracks = data;
-        } else if (data.history && Array.isArray(data.history)) {
-          tracks = data.history;
-        } else if (data.songs && Array.isArray(data.songs)) {
-          tracks = data.songs;
-        } else if (data.data && Array.isArray(data.data)) {
-          tracks = data.data;
-        }
+        var now = Date.now();
 
-        tracks = tracks.slice(0, 5);
+        // Garder uniquement les titres déjà passés (diffusés)
+        var played = data.filter(function(t) {
+          return new Date(t.start_time).getTime() <= now;
+        });
+
+        // Trier du plus récent au plus ancien
+        played.sort(function(a, b) {
+          return new Date(b.start_time) - new Date(a.start_time);
+        });
+
+        // Prendre les 5 derniers
+        var tracks = played.slice(0, 5);
+
+        loading.style.display = 'none';
 
         if (!tracks.length) {
-          loading.style.display = 'none';
-          tl.innerHTML = '<div class="history-empty">Aucun titre disponible pour le moment.</div>';
+          tl.innerHTML = '<div class="history-empty">Aucun titre diffuse pour le moment.<br>La radio est peut-etre en pause.</div>';
           return;
         }
 
-        loading.style.display = 'none';
+        tracks.forEach(function(t, i) {
+          var card       = document.createElement('div');
+          card.className = 'track-card' + (i === 0 ? ' now-playing' : '');
 
-        for (var i = 0; i < tracks.length; i++) {
-          var t = tracks[i];
-          // Normaliser les champs (l'API peut utiliser title/name/song, artist/author)
-          var title  = t.title  || t.name   || t.song   || t.track  || 'Titre inconnu';
-          var artist = t.artist || t.author  || t.singer || t.band   || '';
-          var played = t.played_at || t.started_at || t.date || t.time || null;
-          var artwork = t.artwork || t.cover  || t.image  || t.thumbnail || null;
+          // Pochette — image servie par StreamRadio
+          var artWrap = document.createElement('div');
+          artWrap.className = 'track-artwork-wrap';
 
-          // Si pas de pochette depuis l'API, chercher via iTunes
-          if (!artwork && (title !== 'Titre inconnu' || artist)) {
-            artwork = await fetchArtwork(title, artist);
+          if (t.image) {
+            var img = document.createElement('img');
+            img.className = 'track-artwork';
+            img.alt = t.title;
+            // On construit l'URL absolue depuis le chemin relatif
+            img.src = RADIO_BASE + t.image;
+            img.onerror = function() {
+              // Si l'image du serveur echoue, fallback iTunes
+              fetchArtwork(t.title, t.artist || '').then(function(url) {
+                if (url) { img.src = url; img.onerror = null; }
+                else { img.outerHTML = '<div class="track-artwork-placeholder">🎵</div>'; }
+              });
+            };
+            artWrap.appendChild(img);
+          } else {
+            var ph = document.createElement('div');
+            ph.className = 'track-artwork-placeholder';
+            ph.textContent = '🎵';
+            artWrap.appendChild(ph);
           }
 
-          var card = buildTrackCard(title, artist, artwork, played, i === 0);
+          // Point rouge animé sur le premier titre (en cours)
+          if (i === 0) {
+            var dot = document.createElement('div');
+            dot.className = 'now-dot';
+            artWrap.appendChild(dot);
+          }
+
+          // Infos
+          var info = document.createElement('div');
+          info.className = 'track-info';
+
+          if (i === 0) {
+            var lbl = document.createElement('div');
+            lbl.className = 'track-now-label';
+            lbl.textContent = '▶ En cours';
+            info.appendChild(lbl);
+          }
+
+          var titleEl = document.createElement('div');
+          titleEl.className = 'track-title';
+          titleEl.textContent = t.title || 'Titre inconnu';
+
+          var artistEl = document.createElement('div');
+          artistEl.className = 'track-artist';
+          artistEl.textContent = t.artist || 'Artiste inconnu';
+
+          var meta = document.createElement('div');
+          meta.className = 'track-meta';
+
+          var timeEl = document.createElement('span');
+          timeEl.className = 'track-time';
+          timeEl.textContent = timeAgo(t.start_time);
+
+          var durEl = document.createElement('span');
+          durEl.className = 'track-duration';
+          durEl.textContent = t.track_length_formatted ? '· ' + t.track_length_formatted : '';
+
+          meta.appendChild(timeEl);
+          meta.appendChild(durEl);
+          info.appendChild(titleEl);
+          info.appendChild(artistEl);
+          info.appendChild(meta);
+
+          card.appendChild(artWrap);
+          card.appendChild(info);
           tl.appendChild(card);
-        }
+        });
 
       } catch(e) {
-        console.error('History error:', e);
+        console.error(e);
         loading.style.display = 'none';
-        tl.innerHTML = '<div class="history-empty">Impossible de charger l\'historique.<br>Verifie ta connexion.</div>';
+        tl.innerHTML = '<div class="history-empty">Impossible de charger l\'historique.<br>' + e.message + '</div>';
       }
     }
 
-    /* Recherche de pochette via l'API iTunes (CORS-friendly, gratuite) */
     async function fetchArtwork(title, artist) {
       try {
-        var q   = encodeURIComponent((artist + ' ' + title).trim());
-        var res = await fetch('https://itunes.apple.com/search?term=' + q + '&media=music&limit=1&entity=song');
-        var data = await res.json();
-        if (data.results && data.results.length) {
-          // Prendre la pochette 100x100 -> remplacer par 200x200 pour qualite
-          return data.results[0].artworkUrl100.replace('100x100', '200x200');
-        }
+        var q = encodeURIComponent((artist + ' ' + title).trim());
+        var r = await fetch('https://itunes.apple.com/search?term=' + q + '&media=music&limit=1&entity=song');
+        var d = await r.json();
+        if (d.results && d.results.length) return d.results[0].artworkUrl100.replace('100x100','200x200');
       } catch(e) {}
       return null;
     }
 
-    function buildTrackCard(title, artist, artwork, playedAt, isFirst) {
-      var card = document.createElement('div');
-      card.className = 'track-card';
-
-      // Pochette ou placeholder
-      var artEl;
-      if (artwork) {
-        artEl = document.createElement('img');
-        artEl.className = 'track-artwork';
-        artEl.src = artwork;
-        artEl.alt = title;
-        artEl.onerror = function() {
-          var ph = document.createElement('div');
-          ph.className = 'track-artwork-placeholder';
-          ph.textContent = '🎵';
-          artEl.parentNode.replaceChild(ph, artEl);
-        };
-      } else {
-        artEl = document.createElement('div');
-        artEl.className = 'track-artwork-placeholder';
-        artEl.textContent = '🎵';
-      }
-
-      // Infos
-      var info = document.createElement('div');
-      info.className = 'track-info';
-
-      if (isFirst) {
-        var nowBadge = document.createElement('div');
-        nowBadge.className = 'track-now';
-        nowBadge.textContent = '▶ En cours';
-        info.appendChild(nowBadge);
-      }
-
-      var tTitle = document.createElement('div');
-      tTitle.className = 'track-title';
-      tTitle.textContent = title;
-
-      var tArtist = document.createElement('div');
-      tArtist.className = 'track-artist';
-      tArtist.textContent = artist;
-
-      info.appendChild(tTitle);
-      info.appendChild(tArtist);
-
-      // Temps ecoule
-      var timeEl = document.createElement('div');
-      timeEl.className = 'track-time';
-      timeEl.textContent = playedAt ? timeAgo(playedAt) : '';
-
-      card.appendChild(artEl);
-      card.appendChild(info);
-      card.appendChild(timeEl);
-      return card;
-    }
-
     function timeAgo(dateStr) {
       var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
-      if (isNaN(diff) || diff < 0) return '';
+      if (isNaN(diff) || diff < 0) return 'en cours';
       if (diff < 60)   return 'a l\'instant';
-      if (diff < 3600) return Math.floor(diff / 60) + ' min';
-      if (diff < 86400) return Math.floor(diff / 3600) + 'h';
-      return Math.floor(diff / 86400) + 'j';
+      if (diff < 3600) return Math.floor(diff/60) + ' min';
+      if (diff < 86400) return Math.floor(diff/3600) + 'h';
+      return Math.floor(diff/86400) + 'j';
     }
 
-    /* =====================
-       CHAT
-    ===================== */
-    function openChat() {
-      document.getElementById('chatOverlay').classList.add('open');
-      resetBadge();
-      if (myPseudo) showMessages();
-      else { document.getElementById('pseudoScreen').style.display = 'flex'; document.getElementById('chatBody').classList.remove('show'); }
-    }
+    /* CHAT */
+    function openChat() { document.getElementById('chatOverlay').classList.add('open'); resetBadge(); if(myPseudo) showMessages(); else { document.getElementById('pseudoScreen').style.display='flex'; document.getElementById('chatBody').classList.remove('show'); } }
     function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); stopTyping(); }
-
-    function joinChat() {
-      var input = document.getElementById('pseudoInput'), pseudo = input.value.trim();
-      if (!pseudo) { input.focus(); return; }
-      myPseudo = pseudo;
-      localStorage.setItem('shade_pseudo', pseudo);
-      showMessages();
-    }
-
-    function showMessages() {
-      document.getElementById('pseudoScreen').style.display = 'none';
-      document.getElementById('chatBody').classList.add('show');
-      loadMessages();
-      if (!chatSub) subscribeMessages();
-      if (!reactionSub) subscribeReactions();
-      if (!typingSub) subscribeTyping();
-    }
-
-    function isRecent(dateStr) { return (Date.now() - new Date(dateStr).getTime()) < EXPIRY_MS; }
+    function joinChat() { var i=document.getElementById('pseudoInput'),p=i.value.trim(); if(!p){i.focus();return;} myPseudo=p; localStorage.setItem('shade_pseudo',p); showMessages(); }
+    function showMessages() { document.getElementById('pseudoScreen').style.display='none'; document.getElementById('chatBody').classList.add('show'); loadMessages(); if(!chatSub) subscribeMessages(); if(!reactionSub) subscribeReactions(); if(!typingSub) subscribeTyping(); }
+    function isRecent(d) { return (Date.now()-new Date(d).getTime())<EXPIRY_MS; }
 
     async function loadMessages() {
-      var since = new Date(Date.now() - EXPIRY_MS).toISOString();
-      var res = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
-      if (res.error) return;
-      var list = document.getElementById('messagesList');
-      list.innerHTML = '';
-      if (!res.data.length) {
-        var n = document.createElement('div'); n.className = 'expired-notice';
-        n.textContent = 'Aucun message recent. Soyez le premier a ecrire !';
-        list.appendChild(n); return;
-      }
-      var ids = res.data.map(function(m){ return m.id; });
-      var rRes = await sb.from('reactions').select('*').in('message_id', ids);
-      var rMap = {};
-      if (rRes.data) rRes.data.forEach(function(r){ if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
-      res.data.forEach(function(msg){ renderBubble(msg, rMap[msg.id] || []); });
+      var since=new Date(Date.now()-EXPIRY_MS).toISOString();
+      var res=await sb.from('messages').select('*').gte('created_at',since).order('created_at',{ascending:true}).limit(200);
+      if(res.error) return;
+      var list=document.getElementById('messagesList'); list.innerHTML='';
+      if(!res.data.length){var n=document.createElement('div');n.className='expired-notice';n.textContent='Aucun message recent. Soyez le premier a ecrire !';list.appendChild(n);return;}
+      var ids=res.data.map(function(m){return m.id;});
+      var rRes=await sb.from('reactions').select('*').in('message_id',ids);
+      var rMap={};
+      if(rRes.data) rRes.data.forEach(function(r){if(!rMap[r.message_id])rMap[r.message_id]=[];rMap[r.message_id].push(r);});
+      res.data.forEach(function(msg){renderBubble(msg,rMap[msg.id]||[]);});
       scrollBottom();
     }
 
     function subscribeMessages() {
-      chatSub = sb.channel('chat-messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function(payload) {
-          var msg = payload.new;
-          if (!isRecent(msg.created_at)) return;
-          if (document.getElementById('chatOverlay').classList.contains('open')) { renderBubble(msg, []); scrollBottom(); }
-          else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); }
-        }).subscribe();
+      chatSub=sb.channel('chat-messages').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){
+        var msg=p.new; if(!isRecent(msg.created_at)) return;
+        if(document.getElementById('chatOverlay').classList.contains('open')){renderBubble(msg,[]);scrollBottom();}
+        else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();}
+      }).subscribe();
     }
-
     function subscribeReactions() {
-      reactionSub = sb.channel('chat-reactions')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, function(payload) {
-          var id = payload.new ? payload.new.message_id : (payload.old ? payload.old.message_id : null);
-          if (id) refreshReactions(id);
-        }).subscribe();
+      reactionSub=sb.channel('chat-reactions').on('postgres_changes',{event:'*',schema:'public',table:'reactions'},function(p){
+        var id=p.new?p.new.message_id:(p.old?p.old.message_id:null); if(id) refreshReactions(id);
+      }).subscribe();
     }
-
     async function refreshReactions(msgId) {
-      var res = await sb.from('reactions').select('*').eq('message_id', msgId);
-      if (res.error) return;
-      var wrap = document.querySelector('[data-msg-id="' + msgId + '"]');
-      if (!wrap) return;
-      renderReactionsBar(wrap.querySelector('.reactions-bar'), msgId, res.data);
+      var res=await sb.from('reactions').select('*').eq('message_id',msgId); if(res.error) return;
+      var wrap=document.querySelector('[data-msg-id="'+msgId+'"]'); if(!wrap) return;
+      renderReactionsBar(wrap.querySelector('.reactions-bar'),msgId,res.data);
     }
-
     function subscribeTyping() {
-      typingSub = sb.channel('chat-typing')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'typing' }, function(){ updateTypingDisplay(); })
-        .subscribe();
+      typingSub=sb.channel('chat-typing').on('postgres_changes',{event:'*',schema:'public',table:'typing'},function(){updateTypingDisplay();}).subscribe();
     }
-
     async function updateTypingDisplay() {
-      var cutoff = new Date(Date.now() - 4000).toISOString();
-      var res = await sb.from('typing').select('pseudo').gt('updated_at', cutoff);
-      var ind = document.getElementById('typingIndicator');
-      if (!res.data || !res.data.length) { ind.innerHTML = ''; return; }
-      var others = res.data.map(function(r){ return r.pseudo; }).filter(function(p){ return p !== myPseudo; });
-      if (!others.length) { ind.innerHTML = ''; return; }
-      var name = others.length === 1 ? others[0] : others.length + ' personnes';
-      var verb = others.length === 1 ? ' est en train d\'ecrire' : ' sont en train d\'ecrire';
-      ind.innerHTML = '<span style="font-weight:bold;color:rgba(255,255,255,0.5);">' + esc(name) + '</span>' + verb + '<span class="typing-dots"><span></span><span></span><span></span></span>';
+      var cutoff=new Date(Date.now()-4000).toISOString();
+      var res=await sb.from('typing').select('pseudo').gt('updated_at',cutoff);
+      var ind=document.getElementById('typingIndicator');
+      if(!res.data||!res.data.length){ind.innerHTML='';return;}
+      var others=res.data.map(function(r){return r.pseudo;}).filter(function(p){return p!==myPseudo;});
+      if(!others.length){ind.innerHTML='';return;}
+      var name=others.length===1?others[0]:others.length+' personnes';
+      var verb=others.length===1?' est en train d\'ecrire':' sont en train d\'ecrire';
+      ind.innerHTML='<span style="font-weight:bold;color:rgba(255,255,255,0.5);">'+esc(name)+'</span>'+verb+'<span class="typing-dots"><span></span><span></span><span></span></span>';
     }
+    function onTyping() { if(!myPseudo) return; if(!isTyping){isTyping=true;sb.from('typing').upsert({pseudo:myPseudo,updated_at:new Date().toISOString()}).then(function(){});} clearTimeout(typingTimer); typingTimer=setTimeout(stopTyping,3000); }
+    function stopTyping() { if(!myPseudo||!isTyping) return; isTyping=false; clearTimeout(typingTimer); sb.from('typing').delete().eq('pseudo',myPseudo).then(function(){}); }
 
-    function onTyping() {
-      if (!myPseudo) return;
-      if (!isTyping) { isTyping = true; sb.from('typing').upsert({ pseudo: myPseudo, updated_at: new Date().toISOString() }).then(function(){}); }
-      clearTimeout(typingTimer);
-      typingTimer = setTimeout(stopTyping, 3000);
-    }
-    function stopTyping() {
-      if (!myPseudo || !isTyping) return;
-      isTyping = false; clearTimeout(typingTimer);
-      sb.from('typing').delete().eq('pseudo', myPseudo).then(function(){});
-    }
-
-    function renderReactionsBar(bar, msgId, reactions) {
-      if (!bar) return;
-      bar.innerHTML = '';
-      var counts = {}, mine = {};
-      reactions.forEach(function(r){ counts[r.emoji] = (counts[r.emoji]||0)+1; if (r.pseudo === myPseudo) mine[r.emoji] = true; });
-      Object.keys(counts).forEach(function(emoji) {
-        var pill = document.createElement('div');
-        pill.className = 'reaction-pill' + (mine[emoji] ? ' mine' : '');
-        pill.innerHTML = EMOJI_MAP[emoji] + ' <span class="count">' + counts[emoji] + '</span>';
-        pill.onclick = function(e){ e.stopPropagation(); toggleReaction(msgId, emoji); };
+    function renderReactionsBar(bar,msgId,reactions) {
+      if(!bar) return; bar.innerHTML='';
+      var counts={},mine={};
+      reactions.forEach(function(r){counts[r.emoji]=(counts[r.emoji]||0)+1;if(r.pseudo===myPseudo)mine[r.emoji]=true;});
+      Object.keys(counts).forEach(function(e){
+        var pill=document.createElement('div'); pill.className='reaction-pill'+(mine[e]?' mine':'');
+        pill.innerHTML=EMOJI_MAP[e]+' <span class="count">'+counts[e]+'</span>';
+        pill.onclick=function(ev){ev.stopPropagation();toggleReaction(msgId,e);};
         bar.appendChild(pill);
       });
     }
-
-    async function toggleReaction(msgId, emoji) {
-      if (!myPseudo) return;
-      var check = await sb.from('reactions').select('id').eq('message_id', msgId).eq('pseudo', myPseudo).eq('emoji', emoji);
-      if (check.data && check.data.length) await sb.from('reactions').delete().eq('id', check.data[0].id);
-      else await sb.from('reactions').insert([{ message_id: msgId, pseudo: myPseudo, emoji: emoji }]);
+    async function toggleReaction(msgId,emoji) {
+      if(!myPseudo) return;
+      var check=await sb.from('reactions').select('id').eq('message_id',msgId).eq('pseudo',myPseudo).eq('emoji',emoji);
+      if(check.data&&check.data.length) await sb.from('reactions').delete().eq('id',check.data[0].id);
+      else await sb.from('reactions').insert([{message_id:msgId,pseudo:myPseudo,emoji:emoji}]);
       refreshReactions(msgId);
     }
 
-    function renderBubble(msg, reactions) {
-      var list = document.getElementById('messagesList');
-      var isMe = msg.pseudo === myPseudo;
-      var color = getPseudoColor(msg.pseudo);
-      var time  = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-      var wrap  = document.createElement('div');
-      wrap.className = 'bubble-wrap ' + (isMe ? 'me' : 'them');
-      wrap.setAttribute('data-msg-id', msg.id);
-
-      var picker = document.createElement('div');
-      picker.className = 'emoji-picker';
-      Object.keys(EMOJI_MAP).forEach(function(key) {
-        var btn = document.createElement('button');
-        btn.className = 'emoji-pick-btn'; btn.textContent = EMOJI_MAP[key];
-        btn.onclick = function(e){ e.stopPropagation(); closePicker(); toggleReaction(msg.id, key); };
-        picker.appendChild(btn);
-      });
-
-      var bubble = document.createElement('div');
-      bubble.className = 'bubble';
-      bubble.innerHTML =
-        (!isMe ? '<div class="bubble-pseudo" style="color:' + color + ';">' + esc(msg.pseudo) + '</div>' : '') +
-        '<div>' + esc(msg.message) + '</div>' +
-        '<div class="bubble-time">' + time + '</div>';
+    function renderBubble(msg,reactions) {
+      var list=document.getElementById('messagesList'),isMe=msg.pseudo===myPseudo,color=getPseudoColor(msg.pseudo);
+      var time=new Date(msg.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+      var wrap=document.createElement('div'); wrap.className='bubble-wrap '+(isMe?'me':'them'); wrap.setAttribute('data-msg-id',msg.id);
+      var picker=document.createElement('div'); picker.className='emoji-picker';
+      Object.keys(EMOJI_MAP).forEach(function(k){ var btn=document.createElement('button'); btn.className='emoji-pick-btn'; btn.textContent=EMOJI_MAP[k]; btn.onclick=function(e){e.stopPropagation();closePicker();toggleReaction(msg.id,k);}; picker.appendChild(btn); });
+      var bubble=document.createElement('div'); bubble.className='bubble';
+      bubble.innerHTML=(!isMe?'<div class="bubble-pseudo" style="color:'+color+';">'+esc(msg.pseudo)+'</div>':'')+'<div>'+esc(msg.message)+'</div>'+'<div class="bubble-time">'+time+'</div>';
       bubble.appendChild(picker);
-      bubble.addEventListener('click', function(e){
-        e.stopPropagation();
-        if (openPicker && openPicker !== picker) openPicker.classList.remove('show');
-        picker.classList.toggle('show');
-        openPicker = picker.classList.contains('show') ? picker : null;
-      });
-
-      var bar = document.createElement('div');
-      bar.className = 'reactions-bar';
-      if (reactions && reactions.length) renderReactionsBar(bar, msg.id, reactions);
-
-      wrap.appendChild(bubble);
-      wrap.appendChild(bar);
-      list.appendChild(wrap);
+      bubble.addEventListener('click',function(e){ e.stopPropagation(); if(openPicker&&openPicker!==picker) openPicker.classList.remove('show'); picker.classList.toggle('show'); openPicker=picker.classList.contains('show')?picker:null; });
+      var bar=document.createElement('div'); bar.className='reactions-bar';
+      if(reactions&&reactions.length) renderReactionsBar(bar,msg.id,reactions);
+      wrap.appendChild(bubble); wrap.appendChild(bar); list.appendChild(wrap);
     }
 
-    function closePicker() { if (openPicker) { openPicker.classList.remove('show'); openPicker = null; } }
-    document.addEventListener('click', function(){ closePicker(); });
+    function closePicker(){if(openPicker){openPicker.classList.remove('show');openPicker=null;}}
+    document.addEventListener('click',function(){closePicker();});
 
     async function sendMessage() {
-      var input = document.getElementById('msgInput'), message = input.value.trim();
-      if (!message || !myPseudo) return;
-      input.value = ''; stopTyping();
-      var res = await sb.from('messages').insert([{ pseudo: myPseudo, message: message }]);
-      if (res.error) console.error(res.error);
+      var input=document.getElementById('msgInput'),message=input.value.trim();
+      if(!message||!myPseudo) return;
+      input.value=''; stopTyping();
+      var res=await sb.from('messages').insert([{pseudo:myPseudo,message:message}]);
+      if(res.error) console.error(res.error);
     }
-
-    function scrollBottom() { var l = document.getElementById('messagesList'); l.scrollTop = l.scrollHeight; }
-    function esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function scrollBottom(){var l=document.getElementById('messagesList');l.scrollTop=l.scrollHeight;}
+    function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
     /* INIT */
     subscribeMessages();
-    function onFirstGesture() {
-      unlockAudio();
-      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
-    }
-    document.addEventListener('touchstart', onFirstGesture, { once:true, passive:true });
-    document.addEventListener('click', onFirstGesture, { once:true });
+    function onFirstGesture(){unlockAudio();try{if('wakeLock'in navigator)navigator.wakeLock.request('screen').catch(function(){});}catch(e){}}
+    document.addEventListener('touchstart',onFirstGesture,{once:true,passive:true});
+    document.addEventListener('click',onFirstGesture,{once:true});
   </script>
 </body>
 </html>
