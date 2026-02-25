@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SHADE RADIO – Live</title>
-
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="assets/logo.JPG">
   <meta name="mobile-web-app-capable" content="yes">
@@ -12,616 +11,109 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
   <meta name="theme-color" content="#000000">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
   <style>
-    /* ===========================
-       BASE
-    =========================== */
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0; padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      overflow: hidden;
-      padding-top: env(safe-area-inset-top, 10px);
-      position: relative;
-      perspective: 1200px;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 50% 40%, rgba(220,0,0,0.55), transparent 65%),
-        radial-gradient(circle at 80% 90%, rgba(150,0,0,0.3), transparent 50%),
-        radial-gradient(circle at 10% 20%, rgba(80,0,0,0.4), transparent 40%);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    /* ===========================
-       APP CONTAINER
-    =========================== */
-    #app {
-      width: 100%;
-      max-width: 420px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* ===========================
-       TOP BAR
-    =========================== */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 10px 15px;
-    }
-
-    .header-container {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .live-badge {
-      background: linear-gradient(90deg, #ff0000, #8b0000);
-      color: #fff;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 10px 12px;
-      animation: pulse 1.5s infinite;
-      white-space: nowrap;
-    }
-
-    @keyframes pulse {
-      0%   { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); }
-      70%  { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); }
-      100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); }
-    }
-
-    .radio-ticker {
-      flex: 1;
-      overflow: hidden;
-      padding: 8px 0;
-      display: flex;
-    }
-
-    .radio-ticker span {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      animation: scroll-text 12s linear infinite;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    @keyframes scroll-text {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-
-    /* ===========================
-       HAMBURGER BUTTON
-    =========================== */
-    .hamburger-btn {
-      cursor: pointer;
-      background: rgba(180,0,0,0.25);
-      padding: 8px 10px;
-      border-radius: 10px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      transition: 0.3s;
-      box-shadow: 0 0 15px rgba(255,0,0,0.2);
-      flex-shrink: 0;
-      position: relative; /* needed for badge */
-    }
-
-    .hamburger-btn span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: #fff;
-      margin: 3px 0;
-      border-radius: 2px;
-      transition: 0.4s;
-    }
-
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background: #000; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow: hidden; padding-top: env(safe-area-inset-top, 10px); position: relative; perspective: 1200px; }
+    body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(220,0,0,0.55), transparent 65%), radial-gradient(circle at 80% 90%, rgba(150,0,0,0.3), transparent 50%), radial-gradient(circle at 10% 20%, rgba(80,0,0,0.4), transparent 40%); z-index: -1; pointer-events: none; }
+    #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
+    .top-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 15px; }
+    .header-container { flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; overflow: hidden; }
+    .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap; }
+    @keyframes pulse { 0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); } }
+    .radio-ticker { flex: 1; overflow: hidden; padding: 8px 0; display: flex; }
+    .radio-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 12s linear infinite; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    @keyframes scroll-text { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+    .hamburger-btn { cursor: pointer; background: rgba(180,0,0,0.25); padding: 8px 10px; border-radius: 10px; backdrop-filter: blur(10px); border: 1px solid rgba(255,0,0,0.4); display: flex; flex-direction: column; justify-content: center; transition: 0.3s; box-shadow: 0 0 15px rgba(255,0,0,0.2); flex-shrink: 0; position: relative; }
+    .hamburger-btn span { display: block; width: 22px; height: 2px; background: #fff; margin: 3px 0; border-radius: 2px; transition: 0.4s; }
     .hamburger-btn.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
     .hamburger-btn.open span:nth-child(2) { opacity: 0; }
     .hamburger-btn.open span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
-
-    /* ===========================
-       NOTIFICATION BADGE (hamburger)
-    =========================== */
-    #chatBadge {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      background: #ff0000;
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 9px;
-      display: none;           /* caché par défaut */
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-      border: 2px solid #000;
-      animation: badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-      z-index: 10;
-    }
-    @keyframes badge-pop {
-      from { transform: scale(0); }
-      to   { transform: scale(1); }
-    }
-
-    /* Badge sur le lien Chat dans le menu */
-    .chat-menu-badge {
-      background: #ff0000;
-      color: #fff;
-      font-size: 10px;
-      font-weight: bold;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 9px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-      margin-left: 6px;
-    }
-
-    /* ===========================
-       MAIN FRAME (player card)
-    =========================== */
-    .main-frame {
-      background: linear-gradient(180deg, rgba(120,0,0,0.18) 0%, rgba(255,255,255,0.03) 100%);
-      backdrop-filter: blur(20px);
-      border-radius: 50px;
-      padding: 25px 10px 220px 10px;
-      margin-top: 5px;
-      width: 92%;
-      max-width: 340px;
-      position: relative;
-      border: 2px solid rgba(255,255,255,0.2);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,0,0,0.1);
-    }
-
-    .radio-logo {
-      width: 290px;
-      margin: 0 auto 5px;
-      display: block;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3));
-      animation: logo-swing 7s ease-in-out infinite;
-    }
-
-    @keyframes logo-swing {
-      0%   { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); }
-      15%  { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); }
-      35%  { transform: rotateY(20deg); filter: brightness(1.2); }
-      55%  { transform: rotateY(-20deg); filter: brightness(1.2); }
-      75%  { transform: rotateY(20deg); }
-      100% { transform: rotateY(0deg); filter: brightness(1); }
-    }
-
-    .player-container {
-      position: relative;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 15px;
-    }
-
-    .player-container::after {
-      content: "";
-      position: absolute;
-      top: -8px;
-      width: 221px; height: 221px;
-      border-radius: 32px;
-      background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%);
-      background-size: 200% 100%;
-      pointer-events: none;
-      z-index: 10;
-      animation: gloss 4s linear infinite;
-    }
-
-    @keyframes gloss {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    #sc-player {
-      background: transparent !important;
-      transform: scale(0.65);
-      transform-origin: top center;
-      height: 300px;
-      position: relative;
-      z-index: 2;
-    }
+    #chatBadge { position: absolute; top: -6px; right: -6px; background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #000; z-index: 10; }
+    @keyframes badge-pop { from { transform: scale(0); } to { transform: scale(1); } }
+    .chat-menu-badge { background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; margin-left: 6px; }
+    .main-frame { background: linear-gradient(180deg, rgba(120,0,0,0.18) 0%, rgba(255,255,255,0.03) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 220px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,0,0,0.1); }
+    .radio-logo { width: 290px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3)); animation: logo-swing 7s ease-in-out infinite; }
+    @keyframes logo-swing { 0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); } 15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); } 35% { transform: rotateY(20deg); filter: brightness(1.2); } 55% { transform: rotateY(-20deg); filter: brightness(1.2); } 75% { transform: rotateY(20deg); } 100% { transform: rotateY(0deg); filter: brightness(1); } }
+    .player-container { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 15px; }
+    .player-container::after { content: ""; position: absolute; top: -8px; width: 221px; height: 221px; border-radius: 32px; background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%); background-size: 200% 100%; pointer-events: none; z-index: 10; animation: gloss 4s linear infinite; }
+    @keyframes gloss { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    #sc-player { background: transparent !important; transform: scale(0.65); transform-origin: top center; height: 300px; position: relative; z-index: 2; }
     #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 40px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
-    #sc-player [class*="play-button"] {
-      background: #001f3f !important;
-      border-radius: 50% !important;
-      border: 2px solid rgba(255,255,255,0.8) !important;
-      box-shadow: 0 0 20px rgba(0,31,63,0.6), 0 0 10px rgba(255,255,255,0.2) !important;
-      z-index: 5;
-      transition: transform 0.2s;
-    }
+    #sc-player [class*="play-button"] { background: #001f3f !important; border-radius: 50% !important; border: 2px solid rgba(255,255,255,0.8) !important; box-shadow: 0 0 20px rgba(0,31,63,0.6), 0 0 10px rgba(255,255,255,0.2) !important; z-index: 5; transition: transform 0.2s; }
     #sc-player [class*="play-button"]:active { transform: scale(0.9); }
-
-    .custom-vinyl {
-      position: absolute;
-      top: 191px;
-      width: 155px; height: 155px;
-      z-index: 1;
-      animation: vinyl-spin 6s linear infinite;
-      filter: drop-shadow(0 0 15px rgba(0,0,0,0.6));
-    }
-
-    @keyframes vinyl-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    .ad-banner {
-      position: absolute;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 85%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-    }
-
+    .custom-vinyl { position: absolute; top: 191px; width: 155px; height: 155px; z-index: 1; animation: vinyl-spin 6s linear infinite; filter: drop-shadow(0 0 15px rgba(0,0,0,0.6)); }
+    @keyframes vinyl-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .ad-banner { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 10px; overflow: hidden; display: flex; }
     .ad-ticker { flex: 1; padding: 7px 0; overflow: hidden; display: flex; }
-    .ad-ticker span {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      animation: scroll-text 14s linear infinite;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* ===========================
-       OVERLAYS (menu + chat)
-       z-index stack :
-         menu  = 200
-         chat  = 300
-         (chat est au dessus du menu)
-    =========================== */
-
-    /* shared overlay base */
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      backdrop-filter: blur(25px) saturate(150%);
-      -webkit-backdrop-filter: blur(25px) saturate(150%);
-      background: rgba(0,0,0,0.35);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      /* hidden by default — no pointer events */
-      pointer-events: none;
-      visibility: hidden;
-    }
-
-    .overlay.open {
-      pointer-events: all;
-      visibility: visible;
-    }
-
-    /* ===========================
-       MENU
-    =========================== */
-    #menuOverlay {
-      z-index: 200;
-      gap: 15px;
-      right: -100%;
-      left: auto;
-      width: 100%;
-      transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s;
-    }
-
-    #menuOverlay.open {
-      right: 0;
-      transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s;
-    }
-
-    .menu-logo {
-      width: 130px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-    }
-
-    #menuOverlay.open .menu-logo {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .menu-link {
-      color: #fff;
-      text-decoration: none;
-      font-size: 17px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 15px 25px;
-      border-radius: 50px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.08);
-      width: 80%;
-      max-width: 300px;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      transition: background 0.2s, transform 0.2s;
-      cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    .menu-link:active {
-      background: rgba(255,255,255,0.2);
-      transform: scale(0.96);
-    }
-
-    /* ===========================
-       CHAT
-    =========================== */
-    #chatOverlay {
-      z-index: 300;
-      justify-content: flex-start;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s;
-      padding-top: env(safe-area-inset-top, 10px);
-    }
-
-    #chatOverlay.open {
-      transform: translateY(0);
-      transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s;
-    }
-
-    .chat-header {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      flex-shrink: 0;
-    }
-
-    .chat-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chat-avatar {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, #ff0000, #8b0000);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-    }
-
-    .chat-title  { color: #fff; font-weight: bold; font-size: 15px; }
-    .chat-sub    { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
-
-    .close-btn {
-      background: rgba(255,255,255,0.1);
-      border: none; color: #fff;
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      font-size: 15px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    /* pseudo screen */
-    .pseudo-screen {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 30px 20px; gap: 20px;
-      width: 100%;
-    }
-
+    .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; visibility: hidden; }
+    .overlay.open { pointer-events: all; visibility: visible; }
+    #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
+    #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+    #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
+    .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
+    .menu-link:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
+    #chatOverlay { z-index: 300; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
+    #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .chat-title { color: #fff; font-weight: bold; font-size: 15px; }
+    .chat-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+    .close-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pseudo-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; width: 100%; }
     .pseudo-screen h2 { color: #fff; font-size: 22px; text-align: center; }
-    .pseudo-screen p  { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; }
-
-    .pseudo-input {
-      width: 100%; max-width: 300px;
-      padding: 14px 20px;
-      border-radius: 50px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.08);
-      color: #fff; font-size: 16px; outline: none; text-align: center;
-    }
+    .pseudo-screen p { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; }
+    .pseudo-input { width: 100%; max-width: 300px; padding: 14px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 16px; outline: none; text-align: center; }
     .pseudo-input::placeholder { color: rgba(255,255,255,0.35); }
-
-    .btn-join {
-      background: linear-gradient(90deg, #ff0000, #8b0000);
-      color: #fff; border: none;
-      padding: 14px 44px; border-radius: 50px;
-      font-size: 16px; font-weight: bold; cursor: pointer;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 20px rgba(255,0,0,0.4);
-      transition: transform 0.2s;
-    }
+    .btn-join { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 14px 44px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(255,0,0,0.4); transition: transform 0.2s; }
     .btn-join:active { transform: scale(0.95); }
-
-    /* messages screen */
-    .chat-body {
-      flex: 1;
-      display: none; flex-direction: column;
-      overflow: hidden;
-      width: 100%;
-    }
+    .chat-body { flex: 1; display: none; flex-direction: column; overflow: hidden; width: 100%; }
     .chat-body.show { display: flex; }
-
-    .messages-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 14px 14px 8px;
-      display: flex; flex-direction: column; gap: 8px;
-      scroll-behavior: smooth;
-    }
+    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; }
     .messages-list::-webkit-scrollbar { display: none; }
-
-    /* Message "info" pour les messages expirés */
-    .expired-notice {
-      text-align: center;
-      color: rgba(255,255,255,0.3);
-      font-size: 11px;
-      padding: 6px 0;
-      font-style: italic;
-    }
-
-    .bubble {
-      max-width: 76%;
-      padding: 9px 14px;
-      border-radius: 18px;
-      font-size: 14px; line-height: 1.45;
-      word-break: break-word;
-      animation: pop-in 0.22s ease;
-    }
-    @keyframes pop-in {
-      from { opacity: 0; transform: scale(0.85) translateY(8px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .bubble.them {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #fff;
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-    }
-    .bubble.me {
-      background: linear-gradient(135deg, #ff0000, #8b0000);
-      color: #fff;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-
+    .expired-notice { text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; padding: 6px 0; font-style: italic; }
+    .bubble { max-width: 76%; padding: 9px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; word-break: break-word; animation: pop-in 0.22s ease; }
+    @keyframes pop-in { from { opacity: 0; transform: scale(0.85) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .bubble.them { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .bubble.me { background: linear-gradient(135deg, #ff0000, #8b0000); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
     .bubble-pseudo { font-size: 11px; font-weight: bold; color: rgba(255,255,255,0.5); margin-bottom: 3px; }
-    .bubble-time   { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 3px; text-align: right; }
-
-    .chat-input-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px;
-      padding-bottom: max(10px, env(safe-area-inset-bottom));
-      border-top: 1px solid rgba(255,255,255,0.1);
-      flex-shrink: 0;
-    }
-
-    .chat-input {
-      flex: 1;
-      padding: 11px 16px;
-      border-radius: 25px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.08);
-      color: #fff; font-size: 15px; outline: none;
-    }
+    .bubble-time { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 3px; text-align: right; }
+    .chat-input-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; padding-bottom: max(10px, env(safe-area-inset-bottom)); border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+    .chat-input { flex: 1; padding: 11px 16px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 15px; outline: none; }
     .chat-input::placeholder { color: rgba(255,255,255,0.35); }
-
-    .send-btn {
-      background: linear-gradient(135deg, #ff0000, #8b0000);
-      border: none; width: 42px; height: 42px;
-      border-radius: 50%; color: #fff; font-size: 16px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 10px rgba(255,0,0,0.4);
-      transition: transform 0.2s; flex-shrink: 0;
-    }
+    .send-btn { background: linear-gradient(135deg, #ff0000, #8b0000); border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(255,0,0,0.4); transition: transform 0.2s; flex-shrink: 0; }
     .send-btn:active { transform: scale(0.9); }
   </style>
 </head>
 <body>
 
-  <!-- =====================
-       MENU OVERLAY
-  ===================== -->
+  <!-- MENU OVERLAY -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : "
-       class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub"
-       class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
-
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
       <i class="fas fa-share-nodes"></i> Partager la radio
     </a>
-
-    <a href="https://www.tiktok.com/@shaderadio" target="_blank"
-       class="menu-link" onclick="closeMenu()">
+    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="closeMenu()">
       <i class="fab fa-tiktok"></i> Rejoins-nous sur TikTok
     </a>
-
-    <!-- Lien chat avec badge intégré dans le menu -->
     <a href="javascript:void(0)" class="menu-link" id="chatMenuLink" onclick="closeMenu(); setTimeout(openChat, 450);">
       <i class="fas fa-comments"></i> Chat Auditeurs
       <span class="chat-menu-badge" id="chatMenuBadge"></span>
     </a>
   </div>
 
-  <!-- =====================
-       CHAT OVERLAY
-  ===================== -->
+  <!-- CHAT OVERLAY -->
   <div class="overlay" id="chatOverlay">
-
-    <!-- header -->
     <div class="chat-header">
       <div class="chat-header-left">
         <div class="chat-avatar">🎙️</div>
@@ -632,38 +124,24 @@
       </div>
       <button class="close-btn" onclick="closeChat()">✕</button>
     </div>
-
-    <!-- pseudo screen -->
     <div class="pseudo-screen" id="pseudoScreen">
       <div style="font-size:50px">🎧</div>
       <h2>Rejoins le chat !</h2>
       <p>Choisis un pseudo pour discuter avec les autres auditeurs.</p>
-      <input class="pseudo-input" id="pseudoInput" type="text"
-             placeholder="Ton pseudo…" maxlength="20" autocomplete="off"
-             onkeydown="if(event.key==='Enter') joinChat()">
+      <input class="pseudo-input" id="pseudoInput" type="text" placeholder="Ton pseudo…" maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter') joinChat()">
       <button class="btn-join" onclick="joinChat()">Rejoindre →</button>
     </div>
-
-    <!-- messages screen -->
     <div class="chat-body" id="chatBody">
       <div class="messages-list" id="messagesList"></div>
       <div class="chat-input-row">
-        <input class="chat-input" id="msgInput" type="text"
-               placeholder="Ton message…" maxlength="200" autocomplete="off"
-               onkeydown="if(event.key==='Enter') sendMessage()">
-        <button class="send-btn" onclick="sendMessage()">
-          <i class="fas fa-paper-plane"></i>
-        </button>
+        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message…" maxlength="200" autocomplete="off" onkeydown="if(event.key==='Enter') sendMessage()">
+        <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
-
   </div>
 
-  <!-- =====================
-       MAIN APP
-  ===================== -->
+  <!-- MAIN APP -->
   <div id="app">
-
     <div class="top-bar">
       <div class="header-container">
         <div class="live-badge">● LIVE</div>
@@ -671,62 +149,82 @@
           <span>100% Hip-Hop Classic — Shade Radio — Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
         </div>
       </div>
-
-      <!-- Bouton hamburger avec badge notification -->
       <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
         <span></span><span></span><span></span>
         <div id="chatBadge"></div>
       </div>
     </div>
-
     <div class="main-frame">
       <img src="assets/logo2.PNG" alt="SHADE RADIO" class="radio-logo">
-
       <div class="player-container">
         <img src="assets/disque.PNG" class="custom-vinyl" alt="Vinyl">
-        <div id="sc-player"
-          is="player" lang="fr"
+        <div id="sc-player" is="player" lang="fr"
           api-url="https://manager11.streamradio.fr:1700/api/v2"
-          server-id="1"
-          station-name="SHADE RADIO"
-          imagecontainer="top"
-          controlscontainer="bottom"
-          :show-history="false"
-          :show-share="false"
-          :show-dj="false"
-          :show-image="true"
-          :show-bitrate="false"
-          play-button-color="#ffffff"
-          :progress-show="false"
-          player-width="100%">
+          server-id="1" station-name="SHADE RADIO"
+          imagecontainer="top" controlscontainer="bottom"
+          :show-history="false" :show-share="false" :show-dj="false"
+          :show-image="true" :show-bitrate="false"
+          play-button-color="#ffffff" :progress-show="false" player-width="100%">
         </div>
       </div>
-
       <div class="ad-banner">
         <div class="ad-ticker">
           <span>Pour diffuser votre publicité, contactez nous via l'onglet demande de pub dans le menu.</span>
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- scripts -->
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
-    /* =====================
-       SUPABASE
-    ===================== */
     const SUPA_URL = 'https://rxhyapahjaypeudletdy.supabase.co';
     const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
     const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-    let myPseudo   = localStorage.getItem('shade_pseudo') || null;
-    let chatSub    = null;
-    let unreadCount = 0;   // compteur de messages non lus
-    const EXPIRY_MS = 24 * 60 * 60 * 1000; // 24h en millisecondes
+    let myPseudo    = localStorage.getItem('shade_pseudo') || null;
+    let chatSub     = null;
+    let unreadCount = 0;
+    const EXPIRY_MS = 24 * 60 * 60 * 1000;
+
+    /* =====================
+       SON NOTIFICATION — Web Audio API (aucun fichier externe requis)
+       Fonctionne sur iOS Safari, Android Chrome, et desktop.
+       L'AudioContext est déverrouillé au premier geste utilisateur.
+    ===================== */
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function playNotifSound() {
+      try {
+        const ctx   = getAudioCtx();
+        // Deux notes courtes "ding ding" — La5 (880 Hz) puis Do#6 (1100 Hz)
+        const notes = [880, 1100];
+        notes.forEach(function(freq, i) {
+          const osc  = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sine';
+          const t = ctx.currentTime + i * 0.14;
+          osc.frequency.setValueAtTime(freq, t);
+          // Enveloppe : attaque rapide, relâchement doux
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+          osc.start(t);
+          osc.stop(t + 0.38);
+        });
+      } catch(e) {
+        console.warn('Audio indisponible :', e);
+      }
+    }
 
     /* =====================
        BADGE NOTIFICATION
@@ -736,14 +234,14 @@
       const menuBadge = document.getElementById('chatMenuBadge');
       if (n > 0) {
         const label = n > 99 ? '99+' : String(n);
-        badge.textContent      = label;
-        menuBadge.textContent  = label;
-        badge.style.display      = 'flex';
-        menuBadge.style.display  = 'flex';
-        // Re-trigger animation
+        badge.textContent     = label;
+        menuBadge.textContent = label;
+        badge.style.display     = 'flex';
+        menuBadge.style.display = 'flex';
+        // Re-trigger pop animation
         badge.style.animation = 'none';
-        badge.offsetHeight; // reflow
-        badge.style.animation = '';
+        badge.offsetHeight;
+        badge.style.animation = 'badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
       } else {
         badge.style.display     = 'none';
         menuBadge.style.display = 'none';
@@ -759,8 +257,8 @@
        MENU
     ===================== */
     function toggleMenu() {
-      const menu = document.getElementById('menuOverlay');
-      const btn  = document.getElementById('hamburgerBtn');
+      const menu   = document.getElementById('menuOverlay');
+      const btn    = document.getElementById('hamburgerBtn');
       const isOpen = menu.classList.contains('open');
       if (isOpen) {
         menu.classList.remove('open');
@@ -778,7 +276,7 @@
 
     function shareRadio() {
       if (navigator.share) {
-        navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO ! 🎧', url: window.location.href });
+        navigator.share({ title: 'SHADE RADIO', text: 'Ecoute SHADE RADIO ! 🎧', url: window.location.href });
       }
     }
 
@@ -786,9 +284,8 @@
        CHAT
     ===================== */
     function openChat() {
-      const overlay = document.getElementById('chatOverlay');
-      overlay.classList.add('open');
-      resetBadge(); // on réinitialise le badge quand on ouvre le chat
+      document.getElementById('chatOverlay').classList.add('open');
+      resetBadge();
       if (myPseudo) {
         showMessages();
       } else {
@@ -799,8 +296,7 @@
 
     function closeChat() {
       document.getElementById('chatOverlay').classList.remove('open');
-      // On garde la subscription active pour continuer à compter les messages
-      // même quand le chat est fermé — on ne détruit PAS chatSub ici.
+      // On conserve la subscription pour continuer à détecter les messages
     }
 
     function joinChat() {
@@ -816,11 +312,9 @@
       document.getElementById('pseudoScreen').style.display = 'none';
       document.getElementById('chatBody').classList.add('show');
       loadMessages();
-      // Lance la subscription si pas déjà active
       if (!chatSub) subscribeMessages();
     }
 
-    /* Filtre côté client : ignore les messages de plus de 24h */
     function isRecent(dateStr) {
       return (Date.now() - new Date(dateStr).getTime()) < EXPIRY_MS;
     }
@@ -830,16 +324,15 @@
       const { data, error } = await sb
         .from('messages')
         .select('*')
-        .gte('created_at', since)        // on demande directement les 24 dernières heures
+        .gte('created_at', since)
         .order('created_at', { ascending: true })
         .limit(200);
       if (error) { console.error(error); return; }
       const list = document.getElementById('messagesList');
       list.innerHTML = '';
-
       if (data.length === 0) {
         const notice = document.createElement('div');
-        notice.className = 'expired-notice';
+        notice.className   = 'expired-notice';
         notice.textContent = 'Aucun message récent. Soyez le premier à écrire !';
         list.appendChild(notice);
       } else {
@@ -852,22 +345,19 @@
       chatSub = sb.channel('chat')
         .on('postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'messages' },
-          payload => {
+          function(payload) {
             const msg = payload.new;
-            // Filtre : on n'affiche que les messages récents (sécurité)
             if (!isRecent(msg.created_at)) return;
-
             const chatOpen = document.getElementById('chatOverlay').classList.contains('open');
             if (chatOpen) {
-              // Chat ouvert → on affiche directement
               renderBubble(msg);
               scrollBottom();
             } else {
-              // Chat fermé → on incrémente le badge
-              // Pas de notification pour ses propres messages
+              // Ne pas compter ses propres messages
               if (msg.pseudo !== myPseudo) {
                 unreadCount++;
                 showBadge(unreadCount);
+                playNotifSound(); // 🔔 ding ding !
               }
             }
           }
@@ -875,16 +365,15 @@
     }
 
     function renderBubble(msg) {
-      const list  = document.getElementById('messagesList');
-      const isMe  = msg.pseudo === myPseudo;
-      const div   = document.createElement('div');
+      const list = document.getElementById('messagesList');
+      const isMe = msg.pseudo === myPseudo;
+      const div  = document.createElement('div');
       div.className = 'bubble ' + (isMe ? 'me' : 'them');
-      const time  = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      div.innerHTML = `
-        ${!isMe ? `<div class="bubble-pseudo">${esc(msg.pseudo)}</div>` : ''}
-        <div>${esc(msg.message)}</div>
-        <div class="bubble-time">${time}</div>
-      `;
+      const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      div.innerHTML =
+        (!isMe ? '<div class="bubble-pseudo">' + esc(msg.pseudo) + '</div>' : '') +
+        '<div>' + esc(msg.message) + '</div>' +
+        '<div class="bubble-time">' + time + '</div>';
       list.appendChild(div);
     }
 
@@ -906,21 +395,29 @@
       return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    /* =====================
-       SUBSCRIPTION GLOBALE
-       Lance l'écoute dès le chargement de la page
-       (même sans ouvrir le chat) pour les notifications
-    ===================== */
+    // Lance la subscription dès le chargement (badge même chat fermé)
     subscribeMessages();
 
     /* =====================
-       WAKE LOCK
+       WAKE LOCK + déverrouillage AudioContext
+       Les navigateurs mobiles exigent un geste utilisateur
+       avant d'autoriser la lecture audio.
     ===================== */
     let wakeLock = null;
-    async function reqWakeLock() {
-      try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+
+    function unlockAll() {
+      // Wake lock
+      try {
+        if ('wakeLock' in navigator) {
+          navigator.wakeLock.request('screen').then(function(wl) { wakeLock = wl; }).catch(function(){});
+        }
+      } catch(e) {}
+      // AudioContext (iOS Safari notamment)
+      try { getAudioCtx(); } catch(e) {}
     }
-    window.addEventListener('touchstart', reqWakeLock, { once: true });
+
+    window.addEventListener('touchstart', unlockAll, { once: true });
+    window.addEventListener('click',      unlockAll, { once: true });
   </script>
 </body>
 </html>
