@@ -147,10 +147,10 @@
   <!-- MENU OVERLAY -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de titre&body=Artiste : %0D%0ATitre : " class="menu-link" onclick="closeMenu()">
+    <a href="/cdn-cgi/l/email-protection#e4978c8580819685808d8b888d9281a48389858d88ca878b89db9791868e818790d9a08189858a8081c48081c4908d909681c2868b809dd9a596908d979081c4dec4c1d4a0c1d4a5b08d909681c4dec4" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande de pub" class="menu-link" onclick="closeMenu()">
+    <a href="/cdn-cgi/l/email-protection#f88b90999c9d8a999c919794918e9db89f95999194d69b9795c78b8d9a929d9b8cc5bc9d9599969c9dd89c9dd8888d9a" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -255,7 +255,7 @@
   </div>
 
   <!-- Scripts StreamRadio player -->
-  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -462,7 +462,7 @@
       chatSub=sb.channel('chat-messages').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){
         var msg=p.new; if(!isRecent(msg.created_at)) return;
         if(document.getElementById('chatOverlay').classList.contains('open')){renderBubble(msg,[]);scrollBottom();}
-        else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();}
+        else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();notifyViaSW(msg.pseudo,msg.message);}
       }).subscribe();
     }
     function subscribeReactions() {
@@ -475,22 +475,71 @@
       var wrap=document.querySelector('[data-msg-id="'+msgId+'"]'); if(!wrap) return;
       renderReactionsBar(wrap.querySelector('.reactions-bar'),msgId,res.data);
     }
+    /* -------------------------------------------------------
+       TYPING — via Supabase Broadcast (temps réel garanti,
+       pas de dépendance aux postgres_changes sur UPDATE)
+       ------------------------------------------------------- */
+    var typingUsers = {};   /* { pseudo: timestamp } */
+    var typingChannel = null;
+
     function subscribeTyping() {
-      typingSub=sb.channel('chat-typing').on('postgres_changes',{event:'*',schema:'public',table:'typing'},function(){updateTypingDisplay();}).subscribe();
+      typingChannel = sb.channel('shade-typing-broadcast', {
+        config: { broadcast: { self: false } }
+      });
+
+      typingChannel
+        .on('broadcast', { event: 'typing' }, function(payload) {
+          var p = payload.payload;
+          if (!p || !p.pseudo || p.pseudo === myPseudo) return;
+          if (p.active) {
+            typingUsers[p.pseudo] = Date.now();
+          } else {
+            delete typingUsers[p.pseudo];
+          }
+          renderTypingDisplay();
+        })
+        .subscribe();
+
+      /* Nettoie les pseudos qui n'ont plus envoyé de signal depuis 4s */
+      setInterval(function() {
+        var now = Date.now();
+        var changed = false;
+        Object.keys(typingUsers).forEach(function(p) {
+          if (now - typingUsers[p] > 4000) { delete typingUsers[p]; changed = true; }
+        });
+        if (changed) renderTypingDisplay();
+      }, 1000);
     }
-    async function updateTypingDisplay() {
-      var cutoff=new Date(Date.now()-4000).toISOString();
-      var res=await sb.from('typing').select('pseudo').gt('updated_at',cutoff);
-      var ind=document.getElementById('typingIndicator');
-      if(!res.data||!res.data.length){ind.innerHTML='';return;}
-      var others=res.data.map(function(r){return r.pseudo;}).filter(function(p){return p!==myPseudo;});
-      if(!others.length){ind.innerHTML='';return;}
-      var name=others.length===1?others[0]:others.length+' personnes';
-      var verb=others.length===1?' est en train d\'ecrire':' sont en train d\'ecrire';
-      ind.innerHTML='<span style="font-weight:bold;color:rgba(255,255,255,0.5);">'+esc(name)+'</span>'+verb+'<span class="typing-dots"><span></span><span></span><span></span></span>';
+
+    function renderTypingDisplay() {
+      var ind = document.getElementById('typingIndicator');
+      if (!ind) return;
+      var others = Object.keys(typingUsers);
+      if (!others.length) { ind.innerHTML = ''; return; }
+      var name = others.length === 1 ? others[0] : others.length + ' personnes';
+      var verb = others.length === 1 ? ' est en train d\'écrire' : ' sont en train d\'écrire';
+      ind.innerHTML = '<span style="font-weight:bold;color:rgba(255,255,255,0.6);">' + esc(name) + '</span>' + verb +
+        '<span class="typing-dots"><span></span><span></span><span></span></span>';
     }
-    function onTyping() { if(!myPseudo) return; if(!isTyping){isTyping=true;sb.from('typing').upsert({pseudo:myPseudo,updated_at:new Date().toISOString()}).then(function(){});} clearTimeout(typingTimer); typingTimer=setTimeout(stopTyping,3000); }
-    function stopTyping() { if(!myPseudo||!isTyping) return; isTyping=false; clearTimeout(typingTimer); sb.from('typing').delete().eq('pseudo',myPseudo).then(function(){}); }
+
+    function onTyping() {
+      if (!myPseudo || !typingChannel) return;
+      if (!isTyping) {
+        isTyping = true;
+        typingChannel.send({ type: 'broadcast', event: 'typing', payload: { pseudo: myPseudo, active: true } });
+      }
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(stopTyping, 3000);
+    }
+
+    function stopTyping() {
+      if (!myPseudo || !isTyping) return;
+      isTyping = false;
+      clearTimeout(typingTimer);
+      if (typingChannel) {
+        typingChannel.send({ type: 'broadcast', event: 'typing', payload: { pseudo: myPseudo, active: false } });
+      }
+    }
 
     function renderReactionsBar(bar,msgId,reactions) {
       if(!bar) return; bar.innerHTML='';
@@ -539,11 +588,46 @@
     function scrollBottom(){var l=document.getElementById('messagesList');l.scrollTop=l.scrollHeight;}
     function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+
+    /* -------------------------------------------------------
+       SERVICE WORKER + NOTIFICATIONS PUSH (app fermée)
+       ------------------------------------------------------- */
+    var swReg = null;
+
+    async function registerSW() {
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        swReg = await navigator.serviceWorker.register('/sw.js');
+        console.log('[SW] enregistré');
+      } catch(e) { console.warn('[SW] échec :', e); }
+    }
+
+    async function requestNotifPermission() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission === 'granted') return;
+      if (Notification.permission === 'denied') return;
+      var result = await Notification.requestPermission();
+      console.log('[Notif] permission :', result);
+    }
+
+    /* Envoie une notif via SW si l'app est en arrière-plan */
+    function notifyViaSW(pseudo, message) {
+      if (!swReg || !swReg.active) return;
+      if (Notification.permission !== 'granted') return;
+      swReg.active.postMessage({ type: 'NEW_MESSAGE', pseudo: pseudo, message: message });
+    }
+
     /* INIT */
+    registerSW();
     subscribeMessages();
-    function onFirstGesture(){unlockAudio();try{if('wakeLock'in navigator)navigator.wakeLock.request('screen').catch(function(){});}catch(e){}}
-    document.addEventListener('touchstart',onFirstGesture,{once:true,passive:true});
-    document.addEventListener('click',onFirstGesture,{once:true});
+
+    function onFirstGesture() {
+      unlockAudio();
+      requestNotifPermission();
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
+    }
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click', onFirstGesture, { once: true });
   </script>
 </body>
 </html>
