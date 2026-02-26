@@ -616,6 +616,7 @@
 
     subscribeTyping();
     registerSW();
+    subscribeMessages();   /* ← corrige les notifications : écoute active dès le chargement */
 
     function onFirstGesture() {
       unlockAudio();
