@@ -3,7 +3,7 @@
    ⚠️ Incrémente CACHE_VERSION à chaque déploiement GitHub
       pour forcer la mise à jour chez tous les utilisateurs
    ============================================================ */
-const CACHE_VERSION = 'v22';
+const CACHE_VERSION = 'v23';
 const CACHE_NAME    = 'shade-radio-' + CACHE_VERSION;
 
 /* Fichiers à mettre en cache lors de l'installation */
