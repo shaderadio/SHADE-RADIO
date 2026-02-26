@@ -244,13 +244,13 @@
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
 
-    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); openMail('titre')">
+    <a href="javascript:void(0)" class="menu-link" onclick="openMail('titre'); closeMenu()">
       <!-- ✅ SVG inline : Icône musique -->
       <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       Demander un titre
     </a>
 
-    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); openMail('pub')">
+    <a href="javascript:void(0)" class="menu-link" onclick="openMail('pub'); closeMenu()">
       <!-- ✅ SVG inline : Icône pub -->
       <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h-8l-2 4h12z"/></svg>
       Demande de pub
@@ -539,7 +539,13 @@
       body = "J'aimerais faire la promo pub de ....";
     }
     var link = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    window.location.href = link;
+    /* iOS Safari fix : créer un vrai lien <a> et le cliquer */
+    var a = document.createElement('a');
+    a.href = link;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() { document.body.removeChild(a); }, 500);
   }
 
   function toggleMenu() {
