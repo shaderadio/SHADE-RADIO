@@ -527,7 +527,6 @@
     }
 
     async function loadMessages() {
-      /* Charge les 200 derniers messages sans aucun filtre de date */
       var res = await sb.from('messages').select('*').order('created_at', { ascending: true }).limit(200);
       if (res.error) return;
       var list = document.getElementById('messagesList'); list.innerHTML = '';
@@ -718,7 +717,6 @@
     ============================================================ */
     subscribeTyping();     /* ① Canal typing — toujours en premier */
     registerSW();          /* ② Service Worker + détection mises à jour */
-    subscribeMessages();   /* ③ Écoute temps réel nouveaux messages */
 
     function onFirstGesture() {
       unlockAudio();
