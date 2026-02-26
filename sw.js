@@ -1,136 +1,120 @@
 /* ============================================================
    SHADE RADIO — Service Worker
-   Gère les notifications push MÊME quand l'app est fermée.
+   ⚠️ Incrémente CACHE_VERSION à chaque déploiement GitHub
+      pour forcer la mise à jour chez tous les utilisateurs
    ============================================================ */
+const CACHE_VERSION = 'v1';
+const CACHE_NAME    = 'shade-radio-' + CACHE_VERSION;
 
-var CACHE_NAME = 'shade-radio-v1';
-var ASSETS_TO_CACHE = [
+/* Fichiers à mettre en cache lors de l'installation */
+const ASSETS = [
   '/',
   '/index.html',
+  '/manifest.json',
   '/assets/logo.JPG',
   '/assets/logo2.PNG',
-  '/assets/disque.PNG',
-  '/manifest.json'
+  '/assets/disque.PNG'
 ];
 
-/* ── Installation : mise en cache des assets ── */
+/* ── INSTALL : mise en cache des ressources statiques ── */
 self.addEventListener('install', function(event) {
-  self.skipWaiting();
+  console.log('[SW] Install – cache', CACHE_NAME);
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(ASSETS_TO_CACHE).catch(function() {
-        /* On ignore les erreurs de cache pour ne pas bloquer l'install */
-      });
+      return cache.addAll(ASSETS);
+    }).then(function() {
+      /* Active immédiatement le nouveau SW sans attendre la fermeture des onglets */
+      return self.skipWaiting();
     })
   );
 });
 
-/* ── Activation : nettoyage des vieux caches ── */
+/* ── ACTIVATE : supprime les anciens caches ── */
 self.addEventListener('activate', function(event) {
+  console.log('[SW] Activate – nettoyage des anciens caches');
   event.waitUntil(
     caches.keys().then(function(keys) {
       return Promise.all(
-        keys.filter(function(k) { return k !== CACHE_NAME; })
-            .map(function(k) { return caches.delete(k); })
+        keys.filter(function(key) {
+          return key.startsWith('shade-radio-') && key !== CACHE_NAME;
+        }).map(function(key) {
+          console.log('[SW] Suppression ancien cache :', key);
+          return caches.delete(key);
+        })
       );
     }).then(function() {
+      /* Prend le contrôle de tous les onglets ouverts immédiatement */
       return self.clients.claim();
     })
   );
 });
 
-/* ── Fetch : cache-first pour les assets statiques ── */
+/* ── FETCH : Network First pour HTML/JS, Cache First pour assets ── */
 self.addEventListener('fetch', function(event) {
-  /* On ne cache que les requêtes GET */
-  if (event.request.method !== 'GET') return;
-  /* On ne cache pas les appels API / Supabase */
-  if (event.request.url.includes('supabase.co') ||
-      event.request.url.includes('streamradio.fr')) return;
+  var req = event.request;
+  var url = new URL(req.url);
 
+  /* Ne pas intercepter les requêtes externes (Supabase, StreamRadio, CDN…) */
+  if (url.origin !== self.location.origin) return;
+
+  /* Stratégie Network First pour index.html → toujours la dernière version */
+  if (req.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('.html')) {
+    event.respondWith(
+      fetch(req).then(function(response) {
+        /* Met à jour le cache avec la version réseau */
+        var clone = response.clone();
+        caches.open(CACHE_NAME).then(function(cache) { cache.put(req, clone); });
+        return response;
+      }).catch(function() {
+        /* Hors-ligne : fallback sur le cache */
+        return caches.match(req).then(function(cached) {
+          return cached || caches.match('/index.html');
+        });
+      })
+    );
+    return;
+  }
+
+  /* Stratégie Cache First pour les autres assets (images, etc.) */
   event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      return cached || fetch(event.request);
+    caches.match(req).then(function(cached) {
+      if (cached) return cached;
+      return fetch(req).then(function(response) {
+        var clone = response.clone();
+        caches.open(CACHE_NAME).then(function(cache) { cache.put(req, clone); });
+        return response;
+      });
     })
   );
 });
 
-/* ────────────────────────────────────────────────────────────
-   PUSH EVENT — déclenché par le serveur (Edge Function)
-   même lorsque l'application est complètement fermée.
-   ────────────────────────────────────────────────────────── */
-self.addEventListener('push', function(event) {
-  if (!event.data) return;
+/* ── NOTIFICATIONS PUSH (messages chat) ── */
+self.addEventListener('message', function(event) {
+  if (!event.data || event.data.type !== 'NEW_MESSAGE') return;
+  var pseudo  = event.data.pseudo  || 'Auditeur';
+  var message = event.data.message || '…';
 
-  var data;
-  try { data = event.data.json(); }
-  catch(e) { data = { title: 'Shade Radio', body: event.data.text() }; }
-
-  var title   = data.title   || 'Shade Radio 🎙️';
-  var options = {
-    body:    data.body    || 'Nouveau message dans le chat !',
-    icon:    data.icon    || '/assets/logo.JPG',
-    badge:   data.badge   || '/assets/logo.JPG',
-    image:   data.image   || null,
-    tag:     data.tag     || 'shade-chat',        /* remplace la notif précédente si même tag */
+  self.registration.showNotification('💬 ' + pseudo, {
+    body:    message,
+    icon:    '/assets/logo.JPG',
+    badge:   '/assets/logo.JPG',
+    vibrate: [100, 50, 100],
+    tag:     'shade-chat',          /* remplace la notif précédente */
     renotify: true,
-    vibrate: [200, 100, 200],
-    data: {
-      url: data.url || '/',
-      pseudo: data.pseudo || ''
-    },
-    actions: [
-      { action: 'open',    title: '💬 Ouvrir le chat' },
-      { action: 'dismiss', title: 'Ignorer' }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(title, options)
-  );
+    data:    { url: self.location.origin }
+  });
 });
 
-/* ── Clic sur la notification ── */
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-
-  if (event.action === 'dismiss') return;
-
-  var targetUrl = (event.notification.data && event.notification.data.url) || '/';
-
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clients) {
-      /* Si une fenêtre est déjà ouverte, on la focus */
-      for (var i = 0; i < clients.length; i++) {
-        var client = clients[i];
-        if (client.url.includes(self.location.origin) && 'focus' in client) {
-          client.focus();
-          /* On signale à la page d'ouvrir le chat */
-          client.postMessage({ type: 'OPEN_CHAT' });
-          return;
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list) {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].url.startsWith(self.location.origin) && 'focus' in list[i]) {
+          return list[i].focus();
         }
       }
-      /* Sinon on ouvre une nouvelle fenêtre */
-      if (self.clients.openWindow) {
-        return self.clients.openWindow(targetUrl);
-      }
+      if (clients.openWindow) return clients.openWindow('/');
     })
   );
-});
-
-/* ── Message depuis la page (fallback app ouverte) ── */
-self.addEventListener('message', function(event) {
-  if (!event.data) return;
-
-  /* Ancienne méthode conservée pour compatibilité quand l'app est ouverte */
-  if (event.data.type === 'NEW_MESSAGE') {
-    self.registration.showNotification('Shade Radio 🎙️', {
-      body:    event.data.pseudo + ' : ' + event.data.message,
-      icon:    '/assets/logo.JPG',
-      badge:   '/assets/logo.JPG',
-      tag:     'shade-chat',
-      renotify: true,
-      vibrate: [200, 100, 200],
-      data:    { url: '/' }
-    });
-  }
 });
