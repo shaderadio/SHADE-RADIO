@@ -538,14 +538,12 @@
     function showChatBody() {
       document.getElementById('pseudoScreen').style.display = 'none';
       document.getElementById('chatBody').classList.add('show');
-      /* ✅ Toujours vider + recharger + recréer les canaux */
-      document.getElementById('messagesList').innerHTML = '';
       lastMsgTime = null;
-      loadMessages();
-      destroyChannels();       /* détruit les anciens canaux s'ils existent */
-      subscribeMessages();     /* recrée un canal frais */
+      destroyChannels();       /* détruit les anciens canaux zombies EN PREMIER */
+      subscribeMessages();     /* canal frais prêt AVANT le chargement */
       subscribeReactions();
-      startPolling();          /* polling de sécurité toutes les 5s */
+      loadMessages();          /* charge sans vider le DOM */
+      startPolling();
     }
 
     /* Détruit proprement les canaux Supabase existants */
@@ -590,25 +588,43 @@
       if (res.error) { console.error('[Chat] loadMessages error:', res.error); return; }
 
       var list = document.getElementById('messagesList');
-      list.innerHTML = '';
 
-      if (!res.data.length) {
-        var n = document.createElement('div'); n.className = 'expired-notice';
-        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n);
+      /* ✅ Récupérer les IDs déjà affichés — NE JAMAIS vider le DOM */
+      var existingIds = {};
+      list.querySelectorAll('[data-msg-id]').forEach(function(el) {
+        existingIds[el.getAttribute('data-msg-id')] = true;
+      });
+
+      if (!res.data || !res.data.length) {
+        if (!Object.keys(existingIds).length) {
+          var n = document.createElement('div'); n.className = 'expired-notice';
+          n.textContent = 'Aucun message récent. Soyez le premier à écrire !';
+          list.innerHTML = ''; list.appendChild(n);
+        }
         lastMsgTime = since;
         return;
       }
 
-      var ids  = res.data.map(function (m) { return m.id; });
-      var rRes = await sb.from('reactions').select('*').in('message_id', ids);
-      var rMap = {};
-      if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
+      /* Supprimer le message «aucun message» si présent */
+      var notice = list.querySelector('.expired-notice');
+      if (notice) notice.remove();
 
-      res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
+      /* Uniquement les messages pas encore dans le DOM */
+      var newMsgs = res.data.filter(function(m) { return !existingIds[String(m.id)]; });
 
-      /* ✅ Mémoriser le timestamp du dernier message pour le polling */
+      if (newMsgs.length) {
+        var ids  = newMsgs.map(function(m) { return m.id; });
+        var rRes = await sb.from('reactions').select('*').in('message_id', ids);
+        var rMap = {};
+        if (rRes.data) rRes.data.forEach(function(r) {
+          if (!rMap[r.message_id]) rMap[r.message_id] = [];
+          rMap[r.message_id].push(r);
+        });
+        newMsgs.forEach(function(msg) { renderBubble(msg, rMap[msg.id] || []); });
+        scrollBottom();
+      }
+
       lastMsgTime = res.data[res.data.length - 1].created_at;
-      scrollBottom();
     }
 
     /* ============================================================
@@ -748,6 +764,7 @@
       var wrap  = document.createElement('div');
       wrap.className = 'bubble-wrap ' + (isMe ? 'me' : 'them');
       wrap.setAttribute('data-msg-id', msg.id);
+      wrap.setAttribute('data-msg-time', msg.created_at);
 
       var picker = document.createElement('div'); picker.className = 'emoji-picker';
       Object.keys(EMOJI_MAP).forEach(function (k) {
