@@ -65,20 +65,20 @@
     .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* ── OVERLAYS BASE ── */
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; opacity: 0; }
-    .overlay.open { pointer-events: all; opacity: 1; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; visibility: hidden; }
+    .overlay.open { pointer-events: all; visibility: visible; }
 
     /* ── MENU ── */
-    #menuOverlay { z-index: 200; gap: 15px; transform: translateX(100%); transition: transform 0.45s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0s 0.45s; opacity: 0; }
-    #menuOverlay.open { transform: translateX(0); transition: transform 0.45s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0s 0s; opacity: 1; }
+    #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
+    #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
     #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
     .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
     .menu-link:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
 
     /* ── CHAT ── */
-    #chatOverlay { z-index: 300; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0s 0.4s; opacity: 0; padding-top: env(safe-area-inset-top, 10px); }
-    #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0s 0s; opacity: 1; }
+    #chatOverlay { z-index: 300; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
+    #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
     .chat-header-left { display: flex; align-items: center; gap: 12px; }
     .chat-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -134,8 +134,8 @@
     .send-btn:active { transform: scale(0.9); }
 
     /* ── HISTORIQUE ── */
-    #historyOverlay { z-index: 250; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0s 0.4s; opacity: 0; padding-top: env(safe-area-inset-top, 10px); }
-    #historyOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0s 0s; opacity: 1; }
+    #historyOverlay { z-index: 250; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
+    #historyOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .history-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
     .history-header-left { display: flex; align-items: center; gap: 12px; }
     .history-title { color: #fff; font-weight: bold; font-size: 15px; }
@@ -159,26 +159,6 @@
     .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
     .history-refresh-btn:active { background: rgba(255,255,255,0.14); }
 
-    /* ── REPLY ── */
-    .reply-preview { display: none; align-items: center; gap: 10px; padding: 8px 14px; background: rgba(255,255,255,0.06); border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
-    .reply-preview.show { display: flex; }
-    .reply-bar { width: 3px; background: #ff0000; border-radius: 2px; align-self: stretch; flex-shrink: 0; }
-    .reply-info { flex: 1; min-width: 0; }
-    .reply-author { font-size: 11px; font-weight: bold; color: #ff6b6b; margin-bottom: 2px; }
-    .reply-text { font-size: 12px; color: rgba(255,255,255,0.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .reply-cancel { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 18px; cursor: pointer; padding: 0 4px; flex-shrink: 0; line-height: 1; }
-    .reply-cancel:active { color: #fff; }
-    .bubble-reply-quote { background: rgba(0,0,0,0.25); border-left: 3px solid #ff0000; border-radius: 8px; padding: 5px 10px; margin-bottom: 6px; cursor: pointer; }
-    .bubble-reply-quote .quote-author { font-size: 10px; font-weight: bold; color: #ff9999; margin-bottom: 2px; }
-    .bubble-reply-quote .quote-text { font-size: 12px; color: rgba(255,255,255,0.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .bubble-wrap.me .bubble-reply-quote { background: rgba(0,0,0,0.2); }
-    .reply-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.12); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: background 0.15s; z-index: 20; }
-    .reply-btn:active { background: rgba(255,0,0,0.4); }
-    .bubble-wrap.me   .reply-btn { left: -36px; }
-    .bubble-wrap.them .reply-btn { right: -36px; }
-    .bubble-wrap:hover .reply-btn,
-    .bubble-wrap.touch-active .reply-btn { display: flex; }
-
     /* ── TOAST MISE À JOUR PWA ── */
     #updateToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; padding: 14px 22px; border-radius: 50px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 20px rgba(255,0,0,0.5); display: none; align-items: center; gap: 14px; z-index: 9999; cursor: pointer; white-space: nowrap; }
     #updateToast.show { display: flex; animation: pop-in 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
@@ -194,10 +174,10 @@
   <!-- ══════════════ MENU ══════════════ -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="/cdn-cgi/l/email-protection#c6b5aea7a2a3b4a7a2afa9aaafb0a386a1aba7afaae8a5a9abf9b5b3a4aca3a5b2fb82838b87888283e3f4f68283e3f4f6928f929483e0a4a9a2bffb928f929483e3f587e3f687e3f6878794928f959283e3f587" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="/cdn-cgi/l/email-protection#d8abb0b9bcbdaab9bcb1b7b4b1aebd98bfb5b9b1b4f6bbb7b5e7abadbab2bdbbace59c9d9599969c9dfdeae89c9dfdeae8888d9a" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -262,14 +242,6 @@
     <!-- Corps du chat -->
     <div class="chat-body" id="chatBody">
       <div class="messages-list" id="messagesList"></div>
-      <div class="reply-preview" id="replyPreview">
-        <div class="reply-bar"></div>
-        <div class="reply-info">
-          <div class="reply-author" id="replyAuthor"></div>
-          <div class="reply-text"   id="replyText"></div>
-        </div>
-        <button class="reply-cancel" onclick="cancelReply()">&#10005;</button>
-      </div>
       <div class="typing-indicator" id="typingIndicator"></div>
       <div class="chat-input-row">
         <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off"
@@ -317,7 +289,7 @@
   </div>
 
   <!-- ══════════════ SCRIPTS ══════════════ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -337,7 +309,6 @@
     var EXPIRY_MS   = 24 * 60 * 60 * 1000;
     var openPicker  = null;
     var swReg       = null;
-    var replyTarget = null; /* { id, pseudo, message } */
 
     /* ── Typing ── */
     var typingUsers   = {};
@@ -687,21 +658,6 @@
     }
 
     /* ============================================================
-       REPLY
-    ============================================================ */
-    function setReply(msg) {
-      replyTarget = { id: msg.id, pseudo: msg.pseudo, message: msg.message };
-      document.getElementById('replyAuthor').textContent = msg.pseudo;
-      document.getElementById('replyText').textContent   = msg.message;
-      document.getElementById('replyPreview').classList.add('show');
-      document.getElementById('msgInput').focus();
-    }
-    function cancelReply() {
-      replyTarget = null;
-      document.getElementById('replyPreview').classList.remove('show');
-    }
-
-    /* ============================================================
        BULLES
     ============================================================ */
     function renderBubble(msg, reactions) {
@@ -713,21 +669,6 @@
       wrap.className = 'bubble-wrap ' + (isMe ? 'me' : 'them');
       wrap.setAttribute('data-msg-id', msg.id);
 
-      /* Bouton reply — visible au hover/touch */
-      var replyBtn = document.createElement('button');
-      replyBtn.className = 'reply-btn';
-      replyBtn.innerHTML = '↩';
-      replyBtn.title = 'Répondre';
-      replyBtn.onclick = function (e) { e.stopPropagation(); setReply(msg); };
-
-      /* Touch mobile : affiche le bouton reply au tap long */
-      var touchTimer = null;
-      wrap.addEventListener('touchstart', function () {
-        touchTimer = setTimeout(function () { wrap.classList.add('touch-active'); }, 300);
-      }, { passive: true });
-      wrap.addEventListener('touchend',   function () { clearTimeout(touchTimer); setTimeout(function () { wrap.classList.remove('touch-active'); }, 1500); }, { passive: true });
-      wrap.addEventListener('touchmove',  function () { clearTimeout(touchTimer); }, { passive: true });
-
       var picker = document.createElement('div'); picker.className = 'emoji-picker';
       Object.keys(EMOJI_MAP).forEach(function (k) {
         var btn = document.createElement('button'); btn.className = 'emoji-pick-btn'; btn.textContent = EMOJI_MAP[k];
@@ -736,20 +677,8 @@
       });
 
       var bubble = document.createElement('div'); bubble.className = 'bubble';
-
-      /* Citation du message original si c'est une réponse */
-      var quoteHTML = '';
-      if (msg.reply_to_pseudo && msg.reply_to_message) {
-        quoteHTML =
-          '<div class="bubble-reply-quote" onclick="scrollToMsg(\'' + msg.reply_to_id + '\')">' +
-            '<div class="quote-author">' + esc(msg.reply_to_pseudo) + '</div>' +
-            '<div class="quote-text">'   + esc(msg.reply_to_message) + '</div>' +
-          '</div>';
-      }
-
       bubble.innerHTML =
         (!isMe ? '<div class="bubble-pseudo" style="color:' + color + ';">' + esc(msg.pseudo) + '</div>' : '') +
-        quoteHTML +
         '<div>' + esc(msg.message) + '</div>' +
         '<div class="bubble-time">' + time + '</div>';
       bubble.appendChild(picker);
@@ -762,21 +691,7 @@
 
       var bar = document.createElement('div'); bar.className = 'reactions-bar';
       if (reactions && reactions.length) renderReactionsBar(bar, msg.id, reactions);
-
-      wrap.appendChild(replyBtn);
-      wrap.appendChild(bubble);
-      wrap.appendChild(bar);
-      list.appendChild(wrap);
-    }
-
-    /* Défile jusqu'au message original quand on clique sur la citation */
-    function scrollToMsg(msgId) {
-      var el = document.querySelector('[data-msg-id="' + msgId + '"]');
-      if (!el) return;
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.style.transition = 'background 0.3s';
-      el.style.background = 'rgba(255,0,0,0.15)';
-      setTimeout(function () { el.style.background = ''; }, 1200);
+      wrap.appendChild(bubble); wrap.appendChild(bar); list.appendChild(wrap);
     }
 
     function closePicker() { if (openPicker) { openPicker.classList.remove('show'); openPicker = null; } }
@@ -786,16 +701,7 @@
       var input = document.getElementById('msgInput'), message = input.value.trim();
       if (!message || !myPseudo) return;
       input.value = ''; stopTyping();
-
-      var row = { pseudo: myPseudo, message: message };
-      if (replyTarget) {
-        row.reply_to_id      = replyTarget.id;
-        row.reply_to_pseudo  = replyTarget.pseudo;
-        row.reply_to_message = replyTarget.message;
-        cancelReply();
-      }
-
-      var res = await sb.from('messages').insert([row]);
+      var res = await sb.from('messages').insert([{ pseudo: myPseudo, message: message }]);
       if (res.error) console.error('[Chat] erreur envoi :', res.error);
     }
 
@@ -829,4 +735,10 @@
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if ('wakeLock' in n
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
+    }
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click',      onFirstGesture, { once: true });
+  </script>
+</body>
+</html>
