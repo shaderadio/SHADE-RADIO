@@ -119,10 +119,13 @@
     .history-body::-webkit-scrollbar { display: none; }
     .track-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; }
     .track-card.now-playing { border-color: rgba(255,0,0,0.4); background: rgba(255,0,0,0.07); }
-    .track-artwork-wrap { position: relative; flex-shrink: 0; }
-    .track-artwork { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.08); display: block; }
-    .track-artwork-placeholder { width: 58px; height: 58px; border-radius: 10px; background: linear-gradient(135deg, rgba(255,0,0,0.3), rgba(80,0,0,0.5)); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
-    .now-dot { position: absolute; bottom: -3px; right: -3px; width: 14px; height: 14px; background: #ff0000; border-radius: 50%; border: 2px solid #000; animation: pulse-dot 1.2s infinite; }
+    .track-artwork-wrap { position: relative; flex-shrink: 0; width: 58px; height: 58px; }
+    .track-artwork { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; display: block; }
+    /* Skeleton shimmer pendant le chargement de la pochette */
+    .track-artwork-skeleton { width: 58px; height: 58px; border-radius: 10px; background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.06) 75%); background-size: 200% 100%; animation: skeleton-shine 1.2s infinite; }
+    @keyframes skeleton-shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .track-artwork-placeholder { width: 58px; height: 58px; border-radius: 10px; background: linear-gradient(135deg, rgba(255,0,0,0.3), rgba(80,0,0,0.5)); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    .now-dot { position: absolute; bottom: -3px; right: -3px; width: 14px; height: 14px; background: #ff0000; border-radius: 50%; border: 2px solid #000; animation: pulse-dot 1.2s infinite; z-index: 2; }
     @keyframes pulse-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
     .track-info { flex: 1; min-width: 0; }
     .track-now-label { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #ff4444; margin-bottom: 3px; }
@@ -305,13 +308,50 @@
 
     /* =====================
        HISTORIQUE
-       On utilise /api/v2/history/ qui retourne les titres RÉELLEMENT
-       diffusés, triés du plus récent au plus ancien.
-       Fallback sur /api/v2/lastplayed/ si /history/ échoue.
-       Fallback iTunes pour les pochettes si le serveur ne renvoie rien.
+       Stratégie pochettes :
+       1. Skeleton animé affiché immédiatement
+       2. Requête iTunes (artiste + titre, puis titre seul en fallback)
+       3. Image chargée avec fondu → remplace le skeleton
+       4. Si iTunes ne trouve rien → emoji 🎵
+       Cache en mémoire pour éviter les requêtes doubles.
     ===================== */
     function openHistory() { document.getElementById('historyOverlay').classList.add('open'); loadHistory(); }
     function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
+
+    var artworkCache = {}; /* cache en mémoire session */
+
+    async function fetchArtwork(title, artist) {
+      var key = ((artist || '') + '|' + (title || '')).toLowerCase();
+      if (key in artworkCache) return artworkCache[key];
+
+      /* Deux tentatives : artiste+titre, puis titre seul */
+      var queries = [
+        ((artist || '') + ' ' + (title || '')).trim(),
+        (title || '').trim()
+      ].filter(Boolean);
+
+      for (var qi = 0; qi < queries.length; qi++) {
+        try {
+          var r = await fetch(
+            'https://itunes.apple.com/search?term=' +
+            encodeURIComponent(queries[qi]) +
+            '&media=music&limit=1&entity=song&country=FR'
+          );
+          var d = await r.json();
+          if (d.results && d.results.length) {
+            /* On monte à 600×600 pour une qualité maximale */
+            var url = d.results[0].artworkUrl100
+              .replace('100x100bb', '600x600bb')
+              .replace('100x100',   '600x600');
+            artworkCache[key] = url;
+            return url;
+          }
+        } catch(e) { /* on essaie la requête suivante */ }
+      }
+
+      artworkCache[key] = null;
+      return null;
+    }
 
     async function loadHistory() {
       var loading = document.getElementById('historyLoading');
@@ -320,7 +360,6 @@
       tl.innerHTML = '';
 
       try {
-        // Essai sur /history/ d'abord, puis fallback /lastplayed/
         var data = null;
         var endpoints = ['/api/v2/history/', '/api/v2/lastplayed/'];
 
@@ -329,10 +368,9 @@
             var res = await fetch(RADIO_BASE + endpoints[ei]);
             if (!res.ok) continue;
             var json = await res.json();
-            if (Array.isArray(json) && json.length > 0) { data = json; break; }
-            // Certains endpoints renvoient { data: [...] } ou { tracks: [...] }
-            if (json && Array.isArray(json.data) && json.data.length > 0) { data = json.data; break; }
-            if (json && Array.isArray(json.tracks) && json.tracks.length > 0) { data = json.tracks; break; }
+            if (Array.isArray(json) && json.length)                   { data = json;        break; }
+            if (json && Array.isArray(json.data)   && json.data.length)   { data = json.data;   break; }
+            if (json && Array.isArray(json.tracks) && json.tracks.length) { data = json.tracks; break; }
           } catch(e2) { /* essai suivant */ }
         }
 
@@ -343,56 +381,36 @@
           return;
         }
 
-        // Prendre les 5 premiers (déjà triés du plus récent au plus ancien par l'API)
         var tracks = data.slice(0, 5);
+        var artItems = []; /* références pour charger les pochettes après le rendu */
 
         tracks.forEach(function(t, i) {
-          var card       = document.createElement('div');
+          var title  = t.title  || t.name   || t.song   || 'Titre inconnu';
+          var artist = t.artist || t.author || t.singer || 'Artiste inconnu';
+
+          /* Carte */
+          var card = document.createElement('div');
           card.className = 'track-card' + (i === 0 ? ' now-playing' : '');
 
-          /* --- Pochette --- */
+          /* Wrapper pochette — skeleton affiché immédiatement */
           var artWrap = document.createElement('div');
           artWrap.className = 'track-artwork-wrap';
 
-          // Champ image possible : t.image, t.artwork, t.cover, t.thumbnail
-          var imageUrl = t.image || t.artwork || t.cover || t.thumbnail || null;
+          var skeleton = document.createElement('div');
+          skeleton.className = 'track-artwork-skeleton';
+          artWrap.appendChild(skeleton);
 
-          if (imageUrl) {
-            var img = document.createElement('img');
-            img.className = 'track-artwork';
-            img.alt = t.title || '';
-            // URL absolue si chemin relatif
-            img.src = imageUrl.startsWith('http') ? imageUrl : RADIO_BASE + imageUrl;
-            img.onerror = function() {
-              // Fallback iTunes si l'image du serveur échoue
-              fetchArtwork(t.title, t.artist || '').then(function(url) {
-                if (url) { img.src = url; img.onerror = null; }
-                else { img.style.display='none'; artWrap.insertBefore(makePlaceholder(), img); }
-              });
-            };
-            artWrap.appendChild(img);
-          } else {
-            // Pas d'image : on tente iTunes directement
-            var ph = makePlaceholder();
-            artWrap.appendChild(ph);
-            fetchArtwork(t.title, t.artist || '').then(function(url) {
-              if (url) {
-                var img2 = document.createElement('img');
-                img2.className = 'track-artwork';
-                img2.src = url;
-                artWrap.replaceChild(img2, ph);
-              }
-            });
-          }
-
-          // Point rouge animé sur le premier titre (en cours)
+          /* Point rouge animé sur le titre en cours */
           if (i === 0) {
             var dot = document.createElement('div');
             dot.className = 'now-dot';
             artWrap.appendChild(dot);
           }
 
-          /* --- Infos --- */
+          /* On mémorise pour charger la pochette en parallèle */
+          artItems.push({ wrap: artWrap, skeleton: skeleton, title: title, artist: artist });
+
+          /* Infos texte */
           var info = document.createElement('div');
           info.className = 'track-info';
 
@@ -405,25 +423,23 @@
 
           var titleEl = document.createElement('div');
           titleEl.className = 'track-title';
-          // Champs possibles selon le serveur
-          titleEl.textContent = t.title || t.name || t.song || 'Titre inconnu';
+          titleEl.textContent = title;
 
           var artistEl = document.createElement('div');
           artistEl.className = 'track-artist';
-          artistEl.textContent = t.artist || t.author || t.singer || 'Artiste inconnu';
+          artistEl.textContent = artist;
 
           var meta = document.createElement('div');
           meta.className = 'track-meta';
 
           var timeEl = document.createElement('span');
           timeEl.className = 'track-time';
-          // Champs date possibles
           var dateStr = t.start_time || t.played_at || t.date || t.time || null;
           timeEl.textContent = dateStr ? timeAgo(dateStr) : '';
 
           var durEl = document.createElement('span');
           durEl.className = 'track-duration';
-          durEl.textContent = t.track_length_formatted ? '· ' + t.track_length_formatted : (t.duration ? '· ' + t.duration : '');
+          durEl.textContent = (t.track_length_formatted || t.duration) ? '· ' + (t.track_length_formatted || t.duration) : '';
 
           meta.appendChild(timeEl);
           meta.appendChild(durEl);
@@ -434,6 +450,40 @@
           card.appendChild(artWrap);
           card.appendChild(info);
           tl.appendChild(card);
+        });
+
+        /* Charger toutes les pochettes en parallèle (non-bloquant) */
+        artItems.forEach(function(item) {
+          fetchArtwork(item.title, item.artist).then(function(url) {
+            var artWrap  = item.wrap;
+            var skeleton = item.skeleton;
+
+            if (url) {
+              var img = document.createElement('img');
+              img.className = 'track-artwork';
+              img.alt = item.title;
+              /* Fondu à l'apparition */
+              img.style.opacity = '0';
+              img.style.transition = 'opacity 0.35s ease';
+              img.onload = function() {
+                /* Remplace le skeleton par l'image */
+                if (skeleton.parentNode === artWrap) artWrap.replaceChild(img, skeleton);
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() { img.style.opacity = '1'; });
+                });
+              };
+              img.onerror = function() {
+                /* Image cassée → emoji fallback */
+                var ph = makePlaceholder();
+                if (skeleton.parentNode === artWrap) artWrap.replaceChild(ph, skeleton);
+              };
+              img.src = url; /* déclenche le chargement */
+            } else {
+              /* iTunes n'a rien trouvé → emoji fallback */
+              var ph = makePlaceholder();
+              if (skeleton.parentNode === artWrap) artWrap.replaceChild(ph, skeleton);
+            }
+          });
         });
 
       } catch(e) {
@@ -450,21 +500,11 @@
       return ph;
     }
 
-    async function fetchArtwork(title, artist) {
-      try {
-        var q = encodeURIComponent(((artist || '') + ' ' + (title || '')).trim());
-        var r = await fetch('https://itunes.apple.com/search?term=' + q + '&media=music&limit=1&entity=song');
-        var d = await r.json();
-        if (d.results && d.results.length) return d.results[0].artworkUrl100.replace('100x100','200x200');
-      } catch(e) {}
-      return null;
-    }
-
     function timeAgo(dateStr) {
       var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
       if (isNaN(diff) || diff < 0) return 'en cours';
-      if (diff < 60)   return 'a l\'instant';
-      if (diff < 3600) return Math.floor(diff/60) + ' min';
+      if (diff < 60)    return 'a l\'instant';
+      if (diff < 3600)  return Math.floor(diff/60) + ' min';
       if (diff < 86400) return Math.floor(diff/3600) + 'h';
       return Math.floor(diff/86400) + 'j';
     }
