@@ -174,10 +174,10 @@
   <!-- ══════════════ MENU ══════════════ -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
+    <a href="/cdn-cgi/l/email-protection#f88b90999c9d8a999c919794918e9db89f95999194d69b9795c78b8d9a929d9b8cc5bcbdb5b9b6bcbdddcac8bcbdddcac8acb1acaabdde9a979c81c5acb1acaabdddcbb9ddc8b9ddc8b9b9aaacb1abacbdddcbb9" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
+    <a href="/cdn-cgi/l/email-protection#05766d6461607764616c6a696c7360456268646c692b666a683a7670676f60667138414048444b41402037354140203735555047" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -289,7 +289,7 @@
   </div>
 
   <!-- ══════════════ SCRIPTS ══════════════ -->
-  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -527,18 +527,19 @@
     }
 
     async function loadMessages() {
-      var res = await sb.from('messages').select('*').order('created_at', { ascending: true }).limit(200);
+      var res = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50);
       if (res.error) return;
       var list = document.getElementById('messagesList'); list.innerHTML = '';
-      if (!res.data.length) {
+      var data = res.data.reverse();
+      if (!data.length) {
         var n = document.createElement('div'); n.className = 'expired-notice';
         n.textContent = 'Aucun message pour le moment. Soyez le premier à écrire !'; list.appendChild(n); return;
       }
-      var ids  = res.data.map(function (m) { return m.id; });
+      var ids  = data.map(function (m) { return m.id; });
       var rRes = await sb.from('reactions').select('*').in('message_id', ids);
       var rMap = {};
       if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
-      res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
+      data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
       scrollBottom();
     }
 
@@ -721,10 +722,4 @@
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
-    }
-    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
-    document.addEventListener('click',      onFirstGesture, { once: true });
-  </script>
-</body>
-</html>
+      try { if ('wakeLock' in n
