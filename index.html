@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -15,23 +15,14 @@
   <style>
     /* ── RESET & BASE ── */
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    
-    /* FIX IOS : Empêche le rebond du body qui fait remonter le lecteur */
-    html, body { 
-      background: #000; 
-      height: 100%; 
-      overflow: hidden; 
-      position: fixed; 
-      width: 100%;
-    }
-
+    body { background: #000; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow: hidden; padding-top: env(safe-area-inset-top, 10px); position: relative; perspective: 1200px; }
     body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(220,0,0,0.55), transparent 65%), radial-gradient(circle at 80% 90%, rgba(150,0,0,0.3), transparent 50%), radial-gradient(circle at 10% 20%, rgba(80,0,0,0.4), transparent 40%); z-index: -1; pointer-events: none; }
 
     /* ── LAYOUT ── */
-    #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; height: 100%; margin: 0 auto; position: relative; }
+    #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
 
     /* ── TOP BAR ── */
-    .top-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 15px; flex-shrink: 0; }
+    .top-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 15px; }
     .header-container { flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 12px; overflow: hidden; }
     .live-badge { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; font-size: 11px; font-weight: bold; padding: 10px 12px; animation: pulse 1.5s infinite; white-space: nowrap; }
     @keyframes pulse { 0% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: inset 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: inset 0 0 0 0 rgba(255,255,255,0); } }
@@ -48,70 +39,282 @@
 
     /* ── BADGES ── */
     #chatBadge { position: absolute; top: -6px; right: -6px; background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #000; z-index: 10; }
+    @keyframes badge-pop { from { transform: scale(0); } to { transform: scale(1); } }
     .chat-menu-badge { background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; margin-left: 6px; }
 
     /* ── MAIN FRAME ── */
-    .main-frame { background: linear-gradient(180deg, rgba(120,0,0,0.18) 0%, rgba(255,255,255,0.03) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 40px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 40px 80px rgba(0,0,0,0.9); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .radio-logo { width: 260px; margin-bottom: 5px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)); animation: logo-swing 7s ease-in-out infinite; }
-    @keyframes logo-swing { 0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); } 15% { opacity: 1; transform: translateZ(0) rotateY(0deg); } 35% { transform: rotateY(20deg); } 55% { transform: rotateY(-20deg); } 100% { transform: rotateY(0deg); } }
+    .main-frame { background: linear-gradient(180deg, rgba(120,0,0,0.18) 0%, rgba(255,255,255,0.03) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 220px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,0,0,0.1); }
+    .radio-logo { width: 290px; margin: 0 auto 5px; display: block; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,0,0,0.3)); animation: logo-swing 7s ease-in-out infinite; }
+    @keyframes logo-swing { 0% { opacity: 0; transform: translateZ(400px) rotateY(90deg); filter: brightness(0) blur(10px); } 15% { opacity: 1; transform: translateZ(0) rotateY(0deg); filter: brightness(1); } 35% { transform: rotateY(20deg); filter: brightness(1.2); } 55% { transform: rotateY(-20deg); filter: brightness(1.2); } 75% { transform: rotateY(20deg); } 100% { transform: rotateY(0deg); filter: brightness(1); } }
 
     /* ── PLAYER ── */
     .player-container { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 15px; }
+    .player-container::after { content: ""; position: absolute; top: -8px; width: 221px; height: 221px; border-radius: 32px; background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%); background-size: 200% 100%; pointer-events: none; z-index: 10; animation: gloss 4s linear infinite; }
+    @keyframes gloss { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     #sc-player { background: transparent !important; transform: scale(0.65); transform-origin: top center; height: 300px; position: relative; z-index: 2; }
-    .custom-vinyl { position: absolute; top: 191px; width: 155px; height: 155px; z-index: 1; animation: vinyl-spin 6s linear infinite; }
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
+    #sc-player img { width: 100% !important; border-radius: 40px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
+    #sc-player [class*="play-button"] { background: #001f3f !important; border-radius: 50% !important; border: 2px solid rgba(255,255,255,0.8) !important; box-shadow: 0 0 20px rgba(0,31,63,0.6), 0 0 10px rgba(255,255,255,0.2) !important; z-index: 5; transition: transform 0.2s; }
+    #sc-player [class*="play-button"]:active { transform: scale(0.9); }
+    .custom-vinyl { position: absolute; top: 191px; width: 155px; height: 155px; z-index: 1; animation: vinyl-spin 6s linear infinite; filter: drop-shadow(0 0 15px rgba(0,0,0,0.6)); }
     @keyframes vinyl-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
     /* ── BANDEAU PUB ── */
-    .ad-banner { position: absolute; bottom: 25px; width: 85%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 10px; overflow: hidden; display: flex; }
+    .ad-banner { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 10px; overflow: hidden; display: flex; }
     .ad-ticker { flex: 1; padding: 7px 0; overflow: hidden; display: flex; }
-    .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; }
+    .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* ── OVERLAYS ── */
+    /* ── OVERLAYS BASE ── */
     .overlay {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      height: 100dvh;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      height: 100dvh; /* FIX ANDROID : dynamic viewport height */
       backdrop-filter: blur(25px) saturate(150%);
       -webkit-backdrop-filter: blur(25px) saturate(150%);
       background: rgba(0,0,0,0.35);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      pointer-events: none; visibility: hidden; overflow: hidden; z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      visibility: hidden;
+      overflow: hidden;
     }
     .overlay.open { pointer-events: all; visibility: visible; }
 
-    /* ── CHAT SPECIFIQUE ── */
-    #chatOverlay { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0); justify-content: flex-start; }
-    #chatOverlay.open { transform: translateY(0); }
-    .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
-    .chat-body { flex: 1; display: none; flex-direction: column; width: 100%; overflow: hidden; }
-    .chat-body.show { display: flex; }
-    .messages-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; -webkit-overflow-scrolling: touch; }
+    /* ── MENU ── */
+    #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
+    #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+    #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
+    .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
+    .menu-link:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
 
-    /* FIX IPHONE : Barre de saisie */
-    .chat-input-row {
-      display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-      padding-bottom: max(10px, env(safe-area-inset-bottom));
-      border-top: 1px solid rgba(255,255,255,0.1);
-      background: rgba(0,0,0,0.8);
-      width: 100%;
-      flex-shrink: 0;
-      /* On ne met pas de position fixed ici, le JS s'en chargera dynamiquement sur iPhone */
+    /* ── CHAT ── */
+    #chatOverlay {
+      z-index: 300;
+      justify-content: flex-start;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s;
+      padding-top: env(safe-area-inset-top, 10px);
     }
-    .chat-input { flex: 1; padding: 11px 16px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 16px; outline: none; }
-    .send-btn { background: linear-gradient(135deg, #ff0000, #8b0000); border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .chat-title { color: #fff; font-weight: bold; font-size: 15px; }
+    .chat-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+    .close-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pseudo-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; width: 100%; }
+    .pseudo-screen h2 { color: #fff; font-size: 22px; text-align: center; }
+    .pseudo-screen p { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; }
+    .pseudo-input { width: 100%; max-width: 300px; padding: 14px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 16px; outline: none; text-align: center; }
+    .pseudo-input::placeholder { color: rgba(255,255,255,0.35); }
+    .btn-join { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 14px 44px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(255,0,0,0.4); transition: transform 0.2s; }
+    .btn-join:active { transform: scale(0.95); }
 
-    /* ... (Autres styles menu/historique de ton code original ici) ... */
-    .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; padding: 15px 25px; border-radius: 50px; background: rgba(255,255,255,0.08); width: 80%; text-align: center; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    /* ── CHAT BODY — FIX ANDROID CLAVIER ── */
+    .chat-body {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      min-height: 0;        /* CRITIQUE : permet la compression flex sous Android */
+      width: 100%;
+      overflow: hidden;
+    }
+    .chat-body.show { display: flex; }
+
+    .messages-list {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;   /* scroll fluide iOS/Android */
+      padding: 14px 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+      min-height: 0;        /* CRITIQUE : se compresse quand le clavier s'ouvre */
+    }
+    .messages-list::-webkit-scrollbar { display: none; }
+
+    .expired-notice { text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; padding: 6px 0; font-style: italic; }
+    .bubble-wrap { display: flex; flex-direction: column; max-width: 76%; animation: pop-in 0.22s ease; }
+    .bubble-wrap.me { align-self: flex-end; align-items: flex-end; }
+    .bubble-wrap.them { align-self: flex-start; align-items: flex-start; }
+    @keyframes pop-in { from { opacity: 0; transform: scale(0.85) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .bubble { padding: 9px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; word-break: break-word; position: relative; cursor: pointer; }
+    .bubble-wrap.them .bubble { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-bottom-left-radius: 4px; }
+    .bubble-wrap.me .bubble { background: linear-gradient(135deg, #ff0000, #8b0000); color: #fff; border-bottom-right-radius: 4px; }
+    .bubble-pseudo { font-size: 11px; font-weight: bold; margin-bottom: 3px; }
+    .bubble-time { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 3px; text-align: right; }
+    .reactions-bar { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .reaction-pill { display: flex; align-items: center; gap: 3px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 2px 7px; font-size: 13px; cursor: pointer; transition: background 0.15s, transform 0.15s; user-select: none; }
+    .reaction-pill:active { transform: scale(0.92); }
+    .reaction-pill.mine { background: rgba(255,0,0,0.25); border-color: rgba(255,0,0,0.4); }
+    .reaction-pill span.count { font-size: 11px; color: rgba(255,255,255,0.7); }
+    .emoji-picker { position: absolute; bottom: calc(100% + 6px); background: rgba(30,30,30,0.97); border: 1px solid rgba(255,255,255,0.15); border-radius: 30px; padding: 6px 10px; display: none; gap: 8px; z-index: 50; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+    .emoji-picker.show { display: flex; }
+    .bubble-wrap.me .emoji-picker { right: 0; }
+    .bubble-wrap.them .emoji-picker { left: 0; }
+    .emoji-pick-btn { font-size: 20px; cursor: pointer; transition: transform 0.15s; background: none; border: none; padding: 2px; }
+    .emoji-pick-btn:active { transform: scale(1.35); }
+
+    /* ── TYPING ── */
+    .typing-indicator { padding: 4px 14px 6px; min-height: 22px; color: rgba(255,255,255,0.4); font-size: 12px; font-style: italic; flex-shrink: 0; }
+    .typing-dots { display: inline-flex; gap: 3px; vertical-align: middle; margin-left: 4px; }
+    .typing-dots span { width: 5px; height: 5px; background: rgba(255,255,255,0.4); border-radius: 50%; animation: dot-bounce 1.2s infinite; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot-bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-5px); opacity: 1; } }
+
+    /* ── SAISIE — FIX ANDROID CLAVIER ── */
+    .chat-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
+      border-top: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;     /* NE PAS rétrécir : reste toujours visible */
+      position: relative;
+      z-index: 10;
+      background: rgba(0,0,0,0.25); /* fond pour ne pas fusionner avec les bulles */
+    }
+    .chat-input { flex: 1; padding: 11px 16px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 15px; outline: none; }
+    .chat-input::placeholder { color: rgba(255,255,255,0.35); }
+    .send-btn { background: linear-gradient(135deg, #ff0000, #8b0000); border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(255,0,0,0.4); transition: transform 0.2s; flex-shrink: 0; }
+    .send-btn:active { transform: scale(0.9); }
+
+    /* ── HISTORIQUE ── */
+    #historyOverlay { z-index: 250; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
+    #historyOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .history-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+    .history-header-left { display: flex; align-items: center; gap: 12px; }
+    .history-title { color: #fff; font-weight: bold; font-size: 15px; }
+    .history-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
+    .history-body { flex: 1; overflow-y: auto; width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .history-body::-webkit-scrollbar { display: none; }
+    .track-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; }
+    .track-card.now-playing { border-color: rgba(255,0,0,0.45); background: rgba(255,0,0,0.08); }
+    .track-index { font-size: 13px; font-weight: bold; color: rgba(255,255,255,0.2); width: 20px; text-align: center; flex-shrink: 0; }
+    .now-dot { width: 10px; height: 10px; background: #ff0000; border-radius: 50%; flex-shrink: 0; animation: pulse-dot 1.2s infinite; }
+    @keyframes pulse-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.6; } }
+    .track-info { flex: 1; min-width: 0; }
+    .track-now-label { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #ff4444; margin-bottom: 4px; }
+    .track-title { color: #fff; font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-artist { color: rgba(255,255,255,0.45); font-size: 12px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+    .track-time { color: rgba(255,255,255,0.25); font-size: 10px; }
+    .track-duration { color: rgba(255,255,255,0.2); font-size: 10px; }
+    .history-loading { text-align: center; color: rgba(255,255,255,0.35); font-size: 13px; padding: 40px 0; }
+    .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 40px 0; line-height: 1.6; }
+    .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
+    .history-refresh-btn:active { background: rgba(255,255,255,0.14); }
+
+    /* ── TOAST MISE À JOUR PWA ── */
+    #updateToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; padding: 14px 22px; border-radius: 50px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 20px rgba(255,0,0,0.5); display: none; align-items: center; gap: 14px; z-index: 9999; cursor: pointer; white-space: nowrap; }
+    #updateToast.show { display: flex; animation: pop-in 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
   </style>
 </head>
 <body>
 
+  <!-- TOAST MISE À JOUR -->
+  <div id="updateToast" onclick="window.location.reload()">
+    🔄 Mise à jour disponible ! <span style="text-decoration:underline;opacity:0.9;">Recharger</span>
+  </div>
+
+  <!-- ══════════════ MENU ══════════════ -->
+  <div class="overlay" id="menuOverlay">
+    <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
+      <i class="fas fa-music"></i> Demander un titre
+    </a>
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
+      <i class="fas fa-ad"></i> Demande de pub
+    </a>
+    <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
+      <i class="fas fa-share-nodes"></i> Partager la radio
+    </a>
+    <a href="https://www.tiktok.com/@shaderadio" target="_blank" class="menu-link" onclick="closeMenu()">
+      <i class="fab fa-tiktok"></i> Rejoins-nous sur TikTok
+    </a>
+    <a href="javascript:void(0)" class="menu-link" id="chatMenuLink" onclick="closeMenu(); setTimeout(openChat, 450);">
+      <i class="fas fa-comments"></i> Chat Auditeurs
+      <span class="chat-menu-badge" id="chatMenuBadge"></span>
+    </a>
+    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); setTimeout(openHistory, 450);">
+      <i class="fas fa-clock-rotate-left"></i> Historique des titres
+    </a>
+  </div>
+
+  <!-- ══════════════ HISTORIQUE ══════════════ -->
+  <div class="overlay" id="historyOverlay">
+    <div class="history-header">
+      <div class="history-header-left">
+        <div class="chat-avatar" style="font-size:16px;">&#127925;</div>
+        <div>
+          <div class="history-title">Titres diffusés</div>
+          <div class="history-sub">En cours + 4 derniers morceaux</div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeHistory()">&#10005;</button>
+    </div>
+    <div class="history-body">
+      <div class="history-loading" id="historyLoading">Chargement...</div>
+      <div id="trackList"></div>
+      <button class="history-refresh-btn" onclick="loadHistory()">
+        <i class="fas fa-rotate-right"></i> Actualiser
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════ CHAT ══════════════ -->
+  <div class="overlay" id="chatOverlay">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">&#127897;</div>
+        <div>
+          <div class="chat-title">Chat Auditeurs</div>
+          <div class="chat-sub">Shade Radio – Live</div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeChat()">&#10005;</button>
+    </div>
+
+    <!-- Écran pseudo -->
+    <div class="pseudo-screen" id="pseudoScreen">
+      <div style="font-size:50px">&#127911;</div>
+      <h2>Rejoins le chat !</h2>
+      <p>Choisis un pseudo pour discuter avec les autres auditeurs.</p>
+      <input class="pseudo-input" id="pseudoInput" type="text" placeholder="Ton pseudo..." maxlength="20" autocomplete="off"
+        onkeydown="if(event.key==='Enter') joinChat()">
+      <button class="btn-join" onclick="joinChat()">Rejoindre</button>
+    </div>
+
+    <!-- Corps du chat -->
+    <div class="chat-body" id="chatBody">
+      <div class="messages-list" id="messagesList"></div>
+      <div class="typing-indicator" id="typingIndicator"></div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off"
+          onkeydown="if(event.key==='Enter') sendMessage()"
+          oninput="onTyping()">
+        <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ APP PRINCIPALE ══════════════ -->
   <div id="app">
     <div class="top-bar">
       <div class="header-container">
-        <div class="live-badge">● LIVE</div>
-        <div class="radio-ticker"><span>100% Hip-Hop Classic – Shade Radio – Retrouvez-nous tous les soirs dès 21h sur TikTok</span></div>
+        <div class="live-badge">&#9679; LIVE</div>
+        <div class="radio-ticker">
+          <span>100% Hip-Hop Classic – Shade Radio – Retrouvez-nous tous les soirs dès 21h sur TikTok</span>
+        </div>
       </div>
       <div class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
         <span></span><span></span><span></span>
@@ -133,127 +336,480 @@
         </div>
       </div>
       <div class="ad-banner">
-        <div class="ad-ticker"><span>Pour diffuser votre publicité, contactez nous via l'onglet demande de pub dans le menu.</span></div>
+        <div class="ad-ticker">
+          <span>Pour diffuser votre publicité, contactez nous via l'onglet demande de pub dans le menu.</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="overlay" id="menuOverlay" style="gap:15px; flex-direction: column;">
-    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); setTimeout(openChat, 450);">
-      <i class="fas fa-comments"></i> Chat Auditeurs <span class="chat-menu-badge" id="chatMenuBadge"></span>
-    </a>
-    <button onclick="toggleMenu()" style="color:white; background:none; border:none; margin-top:20px;">Fermer</button>
-  </div>
-
-  <div class="overlay" id="chatOverlay">
-    <div class="chat-header">
-      <div style="color:white; font-weight:bold;">Chat Auditeurs</div>
-      <button onclick="closeChat()" style="color:white; background:none; border:none; font-size:20px;">✕</button>
-    </div>
-
-    <div class="pseudo-screen" id="pseudoScreen" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; gap:20px;">
-      <h2 style="color:white;">Ton Pseudo</h2>
-      <input class="pseudo-input" id="pseudoInput" type="text" placeholder="Ton pseudo..." style="padding:10px; border-radius:20px; border:none;">
-      <button class="btn-join" onclick="joinChat()" style="padding:10px 30px; border-radius:20px; background:red; color:white; border:none; font-weight:bold;">Rejoindre</button>
-    </div>
-
-    <div class="chat-body" id="chatBody">
-      <div class="messages-list" id="messagesList"></div>
-      <div class="chat-input-row" id="chatInputRow">
-        <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off">
-        <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-      </div>
-    </div>
-  </div>
-
+  <!-- ══════════════ SCRIPTS ══════════════ -->
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // Config Supabase (Tes identifiants)
-    var SUPA_URL = 'https://rxhyapahjaypeudletdy.supabase.co';
-    var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
-    var sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    /* ============================================================
+       CONFIG
+    ============================================================ */
+    var SUPA_URL   = 'https://rxhyapahjaypeudletdy.supabase.co';
+    var SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
+    var RADIO_BASE = 'https://manager11.streamradio.fr:1700';
+    var sb         = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-    var myPseudo = localStorage.getItem('shade_pseudo') || null;
+    /* ── État global ── */
+    var myPseudo    = localStorage.getItem('shade_pseudo') || null;
+    var chatSub     = null;
+    var reactionSub = null;
+    var unreadCount = 0;
+    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
+    var openPicker  = null;
+    var swReg       = null;
 
-    function toggleMenu() { document.getElementById('menuOverlay').classList.toggle('open'); }
-    function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); }
-    function openChat() { 
-        document.getElementById('chatOverlay').classList.add('open'); 
-        if(myPseudo) showMessages();
+    /* ── Typing ── */
+    var typingUsers   = {};
+    var typingChannel = null;
+    var typingTimer   = null;
+    var isTyping      = false;
+
+    var EMOJI_MAP = { fire: '🔥', heart: '❤️', joy: '😂', thumbsup: '👍', astonished: '😮' };
+    var PSEUDO_COLORS = ['#ff6b6b','#ffa94d','#ffe066','#69db7c','#4dabf7','#da77f2','#f783ac','#63e6be','#a9e34b','#74c0fc'];
+
+    function getPseudoColor(p) {
+      var h = 0;
+      for (var i = 0; i < p.length; i++) h = p.charCodeAt(i) + ((h << 5) - h);
+      return PSEUDO_COLORS[Math.abs(h) % PSEUDO_COLORS.length];
     }
-    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); }
+
+    /* ============================================================
+       FIX ANDROID KEYBOARD — Visual Viewport API
+       Sur Android, quand le clavier virtuel s'ouvre, window.innerHeight
+       ne change pas. On écoute visualViewport pour recalculer la
+       hauteur réelle disponible et l'appliquer à tous les overlays.
+    ============================================================ */
+    function applyViewportHeight() {
+      var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+      document.querySelectorAll('.overlay').forEach(function(el) {
+        el.style.height = h + 'px';
+      });
+    }
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', applyViewportHeight);
+      window.visualViewport.addEventListener('scroll', applyViewportHeight);
+    }
+    window.addEventListener('resize', applyViewportHeight);
+    applyViewportHeight(); /* Appel initial */
+
+    /* ============================================================
+       SERVICE WORKER + MISE À JOUR AUTOMATIQUE
+       ➜ À chaque déploiement GitHub, ouvrir sw.js et
+         incrémenter CACHE_VERSION (v1 → v2 → v3 …)
+         pour forcer la mise à jour chez tous les utilisateurs PWA.
+    ============================================================ */
+    async function registerSW() {
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        swReg = await navigator.serviceWorker.register('/sw.js');
+        console.log('[SW] enregistré – scope :', swReg.scope);
+
+        swReg.addEventListener('updatefound', function () {
+          var newWorker = swReg.installing;
+          newWorker.addEventListener('statechange', function () {
+            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+
+        swReg.update();
+
+      } catch (e) {
+        console.warn('[SW] échec :', e);
+      }
+
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
+    }
+
+    function showUpdateToast() {
+      var t = document.getElementById('updateToast');
+      if (!t) return;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 15000);
+    }
+
+    /* ============================================================
+       AUDIO
+    ============================================================ */
+    var audioCtx = null, audioUnlocked = false;
+
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      try {
+        var ctx = getAudioCtx();
+        var buf = ctx.createBuffer(1, 1, 22050);
+        var src = ctx.createBufferSource();
+        src.buffer = buf; src.connect(ctx.destination); src.start(0);
+        ctx.resume().then(function () { audioUnlocked = true; }).catch(function () {});
+      } catch (e) {}
+    }
+    function playNotifSound() {
+      try {
+        var ctx = getAudioCtx();
+        function doPlay() {
+          [880, 1100].forEach(function (f, i) {
+            var o = ctx.createOscillator(), g = ctx.createGain();
+            o.connect(g); g.connect(ctx.destination); o.type = 'sine';
+            var t = ctx.currentTime + i * 0.15;
+            o.frequency.setValueAtTime(f, t);
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.linearRampToValueAtTime(0.4, t + 0.02);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+            o.start(t); o.stop(t + 0.41);
+          });
+        }
+        if (ctx.state === 'suspended') ctx.resume().then(doPlay).catch(function () {}); else doPlay();
+      } catch (e) {}
+    }
+
+    /* ============================================================
+       BADGE
+    ============================================================ */
+    function showBadge(n) {
+      var b  = document.getElementById('chatBadge');
+      var mb = document.getElementById('chatMenuBadge');
+      if (n > 0) {
+        var l = n > 99 ? '99+' : String(n);
+        b.textContent = l; mb.textContent = l;
+        b.style.display = 'flex'; mb.style.display = 'flex';
+        b.style.animation = 'none'; b.offsetHeight;
+        b.style.animation = 'badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
+      } else {
+        b.style.display = 'none'; mb.style.display = 'none';
+      }
+    }
+    function resetBadge() { unreadCount = 0; showBadge(0); }
+
+    /* ============================================================
+       MENU
+    ============================================================ */
+    function toggleMenu() {
+      var m = document.getElementById('menuOverlay');
+      var b = document.getElementById('hamburgerBtn');
+      m.classList.contains('open')
+        ? (m.classList.remove('open'), b.classList.remove('open'))
+        : (m.classList.add('open'),    b.classList.add('open'));
+    }
+    function closeMenu() {
+      document.getElementById('menuOverlay').classList.remove('open');
+      document.getElementById('hamburgerBtn').classList.remove('open');
+    }
+    function shareRadio() {
+      if (navigator.share) navigator.share({ title: 'SHADE RADIO', text: 'Écoute SHADE RADIO !', url: window.location.href });
+    }
+
+    /* ============================================================
+       HISTORIQUE
+    ============================================================ */
+    function openHistory()  { document.getElementById('historyOverlay').classList.add('open'); loadHistory(); }
+    function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
+
+    async function loadHistory() {
+      var loading = document.getElementById('historyLoading');
+      var tl      = document.getElementById('trackList');
+      loading.style.display = 'block';
+      tl.innerHTML = '';
+      var data = null;
+      var endpoints = ['/api/v2/history/?server_id=1', '/api/v2/history/', '/api/v2/lastplayed/?server_id=1', '/api/v2/lastplayed/'];
+      for (var ei = 0; ei < endpoints.length; ei++) {
+        try {
+          var res  = await fetch(RADIO_BASE + endpoints[ei]);
+          var json = await res.json();
+          if (Array.isArray(json)                 && json.length)          { data = json;         break; }
+          if (json && Array.isArray(json.data)     && json.data.length)    { data = json.data;    break; }
+          if (json && Array.isArray(json.tracks)   && json.tracks.length)  { data = json.tracks;  break; }
+          if (json && Array.isArray(json.history)  && json.history.length) { data = json.history; break; }
+        } catch (e) {}
+      }
+      loading.style.display = 'none';
+      if (!data || !data.length) {
+        tl.innerHTML = '<div class="history-empty">Aucun titre disponible pour le moment.<br>La radio est peut-être en pause.</div>';
+        return;
+      }
+      renderTracks(data.slice(0, 5).map(function (t) {
+        return { title: t.title || t.name || 'Titre inconnu', artist: t.artist || t.author || 'Artiste inconnu', dateStr: t.start_time || t.played_at || t.date || null, duration: t.track_length_formatted || t.duration || null };
+      }));
+    }
+
+    function renderTracks(tracks) {
+      var tl = document.getElementById('trackList');
+      tl.innerHTML = '';
+      tracks.forEach(function (t, i) {
+        var isNow = (i === 0);
+        var card  = document.createElement('div');
+        card.className = 'track-card' + (isNow ? ' now-playing' : '');
+        var idx = document.createElement('div');
+        if (isNow) { idx.className = 'now-dot'; } else { idx.className = 'track-index'; idx.textContent = i + 1; }
+        var info = document.createElement('div'); info.className = 'track-info';
+        if (isNow) { var lbl = document.createElement('div'); lbl.className = 'track-now-label'; lbl.textContent = '▶ En cours'; info.appendChild(lbl); }
+        var te = document.createElement('div'); te.className = 'track-title';  te.textContent = t.title  || 'Titre inconnu';
+        var ae = document.createElement('div'); ae.className = 'track-artist'; ae.textContent = t.artist || 'Artiste inconnu';
+        var mt = document.createElement('div'); mt.className = 'track-meta';
+        if (t.dateStr)  { var se = document.createElement('span'); se.className = 'track-time';     se.textContent = timeAgo(t.dateStr);                     mt.appendChild(se); }
+        if (t.duration) { var de = document.createElement('span'); de.className = 'track-duration'; de.textContent = (t.dateStr ? '· ' : '') + t.duration; mt.appendChild(de); }
+        info.appendChild(te); info.appendChild(ae); if (mt.children.length) info.appendChild(mt);
+        card.appendChild(idx); card.appendChild(info); tl.appendChild(card);
+      });
+    }
+
+    function timeAgo(dateStr) {
+      var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+      if (isNaN(diff) || diff < 0) return 'en cours';
+      if (diff < 60)    return 'à l\'instant';
+      if (diff < 3600)  return Math.floor(diff / 60) + ' min';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+      return Math.floor(diff / 86400) + 'j';
+    }
+
+    /* ============================================================
+       CHAT
+    ============================================================ */
+    function openChat() {
+      document.getElementById('chatOverlay').classList.add('open');
+      resetBadge();
+      /* FIX ANDROID : recalcul de la hauteur au moment de l'ouverture */
+      applyViewportHeight();
+      if (myPseudo) { showMessages(); }
+      else { document.getElementById('pseudoScreen').style.display = 'flex'; document.getElementById('chatBody').classList.remove('show'); }
+    }
+    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); stopTyping(); }
 
     function joinChat() {
-      var p = document.getElementById('pseudoInput').value.trim();
-      if(!p) return;
-      myPseudo = p; localStorage.setItem('shade_pseudo', p);
-      showMessages();
+      var i = document.getElementById('pseudoInput'), p = i.value.trim();
+      if (!p) { i.focus(); return; }
+      myPseudo = p; localStorage.setItem('shade_pseudo', p); showMessages();
     }
 
     function showMessages() {
       document.getElementById('pseudoScreen').style.display = 'none';
       document.getElementById('chatBody').classList.add('show');
-      // Activation du fix clavier ici
-      initIOSKeyboardFix();
+      loadMessages();
+      if (!chatSub)     subscribeMessages();
+      if (!reactionSub) subscribeReactions();
+      setTimeout(scrollBottom, 100);
     }
 
-    async function sendMessage() {
-      var inp = document.getElementById('msgInput');
-      var m = inp.value.trim();
-      if(!m) return;
-      inp.value = '';
-      await sb.from('messages').insert([{ pseudo: myPseudo, message: m }]);
-      // Simu locale
-      renderMsg(myPseudo, m);
+    function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
+
+    async function loadMessages() {
+      var since = new Date(Date.now() - EXPIRY_MS).toISOString();
+      var res   = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
+      if (res.error) return;
+      var list = document.getElementById('messagesList'); list.innerHTML = '';
+      if (!res.data.length) {
+        var n = document.createElement('div'); n.className = 'expired-notice';
+        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n); return;
+      }
+      var ids  = res.data.map(function (m) { return m.id; });
+      var rRes = await sb.from('reactions').select('*').in('message_id', ids);
+      var rMap = {};
+      if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
+      res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
+      scrollBottom();
     }
 
-    function renderMsg(p, m) {
-      var list = document.getElementById('messagesList');
-      var d = document.createElement('div');
-      d.style.color = "white"; d.style.padding = "5px";
-      d.innerHTML = `<b>${p}:</b> ${m}`;
-      list.appendChild(d);
-      list.scrollTop = list.scrollHeight;
+    function subscribeMessages() {
+      chatSub = sb.channel('chat-messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (p) {
+          var msg = p.new; if (!isRecent(msg.created_at)) return;
+          if (document.getElementById('chatOverlay').classList.contains('open')) { renderBubble(msg, []); scrollBottom(); }
+          else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); notifyViaSW(msg.pseudo, msg.message); }
+        }).subscribe();
+    }
+
+    function subscribeReactions() {
+      reactionSub = sb.channel('chat-reactions')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, function (p) {
+          var id = p.new ? p.new.message_id : (p.old ? p.old.message_id : null); if (id) refreshReactions(id);
+        }).subscribe();
+    }
+
+    async function refreshReactions(msgId) {
+      var res = await sb.from('reactions').select('*').eq('message_id', msgId); if (res.error) return;
+      var wrap = document.querySelector('[data-msg-id="' + msgId + '"]'); if (!wrap) return;
+      renderReactionsBar(wrap.querySelector('.reactions-bar'), msgId, res.data);
     }
 
     /* ============================================================
-       FIX CHIRURGICAL CLAVIER IPHONE
+       TYPING INDICATOR
+       ── Canal Broadcast Supabase, initialisé au démarrage ──
     ============================================================ */
-    function initIOSKeyboardFix() {
-      if (!window.visualViewport) return;
+    function subscribeTyping() {
+      if (typingChannel) return;
 
-      const inputRow = document.getElementById('chatInputRow');
-      const chatOverlay = document.getElementById('chatOverlay');
-
-      window.visualViewport.addEventListener('resize', () => {
-        if (chatOverlay.classList.contains('open')) {
-          const keyboardHeight = window.innerHeight - window.visualViewport.height;
-          
-          if (keyboardHeight > 50) {
-            // Le clavier est là : on fixe la barre au-dessus
-            inputRow.style.position = 'fixed';
-            inputRow.style.bottom = keyboardHeight + 'px';
-            inputRow.style.left = '0';
-            inputRow.style.zIndex = '3000';
-          } else {
-            // Le clavier est parti : retour au flux normal
-            inputRow.style.position = 'relative';
-            inputRow.style.bottom = '0';
-          }
-        }
+      typingChannel = sb.channel('shade-typing-broadcast', {
+        config: { broadcast: { self: false } }
       });
+
+      typingChannel
+        .on('broadcast', { event: 'typing' }, function (payload) {
+          var p = payload.payload;
+          if (!p || !p.pseudo || p.pseudo === myPseudo) return;
+          if (p.active) typingUsers[p.pseudo] = Date.now();
+          else          delete typingUsers[p.pseudo];
+          renderTypingDisplay();
+        })
+        .subscribe(function (status) {
+          console.log('[Typing] statut canal :', status);
+        });
+
+      setInterval(function () {
+        var now = Date.now(), changed = false;
+        Object.keys(typingUsers).forEach(function (p) {
+          if (now - typingUsers[p] > 4000) { delete typingUsers[p]; changed = true; }
+        });
+        if (changed) renderTypingDisplay();
+      }, 1000);
     }
 
-    // Empêche le décalage de page d'iOS
-    document.addEventListener('focusin', (e) => {
-      if (e.target.tagName === 'INPUT') {
-        window.scrollTo(0, 0);
-        document.body.scrollTop = 0;
-      }
-    });
+    function renderTypingDisplay() {
+      var ind = document.getElementById('typingIndicator'); if (!ind) return;
+      var others = Object.keys(typingUsers);
+      if (!others.length) { ind.innerHTML = ''; return; }
+      var name = others.length === 1 ? others[0] : others.length + ' personnes';
+      var verb = others.length === 1 ? ' est en train d\'écrire' : ' sont en train d\'écrire';
+      ind.innerHTML =
+        '<span style="font-weight:bold;color:rgba(255,255,255,0.6);">' + esc(name) + '</span>' + verb +
+        '<span class="typing-dots"><span></span><span></span><span></span></span>';
+    }
 
+    function onTyping() {
+      if (!myPseudo || !typingChannel) return;
+      if (!isTyping) {
+        isTyping = true;
+        typingChannel.send({ type: 'broadcast', event: 'typing', payload: { pseudo: myPseudo, active: true } });
+      }
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(stopTyping, 3000);
+    }
+
+    function stopTyping() {
+      if (!isTyping) return;
+      isTyping = false; clearTimeout(typingTimer);
+      if (myPseudo && typingChannel) {
+        typingChannel.send({ type: 'broadcast', event: 'typing', payload: { pseudo: myPseudo, active: false } });
+      }
+    }
+
+    /* ============================================================
+       RÉACTIONS
+    ============================================================ */
+    function renderReactionsBar(bar, msgId, reactions) {
+      if (!bar) return; bar.innerHTML = '';
+      var counts = {}, mine = {};
+      reactions.forEach(function (r) { counts[r.emoji] = (counts[r.emoji] || 0) + 1; if (r.pseudo === myPseudo) mine[r.emoji] = true; });
+      Object.keys(counts).forEach(function (e) {
+        var pill = document.createElement('div');
+        pill.className = 'reaction-pill' + (mine[e] ? ' mine' : '');
+        pill.innerHTML = EMOJI_MAP[e] + ' <span class="count">' + counts[e] + '</span>';
+        pill.onclick = function (ev) { ev.stopPropagation(); toggleReaction(msgId, e); };
+        bar.appendChild(pill);
+      });
+    }
+    async function toggleReaction(msgId, emoji) {
+      if (!myPseudo) return;
+      var check = await sb.from('reactions').select('id').eq('message_id', msgId).eq('pseudo', myPseudo).eq('emoji', emoji);
+      if (check.data && check.data.length) await sb.from('reactions').delete().eq('id', check.data[0].id);
+      else await sb.from('reactions').insert([{ message_id: msgId, pseudo: myPseudo, emoji: emoji }]);
+      refreshReactions(msgId);
+    }
+
+    /* ============================================================
+       BULLES
+    ============================================================ */
+    function renderBubble(msg, reactions) {
+      var list  = document.getElementById('messagesList');
+      var isMe  = msg.pseudo === myPseudo;
+      var color = getPseudoColor(msg.pseudo);
+      var time  = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      var wrap  = document.createElement('div');
+      wrap.className = 'bubble-wrap ' + (isMe ? 'me' : 'them');
+      wrap.setAttribute('data-msg-id', msg.id);
+
+      var picker = document.createElement('div'); picker.className = 'emoji-picker';
+      Object.keys(EMOJI_MAP).forEach(function (k) {
+        var btn = document.createElement('button'); btn.className = 'emoji-pick-btn'; btn.textContent = EMOJI_MAP[k];
+        btn.onclick = function (e) { e.stopPropagation(); closePicker(); toggleReaction(msg.id, k); };
+        picker.appendChild(btn);
+      });
+
+      var bubble = document.createElement('div'); bubble.className = 'bubble';
+      bubble.innerHTML =
+        (!isMe ? '<div class="bubble-pseudo" style="color:' + color + ';">' + esc(msg.pseudo) + '</div>' : '') +
+        '<div>' + esc(msg.message) + '</div>' +
+        '<div class="bubble-time">' + time + '</div>';
+      bubble.appendChild(picker);
+      bubble.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (openPicker && openPicker !== picker) openPicker.classList.remove('show');
+        picker.classList.toggle('show');
+        openPicker = picker.classList.contains('show') ? picker : null;
+      });
+
+      var bar = document.createElement('div'); bar.className = 'reactions-bar';
+      if (reactions && reactions.length) renderReactionsBar(bar, msg.id, reactions);
+      wrap.appendChild(bubble); wrap.appendChild(bar); list.appendChild(wrap);
+    }
+
+    function closePicker() { if (openPicker) { openPicker.classList.remove('show'); openPicker = null; } }
+    document.addEventListener('click', function () { closePicker(); });
+
+    async function sendMessage() {
+      var input = document.getElementById('msgInput'), message = input.value.trim();
+      if (!message || !myPseudo) return;
+      input.value = ''; stopTyping();
+      var res = await sb.from('messages').insert([{ pseudo: myPseudo, message: message }]);
+      if (res.error) console.error('[Chat] erreur envoi :', res.error);
+    }
+
+    function scrollBottom() { var l = document.getElementById('messagesList'); l.scrollTop = l.scrollHeight; }
+    function esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    /* ============================================================
+       NOTIFICATIONS PUSH
+    ============================================================ */
+    async function requestNotifPermission() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission === 'granted' || Notification.permission === 'denied') return;
+      await Notification.requestPermission();
+    }
+    function notifyViaSW(pseudo, message) {
+      if (!swReg || !swReg.active) return;
+      if (Notification.permission !== 'granted') return;
+      swReg.active.postMessage({ type: 'NEW_MESSAGE', pseudo: pseudo, message: message });
+    }
+
+    /* ============================================================
+       INITIALISATION
+       ► subscribeTyping() en PREMIER — canal prêt avant tout
+    ============================================================ */
+    subscribeTyping();     /* ① Canal typing — toujours en premier */
+    registerSW();          /* ② Service Worker + détection mises à jour */
+    subscribeMessages();   /* ③ Écoute temps réel nouveaux messages */
+
+    function onFirstGesture() {
+      unlockAudio();
+      requestNotifPermission();
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
+    }
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click',      onFirstGesture, { once: true });
   </script>
 </body>
 </html>
