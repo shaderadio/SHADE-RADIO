@@ -304,11 +304,11 @@
     function shareRadio() { if(navigator.share) navigator.share({title:'SHADE RADIO',text:'Ecoute SHADE RADIO !',url:window.location.href}); }
 
     /* =====================
-       HISTORIQUE — /api/v2/forecast/
-       On filtre les titres dont start_time est dans le passé,
-       on trie du plus récent au plus ancien, on prend les 5 premiers.
-       Les pochettes viennent directement du serveur StreamRadio.
-       Fallback iTunes si la pochette du serveur ne charge pas.
+       HISTORIQUE
+       On utilise /api/v2/history/ qui retourne les titres RÉELLEMENT
+       diffusés, triés du plus récent au plus ancien.
+       Fallback sur /api/v2/lastplayed/ si /history/ échoue.
+       Fallback iTunes pour les pochettes si le serveur ne renvoie rien.
     ===================== */
     function openHistory() { document.getElementById('historyOverlay').classList.add('open'); loadHistory(); }
     function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
@@ -320,58 +320,69 @@
       tl.innerHTML = '';
 
       try {
-        var res  = await fetch(RADIO_BASE + '/api/v2/forecast/');
-        var data = await res.json();
+        // Essai sur /history/ d'abord, puis fallback /lastplayed/
+        var data = null;
+        var endpoints = ['/api/v2/history/', '/api/v2/lastplayed/'];
 
-        var now = Date.now();
-
-        // Garder uniquement les titres déjà passés (diffusés)
-        var played = data.filter(function(t) {
-          return new Date(t.start_time).getTime() <= now;
-        });
-
-        // Trier du plus récent au plus ancien
-        played.sort(function(a, b) {
-          return new Date(b.start_time) - new Date(a.start_time);
-        });
-
-        // Prendre les 5 derniers
-        var tracks = played.slice(0, 5);
+        for (var ei = 0; ei < endpoints.length; ei++) {
+          try {
+            var res = await fetch(RADIO_BASE + endpoints[ei]);
+            if (!res.ok) continue;
+            var json = await res.json();
+            if (Array.isArray(json) && json.length > 0) { data = json; break; }
+            // Certains endpoints renvoient { data: [...] } ou { tracks: [...] }
+            if (json && Array.isArray(json.data) && json.data.length > 0) { data = json.data; break; }
+            if (json && Array.isArray(json.tracks) && json.tracks.length > 0) { data = json.tracks; break; }
+          } catch(e2) { /* essai suivant */ }
+        }
 
         loading.style.display = 'none';
 
-        if (!tracks.length) {
+        if (!data || !data.length) {
           tl.innerHTML = '<div class="history-empty">Aucun titre diffuse pour le moment.<br>La radio est peut-etre en pause.</div>';
           return;
         }
+
+        // Prendre les 5 premiers (déjà triés du plus récent au plus ancien par l'API)
+        var tracks = data.slice(0, 5);
 
         tracks.forEach(function(t, i) {
           var card       = document.createElement('div');
           card.className = 'track-card' + (i === 0 ? ' now-playing' : '');
 
-          // Pochette — image servie par StreamRadio
+          /* --- Pochette --- */
           var artWrap = document.createElement('div');
           artWrap.className = 'track-artwork-wrap';
 
-          if (t.image) {
+          // Champ image possible : t.image, t.artwork, t.cover, t.thumbnail
+          var imageUrl = t.image || t.artwork || t.cover || t.thumbnail || null;
+
+          if (imageUrl) {
             var img = document.createElement('img');
             img.className = 'track-artwork';
-            img.alt = t.title;
-            // On construit l'URL absolue depuis le chemin relatif
-            img.src = RADIO_BASE + t.image;
+            img.alt = t.title || '';
+            // URL absolue si chemin relatif
+            img.src = imageUrl.startsWith('http') ? imageUrl : RADIO_BASE + imageUrl;
             img.onerror = function() {
-              // Si l'image du serveur echoue, fallback iTunes
+              // Fallback iTunes si l'image du serveur échoue
               fetchArtwork(t.title, t.artist || '').then(function(url) {
                 if (url) { img.src = url; img.onerror = null; }
-                else { img.outerHTML = '<div class="track-artwork-placeholder">🎵</div>'; }
+                else { img.style.display='none'; artWrap.insertBefore(makePlaceholder(), img); }
               });
             };
             artWrap.appendChild(img);
           } else {
-            var ph = document.createElement('div');
-            ph.className = 'track-artwork-placeholder';
-            ph.textContent = '🎵';
+            // Pas d'image : on tente iTunes directement
+            var ph = makePlaceholder();
             artWrap.appendChild(ph);
+            fetchArtwork(t.title, t.artist || '').then(function(url) {
+              if (url) {
+                var img2 = document.createElement('img');
+                img2.className = 'track-artwork';
+                img2.src = url;
+                artWrap.replaceChild(img2, ph);
+              }
+            });
           }
 
           // Point rouge animé sur le premier titre (en cours)
@@ -381,7 +392,7 @@
             artWrap.appendChild(dot);
           }
 
-          // Infos
+          /* --- Infos --- */
           var info = document.createElement('div');
           info.className = 'track-info';
 
@@ -394,22 +405,25 @@
 
           var titleEl = document.createElement('div');
           titleEl.className = 'track-title';
-          titleEl.textContent = t.title || 'Titre inconnu';
+          // Champs possibles selon le serveur
+          titleEl.textContent = t.title || t.name || t.song || 'Titre inconnu';
 
           var artistEl = document.createElement('div');
           artistEl.className = 'track-artist';
-          artistEl.textContent = t.artist || 'Artiste inconnu';
+          artistEl.textContent = t.artist || t.author || t.singer || 'Artiste inconnu';
 
           var meta = document.createElement('div');
           meta.className = 'track-meta';
 
           var timeEl = document.createElement('span');
           timeEl.className = 'track-time';
-          timeEl.textContent = timeAgo(t.start_time);
+          // Champs date possibles
+          var dateStr = t.start_time || t.played_at || t.date || t.time || null;
+          timeEl.textContent = dateStr ? timeAgo(dateStr) : '';
 
           var durEl = document.createElement('span');
           durEl.className = 'track-duration';
-          durEl.textContent = t.track_length_formatted ? '· ' + t.track_length_formatted : '';
+          durEl.textContent = t.track_length_formatted ? '· ' + t.track_length_formatted : (t.duration ? '· ' + t.duration : '');
 
           meta.appendChild(timeEl);
           meta.appendChild(durEl);
@@ -429,9 +443,16 @@
       }
     }
 
+    function makePlaceholder() {
+      var ph = document.createElement('div');
+      ph.className = 'track-artwork-placeholder';
+      ph.textContent = '🎵';
+      return ph;
+    }
+
     async function fetchArtwork(title, artist) {
       try {
-        var q = encodeURIComponent((artist + ' ' + title).trim());
+        var q = encodeURIComponent(((artist || '') + ' ' + (title || '')).trim());
         var r = await fetch('https://itunes.apple.com/search?term=' + q + '&media=music&limit=1&entity=song');
         var d = await r.json();
         if (d.results && d.results.length) return d.results[0].artworkUrl100.replace('100x100','200x200');
