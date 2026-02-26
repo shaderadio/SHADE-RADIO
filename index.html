@@ -450,7 +450,7 @@
     }
 
     async function loadMessages() {
-      var res = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50);
+      var res = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(199);
       if (res.error) return;
       var list = document.getElementById('messagesList'); list.innerHTML = '';
       var data = res.data.reverse();
