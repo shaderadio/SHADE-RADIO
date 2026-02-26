@@ -59,22 +59,15 @@
     .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
     .menu-link:active { background: rgba(255,255,255,0.2); transform: scale(0.96); }
 
-    /* CHAT OVERLAY */
+    /* CHAT */
     #chatOverlay { z-index: 300; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
     #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
-
-    /* ===== FIX CROIX =====
-       - chat-header en position relative + z-index pour rester au-dessus du contenu
-       - chat-header-left avec flex:1 + min-width:0 pour ne pas déborder sur la croix
-       - close-btn avec flex-shrink:0 + margin-left pour ne jamais être écrasé        */
-    .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; position: relative; z-index: 5; }
-    .chat-header-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-    .chat-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .chat-title { color: #fff; font-weight: bold; font-size: 15px; }
     .chat-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
-    .close-btn { background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3); color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 10px; transition: background 0.2s, transform 0.15s; }
-    .close-btn:active { background: rgba(255,255,255,0.3); transform: scale(0.9); }
-
+    .close-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .pseudo-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; width: 100%; }
     .pseudo-screen h2 { color: #fff; font-size: 22px; text-align: center; }
     .pseudo-screen p { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; }
@@ -82,9 +75,9 @@
     .pseudo-input::placeholder { color: rgba(255,255,255,0.35); }
     .btn-join { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 14px 44px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(255,0,0,0.4); transition: transform 0.2s; }
     .btn-join:active { transform: scale(0.95); }
-    .chat-body { flex: 1; display: none; flex-direction: column; overflow: hidden; width: 100%; min-height: 0; }
+    .chat-body { flex: 1; display: none; flex-direction: column; overflow: hidden; width: 100%; }
     .chat-body.show { display: flex; }
-    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; min-height: 0; }
+    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
     .messages-list::-webkit-scrollbar { display: none; }
     .expired-notice { text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; padding: 6px 0; font-style: italic; }
     .bubble-wrap { display: flex; flex-direction: column; max-width: 76%; animation: pop-in 0.22s ease; }
@@ -119,11 +112,11 @@
     .send-btn { background: linear-gradient(135deg, #ff0000, #8b0000); border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(255,0,0,0.4); transition: transform 0.2s; flex-shrink: 0; }
     .send-btn:active { transform: scale(0.9); }
 
-    /* HISTORIQUE OVERLAY */
+    /* HISTORIQUE */
     #historyOverlay { z-index: 250; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
     #historyOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
-    .history-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; position: relative; z-index: 5; }
-    .history-header-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+    .history-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
+    .history-header-left { display: flex; align-items: center; gap: 12px; }
     .history-title { color: #fff; font-weight: bold; font-size: 15px; }
     .history-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
     .history-body { flex: 1; overflow-y: auto; width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
@@ -145,17 +138,35 @@
     .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 40px 0; line-height: 1.6; }
     .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
     .history-refresh-btn:active { background: rgba(255,255,255,0.14); }
+
+    /* TOAST MISE À JOUR */
+    #updateToast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(90deg, #ff0000, #8b0000);
+      color: #fff; padding: 14px 22px; border-radius: 50px;
+      font-size: 14px; font-weight: bold;
+      box-shadow: 0 4px 20px rgba(255,0,0,0.5);
+      display: none; align-items: center; gap: 14px;
+      z-index: 9999; cursor: pointer; white-space: nowrap;
+      animation: pop-in 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    #updateToast.show { display: flex; }
   </style>
 </head>
 <body>
 
+  <!-- TOAST MISE À JOUR -->
+  <div id="updateToast" onclick="window.location.reload()">
+    🔄 Mise à jour disponible ! <span style="text-decoration:underline;opacity:0.9;">Recharger</span>
+  </div>
+
   <!-- MENU OVERLAY -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande%20de%20titre&body=Artiste%20%3A%20%0D%0ATitre%20%3A%20" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:contact@shaderadio.fr" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=Demande%20de%20pub&body=Bonjour%2C%20je%20souhaite%20diffuser%20une%20publicit%C3%A9%20pour%20..." class="menu-link" onclick="closeMenu()">
+    <a href="mailto:pub@shaderadio.fr" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -259,10 +270,16 @@
     </div>
   </div>
 
+  <!-- Scripts StreamRadio player -->
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+    /* ============================================================
+       CONFIG
+    ============================================================ */
     var SUPA_URL   = 'https://rxhyapahjaypeudletdy.supabase.co';
     var SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
     var RADIO_BASE = 'https://manager11.streamradio.fr:1700';
@@ -285,122 +302,275 @@
       for (var i = 0; i < p.length; i++) h = p.charCodeAt(i) + ((h << 5) - h);
       return PSEUDO_COLORS[Math.abs(h) % PSEUDO_COLORS.length];
     }
-    function esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
 
-    /* ── AUDIO ── */
+    /* ============================================================
+       SERVICE WORKER + MISE À JOUR AUTOMATIQUE
+    ============================================================ */
+    var swReg = null;
+
+    async function registerSW() {
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        swReg = await navigator.serviceWorker.register('/sw.js');
+        console.log('[SW] enregistré – scope :', swReg.scope);
+
+        /* Détection d'une mise à jour disponible */
+        swReg.addEventListener('updatefound', function() {
+          var newWorker = swReg.installing;
+          newWorker.addEventListener('statechange', function() {
+            /* Nouveau SW actif ET ancien SW existait → nouvelle version dispo */
+            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
+
+        /* Vérifie une mise à jour dès l'ouverture */
+        swReg.update();
+
+      } catch(e) {
+        console.warn('[SW] échec :', e);
+      }
+
+      /* Rechargement automatique si le SW change de contrôleur */
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (!refreshing) { refreshing = true; window.location.reload(); }
+      });
+    }
+
+    function showUpdateToast() {
+      var toast = document.getElementById('updateToast');
+      if (toast) {
+        toast.classList.add('show');
+        /* Disparaît au bout de 15 secondes si pas cliqué */
+        setTimeout(function() { toast.classList.remove('show'); }, 15000);
+      }
+    }
+
+    /* ============================================================
+       AUDIO
+    ============================================================ */
     var audioCtx = null, audioUnlocked = false;
     function getAudioCtx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
     function unlockAudio() {
       if (audioUnlocked) return;
-      try { var ctx=getAudioCtx(),buf=ctx.createBuffer(1,1,22050),src=ctx.createBufferSource(); src.buffer=buf; src.connect(ctx.destination); src.start(0); ctx.resume().then(function(){ audioUnlocked=true; }).catch(function(){}); } catch(e) {}
+      try {
+        var ctx = getAudioCtx(), buf = ctx.createBuffer(1,1,22050), src = ctx.createBufferSource();
+        src.buffer=buf; src.connect(ctx.destination); src.start(0);
+        ctx.resume().then(function(){ audioUnlocked=true; }).catch(function(){});
+      } catch(e) {}
     }
     function playNotifSound() {
       try {
         var ctx = getAudioCtx();
-        function doPlay() { [880,1100].forEach(function(f,i){ var o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.type='sine'; var t=ctx.currentTime+i*0.15; o.frequency.setValueAtTime(f,t); g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.4); o.start(t); o.stop(t+0.41); }); }
+        function doPlay() {
+          [880,1100].forEach(function(f,i){
+            var o=ctx.createOscillator(),g=ctx.createGain();
+            o.connect(g); g.connect(ctx.destination); o.type='sine';
+            var t=ctx.currentTime+i*0.15;
+            o.frequency.setValueAtTime(f,t);
+            g.gain.setValueAtTime(0.0001,t);
+            g.gain.linearRampToValueAtTime(0.4,t+0.02);
+            g.gain.exponentialRampToValueAtTime(0.0001,t+0.4);
+            o.start(t); o.stop(t+0.41);
+          });
+        }
         if (ctx.state==='suspended') ctx.resume().then(doPlay).catch(function(){}); else doPlay();
       } catch(e) {}
     }
 
-    /* ── NOTIFICATIONS SYSTÈME (passent écran verrouillé) ── */
-    function requestNotifPermission() {
-      if (!('Notification' in window) || Notification.permission !== 'default') return;
-      Notification.requestPermission();
-    }
-
-    function sendSystemNotif(pseudo, message) {
-      if (!('Notification' in window) || Notification.permission !== 'granted') return;
-      try {
-        var notif = new Notification('💬 ' + pseudo + ' — Shade Radio', {
-          body: message,
-          icon: 'assets/logo.JPG',
-          badge: 'assets/logo.JPG',
-          tag: 'shade-chat',  /* regroupe les notifs, pas de spam */
-          renotify: true,     /* re-sonne/vibre à chaque nouveau message */
-          silent: false
-        });
-        notif.onclick = function() { window.focus(); openChat(); notif.close(); };
-      } catch(e) {}
-    }
-
-    /* ── BADGE ── */
+    /* ============================================================
+       BADGE
+    ============================================================ */
     function showBadge(n) {
       var b=document.getElementById('chatBadge'), mb=document.getElementById('chatMenuBadge');
-      if (n > 0) {
-        var l = n > 99 ? '99+' : String(n);
-        b.textContent=l; mb.textContent=l; b.style.display='flex'; mb.style.display='flex';
-        b.style.animation='none'; b.offsetHeight; b.style.animation='badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
-      } else { b.style.display='none'; mb.style.display='none'; }
+      if (n>0) {
+        var l=n>99?'99+':String(n);
+        b.textContent=l; mb.textContent=l;
+        b.style.display='flex'; mb.style.display='flex';
+        b.style.animation='none'; b.offsetHeight;
+        b.style.animation='badge-pop 0.3s cubic-bezier(0.175,0.885,0.32,1.275)';
+      } else {
+        b.style.display='none'; mb.style.display='none';
+      }
     }
     function resetBadge() { unreadCount=0; showBadge(0); }
 
-    /* ── MENU ── */
-    function toggleMenu() { var m=document.getElementById('menuOverlay'),b=document.getElementById('hamburgerBtn'); if(m.classList.contains('open')){m.classList.remove('open');b.classList.remove('open');}else{m.classList.add('open');b.classList.add('open');} }
-    function closeMenu() { document.getElementById('menuOverlay').classList.remove('open'); document.getElementById('hamburgerBtn').classList.remove('open'); }
-    function shareRadio() { if(navigator.share) navigator.share({title:'SHADE RADIO',text:'Écoute SHADE RADIO !',url:window.location.href}); }
+    /* ============================================================
+       MENU
+    ============================================================ */
+    function toggleMenu() {
+      var m=document.getElementById('menuOverlay'),b=document.getElementById('hamburgerBtn');
+      if(m.classList.contains('open')){m.classList.remove('open');b.classList.remove('open');}
+      else{m.classList.add('open');b.classList.add('open');}
+    }
+    function closeMenu() {
+      document.getElementById('menuOverlay').classList.remove('open');
+      document.getElementById('hamburgerBtn').classList.remove('open');
+    }
+    function shareRadio() {
+      if(navigator.share) navigator.share({title:'SHADE RADIO',text:'Écoute SHADE RADIO !',url:window.location.href});
+    }
 
-    /* ── HISTORIQUE ── */
-    function openHistory() { document.getElementById('historyOverlay').classList.add('open'); loadHistory(); }
-    function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
+    /* ============================================================
+       HISTORIQUE
+    ============================================================ */
+    function openHistory() {
+      document.getElementById('historyOverlay').classList.add('open');
+      loadHistory();
+    }
+    function closeHistory() {
+      document.getElementById('historyOverlay').classList.remove('open');
+    }
 
     async function loadHistory() {
-      var loading=document.getElementById('historyLoading'), tl=document.getElementById('trackList');
-      loading.style.display='block'; tl.innerHTML='';
-      var data=null;
-      var endpoints=['/api/v2/history/?server_id=1','/api/v2/history/','/api/v2/lastplayed/?server_id=1','/api/v2/lastplayed/'];
-      for (var ei=0; ei<endpoints.length; ei++) {
+      var loading = document.getElementById('historyLoading');
+      var tl      = document.getElementById('trackList');
+      loading.style.display = 'block';
+      tl.innerHTML = '';
+
+      var data = null;
+      var endpoints = [
+        '/api/v2/history/?server_id=1',
+        '/api/v2/history/',
+        '/api/v2/lastplayed/?server_id=1',
+        '/api/v2/lastplayed/'
+      ];
+
+      for (var ei = 0; ei < endpoints.length; ei++) {
         try {
-          var res=await fetch(RADIO_BASE+endpoints[ei]); var json=await res.json();
-          if (Array.isArray(json)&&json.length)                         { data=json;         break; }
-          if (json&&Array.isArray(json.data)&&json.data.length)         { data=json.data;    break; }
-          if (json&&Array.isArray(json.tracks)&&json.tracks.length)     { data=json.tracks;  break; }
-          if (json&&Array.isArray(json.history)&&json.history.length)   { data=json.history; break; }
+          var res  = await fetch(RADIO_BASE + endpoints[ei]);
+          var json = await res.json();
+          if (Array.isArray(json)              && json.length)          { data = json;         break; }
+          if (json && Array.isArray(json.data)    && json.data.length)   { data = json.data;    break; }
+          if (json && Array.isArray(json.tracks)  && json.tracks.length) { data = json.tracks;  break; }
+          if (json && Array.isArray(json.history) && json.history.length){ data = json.history; break; }
         } catch(e) {}
       }
-      loading.style.display='none';
-      if (!data||!data.length) { tl.innerHTML='<div class="history-empty">Aucun titre disponible pour le moment.<br>La radio est peut-être en pause.</div>'; return; }
-      renderTracks(data.slice(0,5).map(function(t){ return {title:t.title||t.name||'Titre inconnu',artist:t.artist||t.author||'Artiste inconnu',dateStr:t.start_time||t.played_at||t.date||null,duration:t.track_length_formatted||t.duration||null}; }));
+
+      loading.style.display = 'none';
+
+      if (!data || !data.length) {
+        tl.innerHTML = '<div class="history-empty">Aucun titre disponible pour le moment.<br>La radio est peut-être en pause.</div>';
+        return;
+      }
+
+      renderTracks(data.slice(0, 5).map(function(t) {
+        return {
+          title:   t.title  || t.name   || 'Titre inconnu',
+          artist:  t.artist || t.author || 'Artiste inconnu',
+          dateStr: t.start_time || t.played_at || t.date || null,
+          duration: t.track_length_formatted || t.duration || null
+        };
+      }));
     }
 
     function renderTracks(tracks) {
-      var tl=document.getElementById('trackList'); tl.innerHTML='';
-      tracks.forEach(function(t,i){
-        var isNow=(i===0), card=document.createElement('div');
-        card.className='track-card'+(isNow?' now-playing':'');
-        var indexEl=document.createElement('div');
-        if(isNow){indexEl.className='now-dot';}else{indexEl.className='track-index';indexEl.textContent=i+1;}
-        var info=document.createElement('div'); info.className='track-info';
-        if(isNow){var lbl=document.createElement('div');lbl.className='track-now-label';lbl.textContent='▶ En cours';info.appendChild(lbl);}
-        var titleEl=document.createElement('div');titleEl.className='track-title';titleEl.textContent=t.title;
-        var artistEl=document.createElement('div');artistEl.className='track-artist';artistEl.textContent=t.artist;
-        var meta=document.createElement('div');meta.className='track-meta';
-        if(t.dateStr){var timeEl=document.createElement('span');timeEl.className='track-time';timeEl.textContent=timeAgo(t.dateStr);meta.appendChild(timeEl);}
-        if(t.duration){var durEl=document.createElement('span');durEl.className='track-duration';durEl.textContent=(t.dateStr?'· ':'')+t.duration;meta.appendChild(durEl);}
-        info.appendChild(titleEl);info.appendChild(artistEl);if(meta.children.length)info.appendChild(meta);
-        card.appendChild(indexEl);card.appendChild(info);tl.appendChild(card);
+      var tl = document.getElementById('trackList');
+      tl.innerHTML = '';
+
+      tracks.forEach(function(t, i) {
+        var isNow = (i === 0);
+        var card  = document.createElement('div');
+        card.className = 'track-card' + (isNow ? ' now-playing' : '');
+
+        var indexEl = document.createElement('div');
+        if (isNow) {
+          indexEl.className = 'now-dot';
+        } else {
+          indexEl.className = 'track-index';
+          indexEl.textContent = i + 1;
+        }
+
+        var info = document.createElement('div');
+        info.className = 'track-info';
+
+        if (isNow) {
+          var lbl = document.createElement('div');
+          lbl.className = 'track-now-label';
+          lbl.textContent = '▶ En cours';
+          info.appendChild(lbl);
+        }
+
+        var titleEl = document.createElement('div');
+        titleEl.className = 'track-title';
+        titleEl.textContent = t.title || 'Titre inconnu';
+
+        var artistEl = document.createElement('div');
+        artistEl.className = 'track-artist';
+        artistEl.textContent = t.artist || 'Artiste inconnu';
+
+        var meta = document.createElement('div');
+        meta.className = 'track-meta';
+
+        if (t.dateStr) {
+          var timeEl = document.createElement('span');
+          timeEl.className = 'track-time';
+          timeEl.textContent = timeAgo(t.dateStr);
+          meta.appendChild(timeEl);
+        }
+        if (t.duration) {
+          var durEl = document.createElement('span');
+          durEl.className = 'track-duration';
+          durEl.textContent = (t.dateStr ? '· ' : '') + t.duration;
+          meta.appendChild(durEl);
+        }
+
+        info.appendChild(titleEl);
+        info.appendChild(artistEl);
+        if (meta.children.length) info.appendChild(meta);
+
+        card.appendChild(indexEl);
+        card.appendChild(info);
+        tl.appendChild(card);
       });
     }
 
     function timeAgo(dateStr) {
-      var diff=Math.floor((Date.now()-new Date(dateStr).getTime())/1000);
-      if(isNaN(diff)||diff<0) return 'en cours';
-      if(diff<60) return "à l'instant"; if(diff<3600) return Math.floor(diff/60)+' min';
-      if(diff<86400) return Math.floor(diff/3600)+'h'; return Math.floor(diff/86400)+'j';
+      var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+      if (isNaN(diff) || diff < 0) return 'en cours';
+      if (diff < 60)    return 'à l\'instant';
+      if (diff < 3600)  return Math.floor(diff / 60) + ' min';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+      return Math.floor(diff / 86400) + 'j';
     }
 
-    /* ── CHAT ── */
-    function openChat() { document.getElementById('chatOverlay').classList.add('open'); resetBadge(); if(myPseudo) showMessages(); else { document.getElementById('pseudoScreen').style.display='flex'; document.getElementById('chatBody').classList.remove('show'); } }
+    /* ============================================================
+       CHAT
+    ============================================================ */
+    function openChat() {
+      document.getElementById('chatOverlay').classList.add('open');
+      resetBadge();
+      if(myPseudo) showMessages();
+      else { document.getElementById('pseudoScreen').style.display='flex'; document.getElementById('chatBody').classList.remove('show'); }
+    }
     function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); stopTyping(); }
-    function joinChat() { var i=document.getElementById('pseudoInput'),p=i.value.trim(); if(!p){i.focus();return;} myPseudo=p; localStorage.setItem('shade_pseudo',p); showMessages(); }
-    function showMessages() { document.getElementById('pseudoScreen').style.display='none'; document.getElementById('chatBody').classList.add('show'); loadMessages(); if(!chatSub) subscribeMessages(); if(!reactionSub) subscribeReactions(); if(!typingSub) subscribeTyping(); }
+    function joinChat() {
+      var i=document.getElementById('pseudoInput'),p=i.value.trim();
+      if(!p){i.focus();return;}
+      myPseudo=p; localStorage.setItem('shade_pseudo',p); showMessages();
+    }
+    function showMessages() {
+      document.getElementById('pseudoScreen').style.display='none';
+      document.getElementById('chatBody').classList.add('show');
+      loadMessages();
+      if(!chatSub) subscribeMessages();
+      if(!reactionSub) subscribeReactions();
+      if(!typingSub) subscribeTyping();
+    }
+    function isRecent(d) { return (Date.now()-new Date(d).getTime())<EXPIRY_MS; }
 
     async function loadMessages() {
       var since=new Date(Date.now()-EXPIRY_MS).toISOString();
       var res=await sb.from('messages').select('*').gte('created_at',since).order('created_at',{ascending:true}).limit(200);
       if(res.error) return;
       var list=document.getElementById('messagesList'); list.innerHTML='';
-      if(!res.data.length){var n=document.createElement('div');n.className='expired-notice';n.textContent='Aucun message récent. Soyez le premier à écrire !';list.appendChild(n);return;}
+      if(!res.data.length){
+        var n=document.createElement('div'); n.className='expired-notice';
+        n.textContent='Aucun message récent. Soyez le premier à écrire !';
+        list.appendChild(n); return;
+      }
       var ids=res.data.map(function(m){return m.id;});
       var rRes=await sb.from('reactions').select('*').in('message_id',ids);
       var rMap={};
@@ -413,64 +583,69 @@
       chatSub=sb.channel('chat-messages').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){
         var msg=p.new; if(!isRecent(msg.created_at)) return;
         if(document.getElementById('chatOverlay').classList.contains('open')){renderBubble(msg,[]);scrollBottom();}
-        else if(msg.pseudo!==myPseudo){
-          unreadCount++; showBadge(unreadCount);
-          playNotifSound();
-          sendSystemNotif(msg.pseudo, msg.message); /* ← notif système écran verrouillé */
-        }
+        else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();notifyViaSW(msg.pseudo,msg.message);}
       }).subscribe();
     }
-
     function subscribeReactions() {
       reactionSub=sb.channel('chat-reactions').on('postgres_changes',{event:'*',schema:'public',table:'reactions'},function(p){
         var id=p.new?p.new.message_id:(p.old?p.old.message_id:null); if(id) refreshReactions(id);
       }).subscribe();
     }
-
     async function refreshReactions(msgId) {
       var res=await sb.from('reactions').select('*').eq('message_id',msgId); if(res.error) return;
       var wrap=document.querySelector('[data-msg-id="'+msgId+'"]'); if(!wrap) return;
       renderReactionsBar(wrap.querySelector('.reactions-bar'),msgId,res.data);
     }
 
-    /* ── TYPING ── */
-    var typingUsers={}, typingChannel=null;
+    /* ── TYPING — Supabase Broadcast ── */
+    var typingUsers   = {};
+    var typingChannel = null;
 
     function subscribeTyping() {
-      typingChannel=sb.channel('shade-typing-broadcast',{config:{broadcast:{self:false}}});
-      typingChannel.on('broadcast',{event:'typing'},function(payload){
-        var p=payload.payload; if(!p||!p.pseudo||p.pseudo===myPseudo) return;
-        if(p.active){typingUsers[p.pseudo]=Date.now();}else{delete typingUsers[p.pseudo];}
+      typingChannel = sb.channel('shade-typing-broadcast', { config: { broadcast: { self: false } } });
+      typingChannel.on('broadcast', { event: 'typing' }, function(payload) {
+        var p = payload.payload;
+        if (!p || !p.pseudo || p.pseudo === myPseudo) return;
+        if (p.active) typingUsers[p.pseudo] = Date.now();
+        else delete typingUsers[p.pseudo];
         renderTypingDisplay();
       }).subscribe();
-      setInterval(function(){
-        var now=Date.now(),changed=false;
-        Object.keys(typingUsers).forEach(function(p){if(now-typingUsers[p]>4000){delete typingUsers[p];changed=true;}});
-        if(changed) renderTypingDisplay();
-      },1000);
+
+      setInterval(function() {
+        var now = Date.now(), changed = false;
+        Object.keys(typingUsers).forEach(function(p) {
+          if (now - typingUsers[p] > 4000) { delete typingUsers[p]; changed = true; }
+        });
+        if (changed) renderTypingDisplay();
+      }, 1000);
     }
 
     function renderTypingDisplay() {
-      var ind=document.getElementById('typingIndicator'); if(!ind) return;
-      var others=Object.keys(typingUsers);
-      if(!others.length){ind.innerHTML='';return;}
-      var name=others.length===1?others[0]:others.length+' personnes';
-      var verb=others.length===1?" est en train d'écrire":" sont en train d'écrire";
-      ind.innerHTML='<span style="font-weight:bold;color:rgba(255,255,255,0.6);">'+esc(name)+'</span>'+verb+'<span class="typing-dots"><span></span><span></span><span></span></span>';
+      var ind = document.getElementById('typingIndicator'); if (!ind) return;
+      var others = Object.keys(typingUsers);
+      if (!others.length) { ind.innerHTML = ''; return; }
+      var name = others.length === 1 ? others[0] : others.length + ' personnes';
+      var verb = others.length === 1 ? ' est en train d\'écrire' : ' sont en train d\'écrire';
+      ind.innerHTML = '<span style="font-weight:bold;color:rgba(255,255,255,0.6);">' + esc(name) + '</span>' + verb +
+        '<span class="typing-dots"><span></span><span></span><span></span></span>';
     }
 
     function onTyping() {
-      if(!myPseudo||!typingChannel) return;
-      if(!isTyping){isTyping=true;typingChannel.send({type:'broadcast',event:'typing',payload:{pseudo:myPseudo,active:true}});}
-      clearTimeout(typingTimer); typingTimer=setTimeout(stopTyping,3000);
-    }
-    function stopTyping() {
-      if(!myPseudo||!isTyping) return;
-      isTyping=false; clearTimeout(typingTimer);
-      if(typingChannel) typingChannel.send({type:'broadcast',event:'typing',payload:{pseudo:myPseudo,active:false}});
+      if (!myPseudo || !typingChannel) return;
+      if (!isTyping) {
+        isTyping = true;
+        typingChannel.send({ type:'broadcast', event:'typing', payload:{ pseudo:myPseudo, active:true } });
+      }
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(stopTyping, 3000);
     }
 
-    /* ── RÉACTIONS ── */
+    function stopTyping() {
+      if (!myPseudo || !isTyping) return;
+      isTyping = false; clearTimeout(typingTimer);
+      if (typingChannel) typingChannel.send({ type:'broadcast', event:'typing', payload:{ pseudo:myPseudo, active:false } });
+    }
+
     function renderReactionsBar(bar,msgId,reactions) {
       if(!bar) return; bar.innerHTML='';
       var counts={},mine={};
@@ -478,7 +653,8 @@
       Object.keys(counts).forEach(function(e){
         var pill=document.createElement('div'); pill.className='reaction-pill'+(mine[e]?' mine':'');
         pill.innerHTML=EMOJI_MAP[e]+' <span class="count">'+counts[e]+'</span>';
-        pill.onclick=function(ev){ev.stopPropagation();toggleReaction(msgId,e);}; bar.appendChild(pill);
+        pill.onclick=function(ev){ev.stopPropagation();toggleReaction(msgId,e);};
+        bar.appendChild(pill);
       });
     }
     async function toggleReaction(msgId,emoji) {
@@ -489,17 +665,25 @@
       refreshReactions(msgId);
     }
 
-    /* ── BULLES ── */
     function renderBubble(msg,reactions) {
       var list=document.getElementById('messagesList'),isMe=msg.pseudo===myPseudo,color=getPseudoColor(msg.pseudo);
       var time=new Date(msg.created_at).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
       var wrap=document.createElement('div'); wrap.className='bubble-wrap '+(isMe?'me':'them'); wrap.setAttribute('data-msg-id',msg.id);
       var picker=document.createElement('div'); picker.className='emoji-picker';
-      Object.keys(EMOJI_MAP).forEach(function(k){ var btn=document.createElement('button'); btn.className='emoji-pick-btn'; btn.textContent=EMOJI_MAP[k]; btn.onclick=function(e){e.stopPropagation();closePicker();toggleReaction(msg.id,k);}; picker.appendChild(btn); });
+      Object.keys(EMOJI_MAP).forEach(function(k){
+        var btn=document.createElement('button'); btn.className='emoji-pick-btn'; btn.textContent=EMOJI_MAP[k];
+        btn.onclick=function(e){e.stopPropagation();closePicker();toggleReaction(msg.id,k);};
+        picker.appendChild(btn);
+      });
       var bubble=document.createElement('div'); bubble.className='bubble';
       bubble.innerHTML=(!isMe?'<div class="bubble-pseudo" style="color:'+color+';">'+esc(msg.pseudo)+'</div>':'')+'<div>'+esc(msg.message)+'</div>'+'<div class="bubble-time">'+time+'</div>';
       bubble.appendChild(picker);
-      bubble.addEventListener('click',function(e){e.stopPropagation();if(openPicker&&openPicker!==picker)openPicker.classList.remove('show');picker.classList.toggle('show');openPicker=picker.classList.contains('show')?picker:null;});
+      bubble.addEventListener('click',function(e){
+        e.stopPropagation();
+        if(openPicker&&openPicker!==picker) openPicker.classList.remove('show');
+        picker.classList.toggle('show');
+        openPicker=picker.classList.contains('show')?picker:null;
+      });
       var bar=document.createElement('div'); bar.className='reactions-bar';
       if(reactions&&reactions.length) renderReactionsBar(bar,msg.id,reactions);
       wrap.appendChild(bubble); wrap.appendChild(bar); list.appendChild(wrap);
@@ -512,20 +696,40 @@
       var input=document.getElementById('msgInput'),message=input.value.trim();
       if(!message||!myPseudo) return;
       input.value=''; stopTyping();
-      await sb.from('messages').insert([{pseudo:myPseudo,message:message}]);
+      var res=await sb.from('messages').insert([{pseudo:myPseudo,message:message}]);
+      if(res.error) console.error(res.error);
     }
     function scrollBottom(){var l=document.getElementById('messagesList');l.scrollTop=l.scrollHeight;}
+    function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-    /* ── INIT ── */
+    /* ============================================================
+       NOTIFICATIONS VIA SERVICE WORKER
+    ============================================================ */
+    async function requestNotifPermission() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission === 'granted') return;
+      if (Notification.permission === 'denied') return;
+      await Notification.requestPermission();
+    }
+    function notifyViaSW(pseudo, message) {
+      if (!swReg || !swReg.active) return;
+      if (Notification.permission !== 'granted') return;
+      swReg.active.postMessage({ type:'NEW_MESSAGE', pseudo:pseudo, message:message });
+    }
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    registerSW();
     subscribeMessages();
 
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
     }
-    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
-    document.addEventListener('click', onFirstGesture, { once: true });
+    document.addEventListener('touchstart', onFirstGesture, { once:true, passive:true });
+    document.addEventListener('click', onFirstGesture, { once:true });
   </script>
 </body>
 </html>
