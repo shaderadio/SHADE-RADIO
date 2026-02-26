@@ -174,10 +174,10 @@
   <!-- ══════════════ MENU ══════════════ -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
+    <a href="/cdn-cgi/l/email-protection#c3b0aba2a7a6b1a2a7aaacafaab5a683a4aea2aaafeda0acaefcb0b6a1a9a6a0b7fe87868e828d8786e6f1f38786e6f1f3978a979186e5a1aca7bafe978a979186e6f082e6f382e6f3828291978a909786e6f082" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
+    <a href="/cdn-cgi/l/email-protection#d2a1bab3b6b7a0b3b6bbbdbebba4b792b5bfb3bbbefcb1bdbfeda1a7b0b8b7b1a6ef96979f939c9697f7e0e29697f7e0e2828790" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -289,7 +289,7 @@
   </div>
 
   <!-- ══════════════ SCRIPTS ══════════════ -->
-  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -302,13 +302,15 @@
     var sb         = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
     /* ── État global ── */
-    var myPseudo    = localStorage.getItem('shade_pseudo') || null;
-    var chatSub     = null;
-    var reactionSub = null;
-    var unreadCount = 0;
-    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
-    var openPicker  = null;
-    var swReg       = null;
+    var myPseudo      = localStorage.getItem('shade_pseudo') || null;
+    var chatSub       = null;
+    var reactionSub   = null;
+    var unreadCount   = 0;
+    var EXPIRY_MS     = 24 * 60 * 60 * 1000;
+    var openPicker    = null;
+    var swReg         = null;
+    var pollInterval  = null;   /* ← polling de sécurité quand le chat est ouvert */
+    var lastMsgTime   = null;   /* ← timestamp du dernier message affiché */
 
     /* ── Typing ── */
     var typingUsers   = {};
@@ -501,15 +503,16 @@
 
     /* ============================================================
        CHAT — OUVERTURE / FERMETURE
+       ✅ On détruit et recrée TOUJOURS les canaux à l'ouverture
+          pour éviter les canaux zombies Supabase.
+       ✅ Un polling toutes les 5s garantit l'affichage même si
+          le Realtime se déconnecte silencieusement.
     ============================================================ */
     function openChat() {
       document.getElementById('chatOverlay').classList.add('open');
       resetBadge();
       if (myPseudo) {
         showChatBody();
-        /* ✅ FIX : recharger systématiquement les messages à chaque ouverture */
-        document.getElementById('messagesList').innerHTML = '';
-        loadMessages();
       } else {
         document.getElementById('pseudoScreen').style.display = 'flex';
         document.getElementById('chatBody').classList.remove('show');
@@ -519,6 +522,9 @@
     function closeChat() {
       document.getElementById('chatOverlay').classList.remove('open');
       stopTyping();
+      stopPolling();
+      /* On détruit les canaux pour les recréer proprement à la prochaine ouverture */
+      destroyChannels();
     }
 
     function joinChat() {
@@ -527,19 +533,50 @@
       myPseudo = p;
       localStorage.setItem('shade_pseudo', p);
       showChatBody();
-      /* ✅ FIX : vider et charger après avoir rejoint */
-      document.getElementById('messagesList').innerHTML = '';
-      loadMessages();
-      if (!chatSub)     subscribeMessages();
-      if (!reactionSub) subscribeReactions();
     }
 
-    /* Affiche uniquement le corps du chat (sans déclencher de chargement) */
     function showChatBody() {
       document.getElementById('pseudoScreen').style.display = 'none';
       document.getElementById('chatBody').classList.add('show');
-      if (!chatSub)     subscribeMessages();
-      if (!reactionSub) subscribeReactions();
+      /* ✅ Toujours vider + recharger + recréer les canaux */
+      document.getElementById('messagesList').innerHTML = '';
+      lastMsgTime = null;
+      loadMessages();
+      destroyChannels();       /* détruit les anciens canaux s'ils existent */
+      subscribeMessages();     /* recrée un canal frais */
+      subscribeReactions();
+      startPolling();          /* polling de sécurité toutes les 5s */
+    }
+
+    /* Détruit proprement les canaux Supabase existants */
+    function destroyChannels() {
+      if (chatSub)     { try { sb.removeChannel(chatSub);     } catch(e){} chatSub     = null; }
+      if (reactionSub) { try { sb.removeChannel(reactionSub); } catch(e){} reactionSub = null; }
+    }
+
+    /* Polling de sécurité : vérifie les nouveaux messages toutes les 5s */
+    function startPolling() {
+      stopPolling();
+      pollInterval = setInterval(async function() {
+        if (!document.getElementById('chatOverlay').classList.contains('open')) { stopPolling(); return; }
+        if (!lastMsgTime) return;
+        var res = await sb.from('messages')
+          .select('*')
+          .gt('created_at', lastMsgTime)
+          .order('created_at', { ascending: true })
+          .limit(50);
+        if (res.error || !res.data || !res.data.length) return;
+        res.data.forEach(function(msg) {
+          if (!document.querySelector('[data-msg-id="' + msg.id + '"]')) {
+            renderBubble(msg, []);
+          }
+        });
+        scrollBottom();
+      }, 5000);
+    }
+
+    function stopPolling() {
+      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
     }
 
     function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
@@ -553,11 +590,13 @@
       if (res.error) { console.error('[Chat] loadMessages error:', res.error); return; }
 
       var list = document.getElementById('messagesList');
-      list.innerHTML = ''; /* ✅ FIX : toujours vider avant de rendre */
+      list.innerHTML = '';
 
       if (!res.data.length) {
         var n = document.createElement('div'); n.className = 'expired-notice';
-        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n); return;
+        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n);
+        lastMsgTime = since;
+        return;
       }
 
       var ids  = res.data.map(function (m) { return m.id; });
@@ -566,21 +605,25 @@
       if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
 
       res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
+
+      /* ✅ Mémoriser le timestamp du dernier message pour le polling */
+      lastMsgTime = res.data[res.data.length - 1].created_at;
       scrollBottom();
     }
 
     /* ============================================================
-       CHAT — ABONNEMENTS TEMPS RÉEL
+       CHAT — ABONNEMENTS TEMPS RÉEL (recréés à chaque ouverture)
     ============================================================ */
     function subscribeMessages() {
-      if (chatSub) return; /* anti-doublon */
-      chatSub = sb.channel('chat-messages')
+      chatSub = sb.channel('chat-messages-' + Date.now()) /* nom unique pour éviter les conflits */
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (p) {
           var msg = p.new;
           if (!isRecent(msg.created_at)) return;
 
+          /* Mettre à jour lastMsgTime pour que le polling ne redouble pas */
+          if (!lastMsgTime || msg.created_at > lastMsgTime) lastMsgTime = msg.created_at;
+
           if (document.getElementById('chatOverlay').classList.contains('open')) {
-            /* ✅ FIX : vérifier que la bulle n'est pas déjà dans le DOM (anti-doublon) */
             if (!document.querySelector('[data-msg-id="' + msg.id + '"]')) {
               renderBubble(msg, []);
               scrollBottom();
@@ -591,12 +634,13 @@
             playNotifSound();
             notifyViaSW(msg.pseudo, msg.message);
           }
-        }).subscribe();
+        }).subscribe(function(status) {
+          console.log('[Chat] statut canal messages :', status);
+        });
     }
 
     function subscribeReactions() {
-      if (reactionSub) return; /* anti-doublon */
-      reactionSub = sb.channel('chat-reactions')
+      reactionSub = sb.channel('chat-reactions-' + Date.now())
         .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, function (p) {
           var id = p.new ? p.new.message_id : (p.old ? p.old.message_id : null);
           if (id) refreshReactions(id);
@@ -763,15 +807,11 @@
     ============================================================ */
     subscribeTyping();     /* ① Canal typing — toujours en premier */
     registerSW();          /* ② Service Worker + détection mises à jour */
-    subscribeMessages();   /* ③ Écoute temps réel nouveaux messages */
+    /* ③ Canal messages pour les notifs quand le chat est FERMÉ uniquement */
+    /* (sera recréé proprement dans showChatBody() à l'ouverture du chat) */
+    subscribeMessages();
 
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
-    }
-    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
-    document.addEventListener('click',      onFirstGesture, { once: true });
-  </script>
-</body>
-</html>
+      try { if ('wakeLock' in n
