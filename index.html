@@ -244,13 +244,13 @@
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
 
-    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=ARTISTE%3A%0A%0ATITRE%3A" class="menu-link" onclick="closeMenu()">
+    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); openMail('titre')">
       <!-- ✅ SVG inline : Icône musique -->
       <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       Demander un titre
     </a>
 
-    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB&body=J'aimerais%20faire%20la%20promo%20pub%20de%20...." class="menu-link" onclick="closeMenu()">
+    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); openMail('pub')">
       <!-- ✅ SVG inline : Icône pub -->
       <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h-8l-2 4h12z"/></svg>
       Demande de pub
@@ -528,6 +528,20 @@
   /* =====================================================================
      MENU
      ===================================================================== */
+  function openMail(type) {
+    var email = 'shaderadiolive@gmail.com';
+    var subject, body;
+    if (type === 'titre') {
+      subject = 'DEMANDE DE TITRE';
+      body = 'ARTISTE:\n\nTITRE:';
+    } else {
+      subject = 'DEMANDE DE PUB';
+      body = "J'aimerais faire la promo pub de ....";
+    }
+    var link = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    window.location.href = link;
+  }
+
   function toggleMenu() {
     var m = document.getElementById('menuOverlay'), b = document.getElementById('hamburgerBtn');
     if (m.classList.contains('open')) { m.classList.remove('open'); b.classList.remove('open'); }
