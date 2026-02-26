@@ -326,6 +326,44 @@
     }
 
     /* ============================================================
+       KEYBOARD FIX – DÉTECTION INTELLIGENTE
+       ── S'active uniquement si le clavier cache réellement la
+          barre de saisie, quelle que soit la marque/modèle.
+          Ne fait rien si la barre reste déjà visible (iOS natif,
+          certains Android qui gèrent bien le resize, etc.).
+    ============================================================ */
+    (function() {
+      if (!window.visualViewport) return;
+
+      function onViewportChange() {
+        var chatOverlay = document.getElementById('chatOverlay');
+        if (!chatOverlay || !chatOverlay.classList.contains('open')) return;
+
+        var row = document.querySelector('.chat-input-row');
+        if (!row) return;
+
+        var vv        = window.visualViewport;
+        var rowRect   = row.getBoundingClientRect();
+        var visBottom = vv.offsetTop + vv.height; /* bas de la zone visible */
+
+        /* La barre est-elle cachée sous le clavier ? */
+        if (rowRect.bottom > visBottom + 5) {
+          /* Oui : on la remonte exactement ce qu'il faut */
+          var shift = rowRect.bottom - visBottom;
+          chatOverlay.style.transform = 'translateY(-' + shift + 'px)';
+          chatOverlay.style.height    = (window.innerHeight + shift) + 'px';
+        } else {
+          /* Non : la barre est déjà visible, on ne touche à rien */
+          chatOverlay.style.transform = '';
+          chatOverlay.style.height    = '';
+        }
+      }
+
+      window.visualViewport.addEventListener('resize', onViewportChange);
+      window.visualViewport.addEventListener('scroll', onViewportChange);
+    })();
+
+    /* ============================================================
        SERVICE WORKER + MISE À JOUR AUTOMATIQUE
        ➜ À chaque déploiement GitHub, ouvrir sw.js et
          incrémenter CACHE_VERSION (v1 → v2 → v3 …)
@@ -511,7 +549,14 @@
       if (myPseudo) { showMessages(); }
       else { document.getElementById('pseudoScreen').style.display = 'flex'; document.getElementById('chatBody').classList.remove('show'); }
     }
-    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); stopTyping(); }
+    function closeChat() {
+      var chatOverlay = document.getElementById('chatOverlay');
+      chatOverlay.classList.remove('open');
+      /* Reset Android keyboard fix styles on close */
+      chatOverlay.style.transform = '';
+      chatOverlay.style.height    = '';
+      stopTyping();
+    }
 
     function joinChat() {
       var i = document.getElementById('pseudoInput'), p = i.value.trim();
