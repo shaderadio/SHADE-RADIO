@@ -244,13 +244,13 @@
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
 
-    <a href="javascript:void(0)" class="menu-link" onclick="mailTitre(); closeMenu()">
+    <a class="menu-link" id="btnTitre" onclick="toggleMenu()">
       <!-- ✅ SVG inline : Icône musique -->
       <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       Demander un titre
     </a>
 
-    <a href="javascript:void(0)" class="menu-link" onclick="mailPub(); closeMenu()">
+    <a class="menu-link" id="btnPub" onclick="toggleMenu()">
       <!-- ✅ SVG inline : Icône pub -->
       <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h-8l-2 4h12z"/></svg>
       Demande de pub
@@ -528,24 +528,26 @@
   /* =====================================================================
      MENU
      ===================================================================== */
-  // Email construit dynamiquement pour eviter l'obfuscation Cloudflare
-  function getEmail() {
-    return ['shaderadiolive', 'gmail.com'].join('@');
-  }
+  // Injecter les vrais href mailto au chargement, apres que Cloudflare ait fini
+  window.addEventListener('load', function() {
+    var u = 'shaderadiolive';
+    var d = 'gmail.com';
+    var e = u + String.fromCharCode(64) + d;
 
-  function mailTitre() {
-    var e = getEmail();
-    var s = 'DEMANDE DE TITRE';
-    var b = 'ARTISTE :\r\n\r\nTITRE :';
-    window.location.href = 'mai' + 'lto:' + e + '?subject=' + encodeURIComponent(s) + '&body=' + encodeURIComponent(b);
-  }
+    var t = document.getElementById('btnTitre');
+    var p = document.getElementById('btnPub');
 
-  function mailPub() {
-    var e = getEmail();
-    var s = 'DEMANDE DE PUB';
-    var b = "J'aimerais faire la promo pub de ....";
-    window.location.href = 'mai' + 'lto:' + e + '?subject=' + encodeURIComponent(s) + '&body=' + encodeURIComponent(b);
-  }
+    if (t) {
+      t.href = 'mai' + 'lto:' + e
+        + '?subject=' + encodeURIComponent('DEMANDE DE TITRE')
+        + '&body='    + encodeURIComponent('ARTISTE :\r\nTITRE :');
+    }
+    if (p) {
+      p.href = 'mai' + 'lto:' + e
+        + '?subject=' + encodeURIComponent('DEMANDE DE PUB')
+        + '&body='    + encodeURIComponent("J'aimerais faire la promo pub de ....");
+    }
+  });
 
   function toggleMenu() {
     var m = document.getElementById('menuOverlay'), b = document.getElementById('hamburgerBtn');
