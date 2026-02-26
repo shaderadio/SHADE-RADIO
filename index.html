@@ -100,8 +100,6 @@
       transform: translateY(100%);
       transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s;
       padding-top: env(safe-area-inset-top, 10px);
-      /* FIX iOS : empêche tout scroll involontaire de l'overlay */
-      touch-action: none;
     }
     #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .chat-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
@@ -118,33 +116,27 @@
     .btn-join { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 14px 44px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(255,0,0,0.4); transition: transform 0.2s; }
     .btn-join:active { transform: scale(0.95); }
 
-    /* ── CHAT BODY — FIX iOS + ANDROID CLAVIER ── */
+    /* ── CHAT BODY — FIX ANDROID CLAVIER ── */
     .chat-body {
       flex: 1;
       display: none;
       flex-direction: column;
-      min-height: 0;
+      min-height: 0;        /* CRITIQUE : permet la compression flex sous Android */
       width: 100%;
       overflow: hidden;
-      /* FIX iOS : le chat-body occupe tout l'espace restant,
-         la barre de saisie est poussée en bas naturellement */
-      position: relative;
     }
     .chat-body.show { display: flex; }
 
     .messages-list {
       flex: 1;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch;   /* scroll fluide iOS/Android */
       padding: 14px 14px 8px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       scroll-behavior: smooth;
-      min-height: 0;
-      /* FIX iOS : autoriser le touch scroll uniquement sur cette zone */
-      touch-action: pan-y;
-      overscroll-behavior: contain;
+      min-height: 0;        /* CRITIQUE : se compresse quand le clavier s'ouvre */
     }
     .messages-list::-webkit-scrollbar { display: none; }
 
@@ -178,7 +170,7 @@
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes dot-bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-5px); opacity: 1; } }
 
-    /* ── SAISIE — FIX iOS + ANDROID CLAVIER ── */
+    /* ── SAISIE — FIX ANDROID CLAVIER ── */
     .chat-input-row {
       display: flex;
       align-items: center;
@@ -186,24 +178,12 @@
       padding: 10px 14px;
       padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
       border-top: 1px solid rgba(255,255,255,0.1);
-      flex-shrink: 0;
+      flex-shrink: 0;     /* NE PAS rétrécir : reste toujours visible */
       position: relative;
       z-index: 10;
-      background: rgba(0,0,0,0.25);
-      /* FIX iOS : autoriser les interactions tactiles sur la barre */
-      touch-action: manipulation;
+      background: rgba(0,0,0,0.25); /* fond pour ne pas fusionner avec les bulles */
     }
-    .chat-input {
-      flex: 1;
-      padding: 11px 16px;
-      border-radius: 25px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      /* FIX iOS : font-size >= 16px empêche le zoom auto au focus qui cause le scroll */
-      font-size: 16px;
-      outline: none;
-    }
+    .chat-input { flex: 1; padding: 11px 16px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: #fff; font-size: 15px; outline: none; }
     .chat-input::placeholder { color: rgba(255,255,255,0.35); }
     .send-btn { background: linear-gradient(135deg, #ff0000, #8b0000); border: none; width: 42px; height: 42px; border-radius: 50%; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(255,0,0,0.4); transition: transform 0.2s; flex-shrink: 0; }
     .send-btn:active { transform: scale(0.9); }
@@ -249,10 +229,10 @@
   <!-- ══════════════ MENU ══════════════ -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="/cdn-cgi/l/email-protection#26554e4742435447424f494a4f504366414b474f4a0845494b195553444c4345521b62636b676862630314166263031416726f727463004449425f1b726f7274630315670316670316676774726f757263031567" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="/cdn-cgi/l/email-protection#1b68737a7f7e697a7f727477726d7e5b7c767a72773578747624686e79717e786f265f5e565a555f5e3e292b5f5e3e292b4b4e59" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -321,9 +301,7 @@
       <div class="chat-input-row">
         <input class="chat-input" id="msgInput" type="text" placeholder="Ton message..." maxlength="200" autocomplete="off"
           onkeydown="if(event.key==='Enter') sendMessage()"
-          oninput="onTyping()"
-          onfocus="onChatInputFocus()"
-          onblur="onChatInputBlur()">
+          oninput="onTyping()">
         <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
@@ -366,7 +344,7 @@
   </div>
 
   <!-- ══════════════ SCRIPTS ══════════════ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -403,21 +381,15 @@
     }
 
     /* ============================================================
-       FIX iOS + ANDROID KEYBOARD — Visual Viewport API
-       Sur Android le clavier réduit innerHeight sans notifier.
-       Sur iOS Safari, le clavier pousse le contenu vers le haut et
-       fait scroller la page — on compense via visualViewport.offsetTop.
+       FIX ANDROID KEYBOARD — Visual Viewport API
+       Sur Android, quand le clavier virtuel s'ouvre, window.innerHeight
+       ne change pas. On écoute visualViewport pour recalculer la
+       hauteur réelle disponible et l'appliquer à tous les overlays.
     ============================================================ */
     function applyViewportHeight() {
-      var vv = window.visualViewport;
-      var h  = vv ? vv.height : window.innerHeight;
-      var offsetTop = vv ? vv.offsetTop : 0;
+      var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
       document.querySelectorAll('.overlay').forEach(function(el) {
-        el.style.height    = h + 'px';
-        /* FIX iOS : réancrer l'overlay au bon endroit même quand
-           Safari a scrollé la page sous le clavier */
-        el.style.top       = offsetTop + 'px';
-        el.style.transform = el.style.transform; /* force repaint */
+        el.style.height = h + 'px';
       });
     }
 
@@ -427,19 +399,6 @@
     }
     window.addEventListener('resize', applyViewportHeight);
     applyViewportHeight(); /* Appel initial */
-
-    /* FIX iOS spécifique — focus/blur sur l'input de chat :
-       attendre la fin de l'animation clavier (~350ms) avant
-       de recalculer et scroller vers les derniers messages */
-    function onChatInputFocus() {
-      setTimeout(function() {
-        applyViewportHeight();
-        scrollBottom();
-      }, 350);
-    }
-    function onChatInputBlur() {
-      setTimeout(applyViewportHeight, 100);
-    }
 
     /* ============================================================
        SERVICE WORKER + MISE À JOUR AUTOMATIQUE
@@ -847,4 +806,10 @@
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if ('wakeLock' in n
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
+    }
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click',      onFirstGesture, { once: true });
+  </script>
+</body>
+</html>
