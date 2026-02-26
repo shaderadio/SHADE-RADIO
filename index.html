@@ -327,9 +327,6 @@
 
     /* ============================================================
        SERVICE WORKER + MISE À JOUR AUTOMATIQUE
-       ➜ À chaque déploiement GitHub, ouvrir sw.js et
-         incrémenter CACHE_VERSION (v1 → v2 → v3 …)
-         pour forcer la mise à jour chez tous les utilisateurs PWA.
     ============================================================ */
     async function registerSW() {
       if (!('serviceWorker' in navigator)) return;
@@ -503,63 +500,106 @@
     }
 
     /* ============================================================
-       CHAT
+       CHAT — OUVERTURE / FERMETURE
     ============================================================ */
     function openChat() {
       document.getElementById('chatOverlay').classList.add('open');
       resetBadge();
-      if (myPseudo) { showMessages(); }
-      else { document.getElementById('pseudoScreen').style.display = 'flex'; document.getElementById('chatBody').classList.remove('show'); }
+      if (myPseudo) {
+        showChatBody();
+        /* ✅ FIX : recharger systématiquement les messages à chaque ouverture */
+        document.getElementById('messagesList').innerHTML = '';
+        loadMessages();
+      } else {
+        document.getElementById('pseudoScreen').style.display = 'flex';
+        document.getElementById('chatBody').classList.remove('show');
+      }
     }
-    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); stopTyping(); }
+
+    function closeChat() {
+      document.getElementById('chatOverlay').classList.remove('open');
+      stopTyping();
+    }
 
     function joinChat() {
       var i = document.getElementById('pseudoInput'), p = i.value.trim();
       if (!p) { i.focus(); return; }
-      myPseudo = p; localStorage.setItem('shade_pseudo', p); showMessages();
-    }
-
-    function showMessages() {
-      document.getElementById('pseudoScreen').style.display = 'none';
-      document.getElementById('chatBody').classList.add('show');
+      myPseudo = p;
+      localStorage.setItem('shade_pseudo', p);
+      showChatBody();
+      /* ✅ FIX : vider et charger après avoir rejoint */
+      document.getElementById('messagesList').innerHTML = '';
       loadMessages();
       if (!chatSub)     subscribeMessages();
       if (!reactionSub) subscribeReactions();
-      /* subscribeTyping() est appelé au démarrage — canal déjà prêt */
+    }
+
+    /* Affiche uniquement le corps du chat (sans déclencher de chargement) */
+    function showChatBody() {
+      document.getElementById('pseudoScreen').style.display = 'none';
+      document.getElementById('chatBody').classList.add('show');
+      if (!chatSub)     subscribeMessages();
+      if (!reactionSub) subscribeReactions();
     }
 
     function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
 
+    /* ============================================================
+       CHAT — CHARGEMENT DES MESSAGES
+    ============================================================ */
     async function loadMessages() {
       var since = new Date(Date.now() - EXPIRY_MS).toISOString();
       var res   = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
-      if (res.error) return;
-      var list = document.getElementById('messagesList'); list.innerHTML = '';
+      if (res.error) { console.error('[Chat] loadMessages error:', res.error); return; }
+
+      var list = document.getElementById('messagesList');
+      list.innerHTML = ''; /* ✅ FIX : toujours vider avant de rendre */
+
       if (!res.data.length) {
         var n = document.createElement('div'); n.className = 'expired-notice';
         n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n); return;
       }
+
       var ids  = res.data.map(function (m) { return m.id; });
       var rRes = await sb.from('reactions').select('*').in('message_id', ids);
       var rMap = {};
       if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
+
       res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
       scrollBottom();
     }
 
+    /* ============================================================
+       CHAT — ABONNEMENTS TEMPS RÉEL
+    ============================================================ */
     function subscribeMessages() {
+      if (chatSub) return; /* anti-doublon */
       chatSub = sb.channel('chat-messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (p) {
-          var msg = p.new; if (!isRecent(msg.created_at)) return;
-          if (document.getElementById('chatOverlay').classList.contains('open')) { renderBubble(msg, []); scrollBottom(); }
-          else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); notifyViaSW(msg.pseudo, msg.message); }
+          var msg = p.new;
+          if (!isRecent(msg.created_at)) return;
+
+          if (document.getElementById('chatOverlay').classList.contains('open')) {
+            /* ✅ FIX : vérifier que la bulle n'est pas déjà dans le DOM (anti-doublon) */
+            if (!document.querySelector('[data-msg-id="' + msg.id + '"]')) {
+              renderBubble(msg, []);
+              scrollBottom();
+            }
+          } else if (msg.pseudo !== myPseudo) {
+            unreadCount++;
+            showBadge(unreadCount);
+            playNotifSound();
+            notifyViaSW(msg.pseudo, msg.message);
+          }
         }).subscribe();
     }
 
     function subscribeReactions() {
+      if (reactionSub) return; /* anti-doublon */
       reactionSub = sb.channel('chat-reactions')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, function (p) {
-          var id = p.new ? p.new.message_id : (p.old ? p.old.message_id : null); if (id) refreshReactions(id);
+          var id = p.new ? p.new.message_id : (p.old ? p.old.message_id : null);
+          if (id) refreshReactions(id);
         }).subscribe();
     }
 
@@ -571,13 +611,9 @@
 
     /* ============================================================
        TYPING INDICATOR
-       ── Canal Broadcast Supabase, initialisé au démarrage ──
-       Le canal est créé avant même que l'utilisateur ouvre le chat,
-       ce qui garantit que "est en train d'écrire" s'affiche
-       immédiatement sans aucun délai.
     ============================================================ */
     function subscribeTyping() {
-      if (typingChannel) return; /* anti-doublon */
+      if (typingChannel) return;
 
       typingChannel = sb.channel('shade-typing-broadcast', {
         config: { broadcast: { self: false } }
@@ -595,7 +631,6 @@
           console.log('[Typing] statut canal :', status);
         });
 
-      /* Expire les pseudos silencieux depuis plus de 4s */
       setInterval(function () {
         var now = Date.now(), changed = false;
         Object.keys(typingUsers).forEach(function (p) {
@@ -649,6 +684,7 @@
         bar.appendChild(pill);
       });
     }
+
     async function toggleReaction(msgId, emoji) {
       if (!myPseudo) return;
       var check = await sb.from('reactions').select('id').eq('message_id', msgId).eq('pseudo', myPseudo).eq('emoji', emoji);
@@ -724,9 +760,6 @@
 
     /* ============================================================
        INITIALISATION
-       ► subscribeTyping() en PREMIER — canal prêt avant tout
-         pour que le typing indicator fonctionne dès l'ouverture
-         du chat sans délai ni rechargement.
     ============================================================ */
     subscribeTyping();     /* ① Canal typing — toujours en premier */
     registerSW();          /* ② Service Worker + détection mises à jour */
