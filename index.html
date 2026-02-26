@@ -462,7 +462,7 @@
       chatSub=sb.channel('chat-messages').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){
         var msg=p.new; if(!isRecent(msg.created_at)) return;
         if(document.getElementById('chatOverlay').classList.contains('open')){renderBubble(msg,[]);scrollBottom();}
-        else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();notifyViaSW(msg.pseudo,msg.message);}
+        else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();}
       }).subscribe();
     }
     function subscribeReactions() {
@@ -590,9 +590,17 @@
 
 
     /* -------------------------------------------------------
-       SERVICE WORKER + NOTIFICATIONS PUSH (app fermée)
+       SERVICE WORKER + WEB PUSH VAPID
        ------------------------------------------------------- */
+    var VAPID_PUBLIC_KEY = 'BH2RMI_r3pIOu5WK6n7aTtzF25uWNFxk4AjypiIqn6x2SgtP7_mOyCw4i0a4N3yLe7ypsSd07v8N__-6-6tfirk';
     var swReg = null;
+
+    /* Convertit la clé VAPID base64url → Uint8Array */
+    function urlBase64ToUint8Array(b64) {
+      var pad = '='.repeat((4 - b64.length % 4) % 4);
+      var raw = atob(b64.replace(/-/g, '+').replace(/_/g, '/') + pad);
+      return Uint8Array.from(raw, function(c) { return c.charCodeAt(0); });
+    }
 
     async function registerSW() {
       if (!('serviceWorker' in navigator)) return;
@@ -602,28 +610,65 @@
       } catch(e) { console.warn('[SW] échec :', e); }
     }
 
-    async function requestNotifPermission() {
+    /* Demande la permission puis crée/sauvegarde la subscription push */
+    async function setupPushSubscription() {
+      if (!swReg || !('PushManager' in window)) return;
       if (!('Notification' in window)) return;
-      if (Notification.permission === 'granted') return;
-      if (Notification.permission === 'denied') return;
-      var result = await Notification.requestPermission();
-      console.log('[Notif] permission :', result);
+
+      /* Demande la permission si pas encore accordée */
+      var perm = Notification.permission;
+      if (perm === 'denied') return;
+      if (perm !== 'granted') {
+        perm = await Notification.requestPermission();
+      }
+      if (perm !== 'granted') return;
+
+      try {
+        /* Vérifie si une subscription existe déjà */
+        var existing = await swReg.pushManager.getSubscription();
+        if (existing) {
+          await savePushSubscription(existing);
+          return;
+        }
+
+        /* Crée une nouvelle subscription */
+        var sub = await swReg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+        await savePushSubscription(sub);
+        console.log('[Push] subscription créée');
+      } catch(e) {
+        console.warn('[Push] échec subscription :', e);
+      }
     }
 
-    /* Envoie une notif via SW si l'app est en arrière-plan */
-    function notifyViaSW(pseudo, message) {
-      if (!swReg || !swReg.active) return;
-      if (Notification.permission !== 'granted') return;
-      swReg.active.postMessage({ type: 'NEW_MESSAGE', pseudo: pseudo, message: message });
+    /* Sauvegarde la subscription dans Supabase */
+    async function savePushSubscription(sub) {
+      var json = sub.toJSON();
+      var endpoint = json.endpoint;
+      var p256dh   = json.keys && json.keys.p256dh;
+      var auth     = json.keys && json.keys.auth;
+      if (!endpoint || !p256dh || !auth) return;
+
+      /* Upsert : évite les doublons sur endpoint */
+      await sb.from('push_subscriptions').upsert(
+        { endpoint: endpoint, p256dh: p256dh, auth: auth },
+        { onConflict: 'endpoint' }
+      );
     }
 
     /* INIT */
-    registerSW();
+    registerSW().then(function() {
+      /* On tente la subscription dès que le SW est prêt */
+      if (swReg) setupPushSubscription();
+    });
     subscribeMessages();
 
     function onFirstGesture() {
       unlockAudio();
-      requestNotifPermission();
+      /* Au premier geste, on (re)tente la subscription si pas encore faite */
+      setupPushSubscription();
       try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
     }
     document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
