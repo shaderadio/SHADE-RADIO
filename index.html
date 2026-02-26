@@ -306,7 +306,6 @@
     var chatSub     = null;
     var reactionSub = null;
     var unreadCount = 0;
-    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
     var openPicker  = null;
     var swReg       = null;
 
@@ -525,19 +524,16 @@
       loadMessages();
       if (!chatSub)     subscribeMessages();
       if (!reactionSub) subscribeReactions();
-      /* subscribeTyping() est appelé au démarrage — canal déjà prêt */
     }
 
-    function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
-
     async function loadMessages() {
-      var since = new Date(Date.now() - EXPIRY_MS).toISOString();
-      var res   = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
+      /* Charge les 200 derniers messages sans aucun filtre de date */
+      var res = await sb.from('messages').select('*').order('created_at', { ascending: true }).limit(200);
       if (res.error) return;
       var list = document.getElementById('messagesList'); list.innerHTML = '';
       if (!res.data.length) {
         var n = document.createElement('div'); n.className = 'expired-notice';
-        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n); return;
+        n.textContent = 'Aucun message pour le moment. Soyez le premier à écrire !'; list.appendChild(n); return;
       }
       var ids  = res.data.map(function (m) { return m.id; });
       var rRes = await sb.from('reactions').select('*').in('message_id', ids);
@@ -550,7 +546,7 @@
     function subscribeMessages() {
       chatSub = sb.channel('chat-messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (p) {
-          var msg = p.new; if (!isRecent(msg.created_at)) return;
+          var msg = p.new;
           if (document.getElementById('chatOverlay').classList.contains('open')) { renderBubble(msg, []); scrollBottom(); }
           else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); notifyViaSW(msg.pseudo, msg.message); }
         }).subscribe();
@@ -571,13 +567,9 @@
 
     /* ============================================================
        TYPING INDICATOR
-       ── Canal Broadcast Supabase, initialisé au démarrage ──
-       Le canal est créé avant même que l'utilisateur ouvre le chat,
-       ce qui garantit que "est en train d'écrire" s'affiche
-       immédiatement sans aucun délai.
     ============================================================ */
     function subscribeTyping() {
-      if (typingChannel) return; /* anti-doublon */
+      if (typingChannel) return;
 
       typingChannel = sb.channel('shade-typing-broadcast', {
         config: { broadcast: { self: false } }
@@ -595,7 +587,6 @@
           console.log('[Typing] statut canal :', status);
         });
 
-      /* Expire les pseudos silencieux depuis plus de 4s */
       setInterval(function () {
         var now = Date.now(), changed = false;
         Object.keys(typingUsers).forEach(function (p) {
@@ -724,9 +715,6 @@
 
     /* ============================================================
        INITIALISATION
-       ► subscribeTyping() en PREMIER — canal prêt avant tout
-         pour que le typing indicator fonctionne dès l'ouverture
-         du chat sans délai ni rechargement.
     ============================================================ */
     subscribeTyping();     /* ① Canal typing — toujours en premier */
     registerSW();          /* ② Service Worker + détection mises à jour */
