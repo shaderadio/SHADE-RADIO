@@ -53,18 +53,26 @@
     .ad-banner { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 10px; overflow: hidden; display: flex; }
     .ad-ticker { flex: 1; padding: 7px 0; overflow: hidden; display: flex; }
     .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: shade-scroll 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ===== OVERLAY ===== */
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; pointer-events: none; visibility: hidden; z-index: 10000; }
     .overlay.open { pointer-events: all; visibility: visible; }
     #chatOverlay { justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
     #chatOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     #historyOverlay { justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
     #historyOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
-    .overlay-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; }
-    .overlay-header-left { display: flex; align-items: center; gap: 12px; }
-    .overlay-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+    /* FIX: Header avec z-index élevé et flex-shrink:0 pour que la croix reste visible */
+    .overlay-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0; position: relative; z-index: 10; background: rgba(0,0,0,0.2); }
+    .overlay-header-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+    .overlay-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0000, #8b0000); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     .overlay-title { color: #fff; font-weight: bold; font-size: 15px; }
     .overlay-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
-    .close-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    /* FIX: Bouton fermeture toujours visible, flex-shrink:0 empêche l'écrasement */
+    .close-btn { background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3); color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 10px; transition: background 0.2s; -webkit-tap-highlight-color: transparent; z-index: 20; position: relative; }
+    .close-btn:active { background: rgba(255,255,255,0.3); transform: scale(0.92); }
+
     .pseudo-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 20px; width: 100%; }
     .pseudo-screen h2 { color: #fff; font-size: 22px; text-align: center; }
     .pseudo-screen p { color: rgba(255,255,255,0.55); font-size: 14px; text-align: center; }
@@ -72,9 +80,9 @@
     .pseudo-input::placeholder { color: rgba(255,255,255,0.35); }
     .btn-join { background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; border: none; padding: 14px 44px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 20px rgba(255,0,0,0.4); transition: transform 0.2s; }
     .btn-join:active { transform: scale(0.95); }
-    .chat-body { flex: 1; display: none; flex-direction: column; overflow: hidden; width: 100%; }
+    .chat-body { flex: 1; display: none; flex-direction: column; overflow: hidden; width: 100%; min-height: 0; }
     .chat-body.show { display: flex; }
-    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+    .messages-list { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; min-height: 0; }
     .messages-list::-webkit-scrollbar { display: none; }
     .expired-notice { text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; padding: 6px 0; font-style: italic; }
     .bubble-wrap { display: flex; flex-direction: column; max-width: 76%; animation: pop-in 0.22s ease; }
@@ -242,7 +250,7 @@
     function joinChat(){var p=document.getElementById('pseudoInput').value.trim();if(!p){document.getElementById('pseudoInput').focus();return;}myPseudo=p;localStorage.setItem('shade_pseudo',p);showMessages();}
     function showMessages(){document.getElementById('pseudoScreen').style.display='none';document.getElementById('chatBody').classList.add('show');loadMessages();if(!chatSub)subscribeMessages();if(!reactionSub)subscribeReactions();if(!typingChannel)subscribeTyping();}
     async function loadMessages(){var since=new Date(Date.now()-EXPIRY_MS).toISOString();var res=await sb.from('messages').select('*').gte('created_at',since).order('created_at',{ascending:true}).limit(200);if(res.error)return;var list=document.getElementById('messagesList');list.innerHTML='';if(!res.data.length){var n=document.createElement('div');n.className='expired-notice';n.textContent='Aucun message récent. Soyez le premier à écrire !';list.appendChild(n);return;}var ids=res.data.map(function(m){return m.id;});var rRes=await sb.from('reactions').select('*').in('message_id',ids);var rMap={};if(rRes.data)rRes.data.forEach(function(r){if(!rMap[r.message_id])rMap[r.message_id]=[];rMap[r.message_id].push(r);});res.data.forEach(function(msg){renderBubble(msg,rMap[msg.id]||[]);});scrollBottom();}
-    function subscribeMessages(){chatSub=sb.channel('chat-messages').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){var msg=p.new;if(!isRecent(msg.created_at))return;if(document.getElementById('chatOverlay').classList.contains('open')){renderBubble(msg,[]);scrollBottom();}else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();}}).subscribe();}
+    function subscribeMessages(){chatSub=sb.channel('chat-messages').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){var msg=p.new;if(!isRecent(msg.created_at))return;if(document.getElementById('chatOverlay').classList.contains('open')){renderBubble(msg,[]);scrollBottom();}else if(msg.pseudo!==myPseudo){unreadCount++;showBadge(unreadCount);playNotifSound();sendPushNotification(msg.pseudo, msg.message);}}).subscribe();}
     function subscribeReactions(){reactionSub=sb.channel('chat-reactions').on('postgres_changes',{event:'*',schema:'public',table:'reactions'},function(p){var id=p.new?p.new.message_id:(p.old?p.old.message_id:null);if(id)refreshReactions(id);}).subscribe();}
     function subscribeTyping(){typingChannel=sb.channel('shade-typing-broadcast',{config:{broadcast:{self:false}}});typingChannel.on('broadcast',{event:'typing'},function(payload){var p=payload.payload;if(!p||!p.pseudo||p.pseudo===myPseudo)return;if(p.active){typingUsers[p.pseudo]=Date.now();}else{delete typingUsers[p.pseudo];}renderTypingDisplay();}).subscribe();setInterval(function(){var now=Date.now(),changed=false;Object.keys(typingUsers).forEach(function(p){if(now-typingUsers[p]>4000){delete typingUsers[p];changed=true;}});if(changed)renderTypingDisplay();},1000);}
     function renderTypingDisplay(){var ind=document.getElementById('typingIndicator');if(!ind)return;var others=Object.keys(typingUsers);if(!others.length){ind.innerHTML='';return;}var name=others.length===1?others[0]:others.length+' personnes';var verb=others.length===1?" est en train d'écrire":" sont en train d'écrire";ind.innerHTML='<span style="font-weight:bold;color:rgba(255,255,255,0.6);">'+esc(name)+'</span>'+verb+'<span class="typing-dots"><span></span><span></span><span></span></span>';}
@@ -260,12 +268,59 @@
     function closeHistory(){document.getElementById('historyOverlay').classList.remove('open');}
     async function loadHistory(){var loading=document.getElementById('historyLoading'),tl=document.getElementById('trackList');loading.style.display='block';tl.innerHTML='';var data=null;var endpoints=['/api/v2/history/?server_id=1','/api/v2/history/','/api/v2/lastplayed/?server_id=1','/api/v2/lastplayed/'];for(var ei=0;ei<endpoints.length;ei++){try{var res=await fetch(RADIO_BASE+endpoints[ei]);var json=await res.json();if(Array.isArray(json)&&json.length){data=json;break;}if(json&&Array.isArray(json.data)&&json.data.length){data=json.data;break;}if(json&&Array.isArray(json.tracks)&&json.tracks.length){data=json.tracks;break;}if(json&&Array.isArray(json.history)&&json.history.length){data=json.history;break;}}catch(e){}}loading.style.display='none';if(!data||!data.length){tl.innerHTML='<div class="history-empty">Aucun titre disponible.<br>La radio est peut-être en pause.</div>';return;}data.slice(0,5).forEach(function(t,i){var isNow=(i===0);var card=document.createElement('div');card.className='track-card'+(isNow?' now-playing':'');var idx=document.createElement('div');if(isNow){idx.className='now-dot';}else{idx.className='track-index';idx.textContent=i+1;}var info=document.createElement('div');info.className='track-info';if(isNow){var lbl=document.createElement('div');lbl.className='track-now-label';lbl.textContent='▶ En cours';info.appendChild(lbl);}var title=document.createElement('div');title.className='track-title';title.textContent=t.title||t.name||'Titre inconnu';var artist=document.createElement('div');artist.className='track-artist';artist.textContent=t.artist||t.author||'Artiste inconnu';info.appendChild(title);info.appendChild(artist);var dateStr=t.start_time||t.played_at||t.date||null;if(dateStr){var tm=document.createElement('div');tm.className='track-time';tm.textContent=timeAgo(dateStr);info.appendChild(tm);}card.appendChild(idx);card.appendChild(info);tl.appendChild(card);});}
     function timeAgo(dateStr){var diff=Math.floor((Date.now()-new Date(dateStr).getTime())/1000);if(isNaN(diff)||diff<0)return 'en cours';if(diff<60)return "à l'instant";if(diff<3600)return Math.floor(diff/60)+' min';if(diff<86400)return Math.floor(diff/3600)+'h';return Math.floor(diff/86400)+'j';}
+
+    /* ===================================================
+       NOTIFICATIONS SYSTÈME (visibles écran verrouillé)
+       =================================================== */
+    var notifPermission = 'default';
+
+    // Demande la permission dès le premier geste utilisateur
+    function requestNotifPermission() {
+      if (!('Notification' in window)) return;
+      if (Notification.permission === 'granted') { notifPermission = 'granted'; return; }
+      if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(function(perm) {
+          notifPermission = perm;
+        });
+      }
+    }
+
+    // Envoie une notification système native (passe l'écran verrouillé sur Android/desktop)
+    function sendPushNotification(pseudo, message) {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'granted') return;
+      // On évite de spammer : une seule notif groupée "Shade Radio Chat"
+      try {
+        var notif = new Notification('💬 ' + pseudo + ' — Shade Radio', {
+          body: message,
+          icon: 'assets/logo.JPG',
+          badge: 'assets/logo.JPG',
+          tag: 'shade-chat',          // remplace la précédente au lieu d'empiler
+          renotify: true,             // fait vibrer/sonner même avec le même tag
+          silent: false
+        });
+        // Ouvre le chat au clic sur la notification
+        notif.onclick = function() {
+          window.focus();
+          openChat();
+          notif.close();
+        };
+      } catch(e) {}
+    }
+
+    /* Son de notification (fallback quand les notifs système ne sont pas dispo) */
     var audioCtx=null,audioUnlocked=false;
     function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
     function unlockAudio(){if(audioUnlocked)return;try{var ctx=getAudioCtx(),buf=ctx.createBuffer(1,1,22050),src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.start(0);ctx.resume().then(function(){audioUnlocked=true;}).catch(function(){});}catch(e){}}
     function playNotifSound(){try{var ctx=getAudioCtx();function doPlay(){[880,1100].forEach(function(f,i){var o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';var t=ctx.currentTime+i*0.15;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(0.4,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.4);o.start(t);o.stop(t+0.41);});}if(ctx.state==='suspended')ctx.resume().then(doPlay).catch(function(){});else doPlay();}catch(e){}}
+
     subscribeMessages();
-    function onFirstGesture(){unlockAudio();try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').catch(function(){});}catch(e){}}
+
+    function onFirstGesture(){
+      unlockAudio();
+      requestNotifPermission(); // ← demande la permission notifications au premier geste
+      try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').catch(function(){});}catch(e){}
+    }
     document.addEventListener('touchstart',onFirstGesture,{once:true,passive:true});
     document.addEventListener('click',onFirstGesture,{once:true});
   </script>
