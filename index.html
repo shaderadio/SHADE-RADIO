@@ -69,8 +69,8 @@
     .overlay.open { pointer-events: all; visibility: visible; }
 
     /* ── MENU ── */
-    #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
-    #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    #menuOverlay { z-index: 200; gap: 15px; transform: translateX(100%); transition: transform 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
+    #menuOverlay.open { transform: translateX(0); transition: transform 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
     #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
     .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
