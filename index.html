@@ -244,13 +244,13 @@
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
 
-    <a href="mailto:contact@shaderadio.fr" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=ARTISTE%3A%0A%0ATITRE%3A" class="menu-link" onclick="closeMenu()">
       <!-- ✅ SVG inline : Icône musique -->
       <svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       Demander un titre
     </a>
 
-    <a href="mailto:pub@shaderadio.fr" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB&body=J'aimerais%20faire%20la%20promo%20pub%20de%20...." class="menu-link" onclick="closeMenu()">
       <!-- ✅ SVG inline : Icône pub -->
       <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h-8l-2 4h12z"/></svg>
       Demande de pub
@@ -1006,8 +1006,3 @@
     requestNotifPermission();
     try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function(){}); } catch(e) {}
   }
-  document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
-  document.addEventListener('click',      onFirstGesture, { once: true });
-  </script>
-</body>
-</html>
