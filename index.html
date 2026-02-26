@@ -121,35 +121,28 @@
     .history-sub { color: rgba(255,255,255,0.45); font-size: 11px; margin-top: 2px; }
     .history-body { flex: 1; overflow-y: auto; width: 100%; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .history-body::-webkit-scrollbar { display: none; }
-    .track-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; }
-    .track-card.now-playing { border-color: rgba(255,0,0,0.4); background: rgba(255,0,0,0.07); }
-    .track-artwork-wrap { position: relative; flex-shrink: 0; width: 58px; height: 58px; }
-    .track-artwork { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; display: block; }
-    .track-artwork-skeleton { width: 58px; height: 58px; border-radius: 10px; background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.06) 75%); background-size: 200% 100%; animation: skeleton-shine 1.2s infinite; }
-    @keyframes skeleton-shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    .track-artwork-placeholder { width: 58px; height: 58px; border-radius: 10px; background: linear-gradient(135deg, rgba(255,0,0,0.3), rgba(80,0,0,0.5)); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-    .now-dot { position: absolute; bottom: -3px; right: -3px; width: 14px; height: 14px; background: #ff0000; border-radius: 50%; border: 2px solid #000; animation: pulse-dot 1.2s infinite; z-index: 2; }
-    @keyframes pulse-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
+
+    /* Track cards — version simplifiée sans pochettes */
+    .track-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; }
+    .track-card.now-playing { border-color: rgba(255,0,0,0.45); background: rgba(255,0,0,0.08); }
+    .track-index { font-size: 13px; font-weight: bold; color: rgba(255,255,255,0.2); width: 20px; text-align: center; flex-shrink: 0; }
+    .track-card.now-playing .track-index { color: #ff4444; }
+    .now-dot { width: 10px; height: 10px; background: #ff0000; border-radius: 50%; flex-shrink: 0; animation: pulse-dot 1.2s infinite; }
+    @keyframes pulse-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.6; } }
     .track-info { flex: 1; min-width: 0; }
-    .track-now-label { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #ff4444; margin-bottom: 3px; }
+    .track-now-label { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #ff4444; margin-bottom: 4px; }
     .track-title { color: #fff; font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .track-artist { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .track-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-    .track-time { color: rgba(255,255,255,0.3); font-size: 10px; }
+    .track-artist { color: rgba(255,255,255,0.45); font-size: 12px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-meta { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+    .track-time { color: rgba(255,255,255,0.25); font-size: 10px; }
     .track-duration { color: rgba(255,255,255,0.2); font-size: 10px; }
     .history-loading { text-align: center; color: rgba(255,255,255,0.35); font-size: 13px; padding: 40px 0; }
     .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 40px 0; line-height: 1.6; }
     .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
     .history-refresh-btn:active { background: rgba(255,255,255,0.14); }
-
-    /* Widget StreamRadio caché — on l'utilise juste pour ses données */
-    #RTWidgetStatus { display: none !important; position: absolute; visibility: hidden; }
   </style>
 </head>
 <body>
-
-  <!-- Widget StreamRadio caché — fournit les données réelles (titres + pochettes) -->
-  <div id="RTWidgetStatus"></div>
 
   <!-- MENU OVERLAY -->
   <div class="overlay" id="menuOverlay">
@@ -182,7 +175,7 @@
         <div class="chat-avatar" style="font-size:16px;">&#127925;</div>
         <div>
           <div class="history-title">Titres diffuses</div>
-          <div class="history-sub">5 derniers morceaux</div>
+          <div class="history-sub">En cours + 4 derniers morceaux</div>
         </div>
       </div>
       <button class="close-btn" onclick="closeHistory()">&#10005;</button>
@@ -264,15 +257,6 @@
   <!-- Scripts StreamRadio player -->
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
 
-  <!-- jQuery requis par le StatusWidget -->
-  <script>
-    if (typeof jQuery == 'undefined') {
-      document.write('<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"><\/script>');
-    }
-  </script>
-  <script type="text/javascript" src="https://yandex.st/jquery/tmpl/1.0.0pre/jquery.tmpl.min.js"></script>
-  <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/external/status-widget.js"></script>
-
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -329,10 +313,7 @@
     function shareRadio() { if(navigator.share) navigator.share({title:'SHADE RADIO',text:'Ecoute SHADE RADIO !',url:window.location.href}); }
 
     /* =====================
-       HISTORIQUE
-       On utilise le StatusWidget officiel de StreamRadio (caché dans le DOM).
-       Il contient les vraies données : titre, artiste, et surtout la pochette.
-       On parse son contenu HTML après son chargement.
+       HISTORIQUE — appel direct API, pas de pochettes
     ===================== */
     function openHistory() {
       document.getElementById('historyOverlay').classList.add('open');
@@ -342,130 +323,46 @@
       document.getElementById('historyOverlay').classList.remove('open');
     }
 
-    function loadHistory() {
+    async function loadHistory() {
       var loading = document.getElementById('historyLoading');
       var tl      = document.getElementById('trackList');
       loading.style.display = 'block';
       tl.innerHTML = '';
 
-      /* On lance le widget officiel StreamRadio dans son div caché.
-         Il fait ses propres appels API et injecte le HTML avec les bonnes pochettes.
-         On attend qu'il ait fini, puis on parse son contenu. */
-      var widgetEl = document.getElementById('RTWidgetStatus');
-      widgetEl.innerHTML = ''; /* reset */
+      var data = null;
+      var endpoints = [
+        '/api/v2/history/?server_id=1',
+        '/api/v2/history/',
+        '/api/v2/lastplayed/?server_id=1',
+        '/api/v2/lastplayed/'
+      ];
 
-      try {
-        jQuery(document).ready(function() {
-          new StatusWidget(
-            { djImage: true, djName: false, listenersNum: false, trackCurrent: true, history: true, widgetWidth: 350 },
-            1,
-            RADIO_BASE,
-            '#RTWidgetStatus',
-            'fr'
-          );
-
-          /* On attend que le widget ait injecté son contenu (polling) */
-          var attempts = 0;
-          var maxAttempts = 30; /* 3 secondes max */
-          var poller = setInterval(function() {
-            attempts++;
-            var items = parseWidgetData();
-            if (items.length > 0 || attempts >= maxAttempts) {
-              clearInterval(poller);
-              loading.style.display = 'none';
-              if (items.length === 0) {
-                tl.innerHTML = '<div class="history-empty">Aucun titre diffuse pour le moment.<br>La radio est peut-etre en pause.</div>';
-                return;
-              }
-              renderTracks(items.slice(0, 5));
-            }
-          }, 100);
-        });
-      } catch(e) {
-        console.error('Widget error:', e);
-        /* Fallback API directe sans pochettes */
-        loadHistoryFallback();
-      }
-    }
-
-    /* Parse le HTML injecté par le StatusWidget pour en extraire les données */
-    function parseWidgetData() {
-      var widgetEl = document.getElementById('RTWidgetStatus');
-      var items = [];
-
-      /* Le widget génère des éléments avec les classes StreamRadio standard */
-      /* On cherche les items d'historique et le titre courant */
-      var rows = widgetEl.querySelectorAll(
-        '.track-item, .history-item, .sw-track, .sw-history-item, ' +
-        '[class*="track"], [class*="history"], li, .item'
-      );
-
-      if (rows.length === 0) {
-        /* Tentative plus large sur tout le contenu du widget */
-        rows = widgetEl.querySelectorAll('*');
+      for (var ei = 0; ei < endpoints.length; ei++) {
+        try {
+          var res  = await fetch(RADIO_BASE + endpoints[ei]);
+          var json = await res.json();
+          if (Array.isArray(json)            && json.length)         { data = json;        break; }
+          if (json && Array.isArray(json.data)   && json.data.length)   { data = json.data;   break; }
+          if (json && Array.isArray(json.tracks) && json.tracks.length) { data = json.tracks; break; }
+          if (json && Array.isArray(json.history) && json.history.length) { data = json.history; break; }
+        } catch(e) {}
       }
 
-      rows.forEach(function(row) {
-        /* On cherche une image (pochette) et du texte (titre/artiste) */
-        var img = row.querySelector('img');
-        var text = row.innerText || row.textContent || '';
-        text = text.trim();
+      loading.style.display = 'none';
 
-        if (!text || text.length < 3) return;
-        if (img || text.includes(' - ') || text.includes('\n')) {
-          var imgSrc = img ? (img.src || img.getAttribute('data-src') || '') : '';
-          /* Ignorer les logos et petites icônes */
-          if (imgSrc && (imgSrc.includes('logo') || imgSrc.includes('icon'))) imgSrc = '';
-
-          var lines = text.split(/[\n\r]+/).map(function(l){ return l.trim(); }).filter(Boolean);
-          var title  = lines[0] || '';
-          var artist = lines[1] || '';
-
-          /* Éviter les doublons */
-          var alreadyIn = items.some(function(x){ return x.title === title; });
-          if (title && !alreadyIn) {
-            items.push({ title: title, artist: artist, image: imgSrc });
-          }
-        }
-      });
-
-      return items;
-    }
-
-    /* Fallback : appel direct API sans pochettes */
-    async function loadHistoryFallback() {
-      var loading = document.getElementById('historyLoading');
-      var tl      = document.getElementById('trackList');
-      try {
-        var endpoints = ['/api/v2/history/', '/api/v2/lastplayed/'];
-        var data = null;
-        for (var ei = 0; ei < endpoints.length; ei++) {
-          try {
-            var res  = await fetch(RADIO_BASE + endpoints[ei]);
-            var json = await res.json();
-            if (Array.isArray(json) && json.length)                       { data = json;        break; }
-            if (json && Array.isArray(json.data)   && json.data.length)   { data = json.data;   break; }
-            if (json && Array.isArray(json.tracks) && json.tracks.length) { data = json.tracks; break; }
-          } catch(e2) {}
-        }
-        loading.style.display = 'none';
-        if (!data || !data.length) {
-          tl.innerHTML = '<div class="history-empty">Aucun titre disponible.</div>';
-          return;
-        }
-        renderTracks(data.slice(0, 5).map(function(t) {
-          return {
-            title:  t.title  || t.name   || 'Titre inconnu',
-            artist: t.artist || t.author || 'Artiste inconnu',
-            image:  null,
-            dateStr: t.start_time || t.played_at || null,
-            duration: t.track_length_formatted || t.duration || null
-          };
-        }));
-      } catch(e) {
-        loading.style.display = 'none';
-        tl.innerHTML = '<div class="history-empty">Impossible de charger l\'historique.</div>';
+      if (!data || !data.length) {
+        tl.innerHTML = '<div class="history-empty">Aucun titre disponible pour le moment.<br>La radio est peut-etre en pause.</div>';
+        return;
       }
+
+      renderTracks(data.slice(0, 5).map(function(t) {
+        return {
+          title:   t.title  || t.name        || 'Titre inconnu',
+          artist:  t.artist || t.author      || 'Artiste inconnu',
+          dateStr: t.start_time || t.played_at || t.date || null,
+          duration: t.track_length_formatted  || t.duration || null
+        };
+      }));
     }
 
     function renderTracks(tracks) {
@@ -473,37 +370,24 @@
       tl.innerHTML = '';
 
       tracks.forEach(function(t, i) {
-        var card = document.createElement('div');
-        card.className = 'track-card' + (i === 0 ? ' now-playing' : '');
+        var isNow = (i === 0);
+        var card  = document.createElement('div');
+        card.className = 'track-card' + (isNow ? ' now-playing' : '');
 
-        /* Artwork */
-        var artWrap = document.createElement('div');
-        artWrap.className = 'track-artwork-wrap';
-
-        if (t.image && t.image.length > 5) {
-          var img = document.createElement('img');
-          img.className = 'track-artwork';
-          img.alt = t.title;
-          img.src = t.image;
-          img.onerror = function() {
-            artWrap.replaceChild(makePlaceholder(), img);
-          };
-          artWrap.appendChild(img);
+        /* Indicateur gauche : point rouge animé pour "en cours", numéro sinon */
+        var indexEl = document.createElement('div');
+        if (isNow) {
+          indexEl.className = 'now-dot';
         } else {
-          artWrap.appendChild(makePlaceholder());
-        }
-
-        if (i === 0) {
-          var dot = document.createElement('div');
-          dot.className = 'now-dot';
-          artWrap.appendChild(dot);
+          indexEl.className = 'track-index';
+          indexEl.textContent = i + 1;
         }
 
         /* Infos */
         var info = document.createElement('div');
         info.className = 'track-info';
 
-        if (i === 0) {
+        if (isNow) {
           var lbl = document.createElement('div');
           lbl.className = 'track-now-label';
           lbl.textContent = '▶ En cours';
@@ -530,33 +414,27 @@
         if (t.duration) {
           var durEl = document.createElement('span');
           durEl.className = 'track-duration';
-          durEl.textContent = '· ' + t.duration;
+          durEl.textContent = (t.dateStr ? '· ' : '') + t.duration;
           meta.appendChild(durEl);
         }
 
         info.appendChild(titleEl);
         info.appendChild(artistEl);
-        info.appendChild(meta);
-        card.appendChild(artWrap);
+        if (meta.children.length) info.appendChild(meta);
+
+        card.appendChild(indexEl);
         card.appendChild(info);
         tl.appendChild(card);
       });
-    }
-
-    function makePlaceholder() {
-      var ph = document.createElement('div');
-      ph.className = 'track-artwork-placeholder';
-      ph.textContent = '🎵';
-      return ph;
     }
 
     function timeAgo(dateStr) {
       var diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
       if (isNaN(diff) || diff < 0) return 'en cours';
       if (diff < 60)    return 'a l\'instant';
-      if (diff < 3600)  return Math.floor(diff/60) + ' min';
-      if (diff < 86400) return Math.floor(diff/3600) + 'h';
-      return Math.floor(diff/86400) + 'j';
+      if (diff < 3600)  return Math.floor(diff / 60) + ' min';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+      return Math.floor(diff / 86400) + 'j';
     }
 
     /* ===== CHAT ===== */
