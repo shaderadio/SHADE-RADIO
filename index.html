@@ -65,12 +65,12 @@
     .ad-ticker span { display: inline-block; white-space: nowrap; padding-left: 100%; animation: scroll-text 14s linear infinite; color: #fff; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 
     /* ── OVERLAYS BASE ── */
-    .overlay { position: fixed; top: 0; left: 0; right: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; visibility: hidden; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%); background: rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; visibility: hidden; }
     .overlay.open { pointer-events: all; visibility: visible; }
 
     /* ── MENU ── */
-    #menuOverlay { z-index: 200; gap: 15px; transform: translateX(100%); transition: transform 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
-    #menuOverlay.open { transform: translateX(0); transition: transform 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    #menuOverlay { z-index: 200; gap: 15px; right: -100%; left: auto; width: 100%; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.45s; }
+    #menuOverlay.open { right: 0; transition: right 0.45s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
     .menu-logo { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); opacity: 0; transform: scale(0.8); transition: opacity 0.5s 0.3s, transform 0.5s 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
     #menuOverlay.open .menu-logo { opacity: 1; transform: scale(1); }
     .menu-link { color: #fff; text-decoration: none; font-size: 17px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 15px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.2s; cursor: pointer; -webkit-user-select: none; user-select: none; }
@@ -174,10 +174,10 @@
   <!-- ══════════════ MENU ══════════════ -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="/cdn-cgi/l/email-protection#c3b0aba2a7a6b1a2a7aaacafaab5a683a4aea2aaafeda0acaefcb0b6a1a9a6a0b7fe87868e828d8786e6f1f38786e6f1f3978a979186e5a1aca7bafe978a979186e6f082e6f382e6f3828291978a909786e6f082" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="/cdn-cgi/l/email-protection#d2a1bab3b6b7a0b3b6bbbdbebba4b792b5bfb3bbbefcb1bdbfeda1a7b0b8b7b1a6ef96979f939c9697f7e0e29697f7e0e2828790" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -289,7 +289,7 @@
   </div>
 
   <!-- ══════════════ SCRIPTS ══════════════ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -302,15 +302,13 @@
     var sb         = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
     /* ── État global ── */
-    var myPseudo      = localStorage.getItem('shade_pseudo') || null;
-    var chatSub       = null;
-    var reactionSub   = null;
-    var unreadCount   = 0;
-    var EXPIRY_MS     = 24 * 60 * 60 * 1000;
-    var openPicker    = null;
-    var swReg         = null;
-    var pollInterval  = null;   /* ← polling de sécurité quand le chat est ouvert */
-    var lastMsgTime   = null;   /* ← timestamp du dernier message affiché */
+    var myPseudo    = localStorage.getItem('shade_pseudo') || null;
+    var chatSub     = null;
+    var reactionSub = null;
+    var unreadCount = 0;
+    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
+    var openPicker  = null;
+    var swReg       = null;
 
     /* ── Typing ── */
     var typingUsers   = {};
@@ -329,6 +327,9 @@
 
     /* ============================================================
        SERVICE WORKER + MISE À JOUR AUTOMATIQUE
+       ➜ À chaque déploiement GitHub, ouvrir sw.js et
+         incrémenter CACHE_VERSION (v1 → v2 → v3 …)
+         pour forcer la mise à jour chez tous les utilisateurs PWA.
     ============================================================ */
     async function registerSW() {
       if (!('serviceWorker' in navigator)) return;
@@ -502,164 +503,63 @@
     }
 
     /* ============================================================
-       CHAT — OUVERTURE / FERMETURE
-       ✅ On détruit et recrée TOUJOURS les canaux à l'ouverture
-          pour éviter les canaux zombies Supabase.
-       ✅ Un polling toutes les 5s garantit l'affichage même si
-          le Realtime se déconnecte silencieusement.
+       CHAT
     ============================================================ */
     function openChat() {
       document.getElementById('chatOverlay').classList.add('open');
       resetBadge();
-      if (myPseudo) {
-        showChatBody();
-      } else {
-        document.getElementById('pseudoScreen').style.display = 'flex';
-        document.getElementById('chatBody').classList.remove('show');
-      }
+      if (myPseudo) { showMessages(); }
+      else { document.getElementById('pseudoScreen').style.display = 'flex'; document.getElementById('chatBody').classList.remove('show'); }
     }
-
-    function closeChat() {
-      document.getElementById('chatOverlay').classList.remove('open');
-      stopTyping();
-      stopPolling();
-      /* On détruit les canaux pour les recréer proprement à la prochaine ouverture */
-      destroyChannels();
-    }
+    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); stopTyping(); }
 
     function joinChat() {
       var i = document.getElementById('pseudoInput'), p = i.value.trim();
       if (!p) { i.focus(); return; }
-      myPseudo = p;
-      localStorage.setItem('shade_pseudo', p);
-      showChatBody();
+      myPseudo = p; localStorage.setItem('shade_pseudo', p); showMessages();
     }
 
-    function showChatBody() {
+    function showMessages() {
       document.getElementById('pseudoScreen').style.display = 'none';
       document.getElementById('chatBody').classList.add('show');
-      lastMsgTime = null;
-      destroyChannels();       /* détruit les anciens canaux zombies EN PREMIER */
-      subscribeMessages();     /* canal frais prêt AVANT le chargement */
-      subscribeReactions();
-      loadMessages();          /* charge sans vider le DOM */
-      startPolling();
-    }
-
-    /* Détruit proprement les canaux Supabase existants */
-    function destroyChannels() {
-      if (chatSub)     { try { sb.removeChannel(chatSub);     } catch(e){} chatSub     = null; }
-      if (reactionSub) { try { sb.removeChannel(reactionSub); } catch(e){} reactionSub = null; }
-    }
-
-    /* Polling de sécurité : vérifie les nouveaux messages toutes les 5s */
-    function startPolling() {
-      stopPolling();
-      pollInterval = setInterval(async function() {
-        if (!document.getElementById('chatOverlay').classList.contains('open')) { stopPolling(); return; }
-        if (!lastMsgTime) return;
-        var res = await sb.from('messages')
-          .select('*')
-          .gt('created_at', lastMsgTime)
-          .order('created_at', { ascending: true })
-          .limit(50);
-        if (res.error || !res.data || !res.data.length) return;
-        res.data.forEach(function(msg) {
-          if (!document.querySelector('[data-msg-id="' + msg.id + '"]')) {
-            renderBubble(msg, []);
-          }
-        });
-        scrollBottom();
-      }, 5000);
-    }
-
-    function stopPolling() {
-      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+      loadMessages();
+      if (!chatSub)     subscribeMessages();
+      if (!reactionSub) subscribeReactions();
+      /* subscribeTyping() est appelé au démarrage — canal déjà prêt */
     }
 
     function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
 
-    /* ============================================================
-       CHAT — CHARGEMENT DES MESSAGES
-    ============================================================ */
     async function loadMessages() {
       var since = new Date(Date.now() - EXPIRY_MS).toISOString();
       var res   = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
-      if (res.error) { console.error('[Chat] loadMessages error:', res.error); return; }
-
-      var list = document.getElementById('messagesList');
-
-      /* ✅ Récupérer les IDs déjà affichés — NE JAMAIS vider le DOM */
-      var existingIds = {};
-      list.querySelectorAll('[data-msg-id]').forEach(function(el) {
-        existingIds[el.getAttribute('data-msg-id')] = true;
-      });
-
-      if (!res.data || !res.data.length) {
-        if (!Object.keys(existingIds).length) {
-          var n = document.createElement('div'); n.className = 'expired-notice';
-          n.textContent = 'Aucun message récent. Soyez le premier à écrire !';
-          list.innerHTML = ''; list.appendChild(n);
-        }
-        lastMsgTime = since;
-        return;
+      if (res.error) return;
+      var list = document.getElementById('messagesList'); list.innerHTML = '';
+      if (!res.data.length) {
+        var n = document.createElement('div'); n.className = 'expired-notice';
+        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n); return;
       }
-
-      /* Supprimer le message «aucun message» si présent */
-      var notice = list.querySelector('.expired-notice');
-      if (notice) notice.remove();
-
-      /* Uniquement les messages pas encore dans le DOM */
-      var newMsgs = res.data.filter(function(m) { return !existingIds[String(m.id)]; });
-
-      if (newMsgs.length) {
-        var ids  = newMsgs.map(function(m) { return m.id; });
-        var rRes = await sb.from('reactions').select('*').in('message_id', ids);
-        var rMap = {};
-        if (rRes.data) rRes.data.forEach(function(r) {
-          if (!rMap[r.message_id]) rMap[r.message_id] = [];
-          rMap[r.message_id].push(r);
-        });
-        newMsgs.forEach(function(msg) { renderBubble(msg, rMap[msg.id] || []); });
-        scrollBottom();
-      }
-
-      lastMsgTime = res.data[res.data.length - 1].created_at;
+      var ids  = res.data.map(function (m) { return m.id; });
+      var rRes = await sb.from('reactions').select('*').in('message_id', ids);
+      var rMap = {};
+      if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
+      res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
+      scrollBottom();
     }
 
-    /* ============================================================
-       CHAT — ABONNEMENTS TEMPS RÉEL (recréés à chaque ouverture)
-    ============================================================ */
     function subscribeMessages() {
-      chatSub = sb.channel('chat-messages-' + Date.now()) /* nom unique pour éviter les conflits */
+      chatSub = sb.channel('chat-messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (p) {
-          var msg = p.new;
-          if (!isRecent(msg.created_at)) return;
-
-          /* Mettre à jour lastMsgTime pour que le polling ne redouble pas */
-          if (!lastMsgTime || msg.created_at > lastMsgTime) lastMsgTime = msg.created_at;
-
-          if (document.getElementById('chatOverlay').classList.contains('open')) {
-            if (!document.querySelector('[data-msg-id="' + msg.id + '"]')) {
-              renderBubble(msg, []);
-              scrollBottom();
-            }
-          } else if (msg.pseudo !== myPseudo) {
-            unreadCount++;
-            showBadge(unreadCount);
-            playNotifSound();
-            notifyViaSW(msg.pseudo, msg.message);
-          }
-        }).subscribe(function(status) {
-          console.log('[Chat] statut canal messages :', status);
-        });
+          var msg = p.new; if (!isRecent(msg.created_at)) return;
+          if (document.getElementById('chatOverlay').classList.contains('open')) { renderBubble(msg, []); scrollBottom(); }
+          else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); notifyViaSW(msg.pseudo, msg.message); }
+        }).subscribe();
     }
 
     function subscribeReactions() {
-      reactionSub = sb.channel('chat-reactions-' + Date.now())
+      reactionSub = sb.channel('chat-reactions')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, function (p) {
-          var id = p.new ? p.new.message_id : (p.old ? p.old.message_id : null);
-          if (id) refreshReactions(id);
+          var id = p.new ? p.new.message_id : (p.old ? p.old.message_id : null); if (id) refreshReactions(id);
         }).subscribe();
     }
 
@@ -671,9 +571,13 @@
 
     /* ============================================================
        TYPING INDICATOR
+       ── Canal Broadcast Supabase, initialisé au démarrage ──
+       Le canal est créé avant même que l'utilisateur ouvre le chat,
+       ce qui garantit que "est en train d'écrire" s'affiche
+       immédiatement sans aucun délai.
     ============================================================ */
     function subscribeTyping() {
-      if (typingChannel) return;
+      if (typingChannel) return; /* anti-doublon */
 
       typingChannel = sb.channel('shade-typing-broadcast', {
         config: { broadcast: { self: false } }
@@ -691,6 +595,7 @@
           console.log('[Typing] statut canal :', status);
         });
 
+      /* Expire les pseudos silencieux depuis plus de 4s */
       setInterval(function () {
         var now = Date.now(), changed = false;
         Object.keys(typingUsers).forEach(function (p) {
@@ -744,7 +649,6 @@
         bar.appendChild(pill);
       });
     }
-
     async function toggleReaction(msgId, emoji) {
       if (!myPseudo) return;
       var check = await sb.from('reactions').select('id').eq('message_id', msgId).eq('pseudo', myPseudo).eq('emoji', emoji);
@@ -764,7 +668,6 @@
       var wrap  = document.createElement('div');
       wrap.className = 'bubble-wrap ' + (isMe ? 'me' : 'them');
       wrap.setAttribute('data-msg-id', msg.id);
-      wrap.setAttribute('data-msg-time', msg.created_at);
 
       var picker = document.createElement('div'); picker.className = 'emoji-picker';
       Object.keys(EMOJI_MAP).forEach(function (k) {
@@ -821,14 +724,21 @@
 
     /* ============================================================
        INITIALISATION
+       ► subscribeTyping() en PREMIER — canal prêt avant tout
+         pour que le typing indicator fonctionne dès l'ouverture
+         du chat sans délai ni rechargement.
     ============================================================ */
     subscribeTyping();     /* ① Canal typing — toujours en premier */
     registerSW();          /* ② Service Worker + détection mises à jour */
-    /* ③ Canal messages pour les notifs quand le chat est FERMÉ uniquement */
-    /* (sera recréé proprement dans showChatBody() à l'ouverture du chat) */
-    subscribeMessages();
+    subscribeMessages();   /* ③ Écoute temps réel nouveaux messages */
 
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if ('wakeLock' in n
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
+    }
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click',      onFirstGesture, { once: true });
+  </script>
+</body>
+</html>
