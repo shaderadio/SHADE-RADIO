@@ -174,10 +174,10 @@
   <!-- ══════════════ MENU ══════════════ -->
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    <a href="/cdn-cgi/l/email-protection#f88b90999c9d8a999c919794918e9db89f95999194d69b9795c78b8d9a929d9b8cc5bcbdb5b9b6bcbdddcac8bcbdddcac8acb1acaabdde9a979c81c5acb1acaabdddcbb9ddc8b9ddc8b9b9aaacb1abacbdddcbb9" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-music"></i> Demander un titre
     </a>
-    <a href="/cdn-cgi/l/email-protection#05766d6461607764616c6a696c7360456268646c692b666a683a7670676f60667138414048444b41402037354140203735555047" class="menu-link" onclick="closeMenu()">
+    <a href="mailto:shaderadiolive@gmail.com?subject=DEMANDE%20DE%20PUB" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-ad"></i> Demande de pub
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="shareRadio(); closeMenu();">
@@ -289,7 +289,7 @@
   </div>
 
   <!-- ══════════════ SCRIPTS ══════════════ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
+  <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -306,6 +306,7 @@
     var chatSub     = null;
     var reactionSub = null;
     var unreadCount = 0;
+    var EXPIRY_MS   = 24 * 60 * 60 * 1000;
     var openPicker  = null;
     var swReg       = null;
 
@@ -524,29 +525,32 @@
       loadMessages();
       if (!chatSub)     subscribeMessages();
       if (!reactionSub) subscribeReactions();
+      /* subscribeTyping() est appelé au démarrage — canal déjà prêt */
     }
 
+    function isRecent(d) { return (Date.now() - new Date(d).getTime()) < EXPIRY_MS; }
+
     async function loadMessages() {
-      var res = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(50);
+      var since = new Date(Date.now() - EXPIRY_MS).toISOString();
+      var res   = await sb.from('messages').select('*').gte('created_at', since).order('created_at', { ascending: true }).limit(200);
       if (res.error) return;
       var list = document.getElementById('messagesList'); list.innerHTML = '';
-      var data = res.data.reverse();
-      if (!data.length) {
+      if (!res.data.length) {
         var n = document.createElement('div'); n.className = 'expired-notice';
-        n.textContent = 'Aucun message pour le moment. Soyez le premier à écrire !'; list.appendChild(n); return;
+        n.textContent = 'Aucun message récent. Soyez le premier à écrire !'; list.appendChild(n); return;
       }
-      var ids  = data.map(function (m) { return m.id; });
+      var ids  = res.data.map(function (m) { return m.id; });
       var rRes = await sb.from('reactions').select('*').in('message_id', ids);
       var rMap = {};
       if (rRes.data) rRes.data.forEach(function (r) { if (!rMap[r.message_id]) rMap[r.message_id] = []; rMap[r.message_id].push(r); });
-      data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
+      res.data.forEach(function (msg) { renderBubble(msg, rMap[msg.id] || []); });
       scrollBottom();
     }
 
     function subscribeMessages() {
       chatSub = sb.channel('chat-messages')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, function (p) {
-          var msg = p.new;
+          var msg = p.new; if (!isRecent(msg.created_at)) return;
           if (document.getElementById('chatOverlay').classList.contains('open')) { renderBubble(msg, []); scrollBottom(); }
           else if (msg.pseudo !== myPseudo) { unreadCount++; showBadge(unreadCount); playNotifSound(); notifyViaSW(msg.pseudo, msg.message); }
         }).subscribe();
@@ -567,9 +571,13 @@
 
     /* ============================================================
        TYPING INDICATOR
+       ── Canal Broadcast Supabase, initialisé au démarrage ──
+       Le canal est créé avant même que l'utilisateur ouvre le chat,
+       ce qui garantit que "est en train d'écrire" s'affiche
+       immédiatement sans aucun délai.
     ============================================================ */
     function subscribeTyping() {
-      if (typingChannel) return;
+      if (typingChannel) return; /* anti-doublon */
 
       typingChannel = sb.channel('shade-typing-broadcast', {
         config: { broadcast: { self: false } }
@@ -587,6 +595,7 @@
           console.log('[Typing] statut canal :', status);
         });
 
+      /* Expire les pseudos silencieux depuis plus de 4s */
       setInterval(function () {
         var now = Date.now(), changed = false;
         Object.keys(typingUsers).forEach(function (p) {
@@ -715,11 +724,21 @@
 
     /* ============================================================
        INITIALISATION
+       ► subscribeTyping() en PREMIER — canal prêt avant tout
+         pour que le typing indicator fonctionne dès l'ouverture
+         du chat sans délai ni rechargement.
     ============================================================ */
     subscribeTyping();     /* ① Canal typing — toujours en premier */
     registerSW();          /* ② Service Worker + détection mises à jour */
+    subscribeMessages();   /* ③ Écoute temps réel nouveaux messages */
 
     function onFirstGesture() {
       unlockAudio();
       requestNotifPermission();
-      try { if ('wakeLock' in n
+      try { if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
+    }
+    document.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
+    document.addEventListener('click',      onFirstGesture, { once: true });
+  </script>
+</body>
+</html>
