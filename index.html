@@ -38,8 +38,27 @@
     .player-container { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 15px; }
     .player-container::after { content: ""; position: absolute; top: -8px; width: 221px; height: 221px; border-radius: 32px; background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%); background-size: 200% 100%; pointer-events: none; z-index: 10; animation: gloss 4s linear infinite; }
     @keyframes gloss { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    #sc-player { background: transparent !important; transform: scale(0.65); transform-origin: top center; height: 300px; position: relative; z-index: 2; }
-    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
+  /* Style par défaut (Mobile) */
+#sc-player { 
+    background: transparent !important; 
+    transform: scale(0.65); 
+    transform-origin: top center; 
+    height: 300px; 
+    position: relative; 
+    z-index: 2; 
+    width: 100%;
+}
+
+/* Ajustement pour Ordinateur (écrans > 768px) */
+@media (min-width: 768px) {
+    #sc-player {
+        transform: scale(0.45); /* Réduit encore plus la taille sur PC */
+        transform-origin: center center; /* Centre le point de réduction */
+        margin-top: -40px; /* Remonte le bouton pour compenser le vide */
+        display: flex;
+        justify-content: center;
+    }
+}    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 40px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
     #sc-player [class*="play-button"] { background: #001f3f !important; border-radius: 50% !important; border: 2px solid rgba(255,255,255,0.8) !important; box-shadow: 0 0 20px rgba(0,31,63,0.6), 0 0 10px rgba(255,255,255,0.2) !important; z-index: 5; transition: transform 0.2s; }
     #sc-player [class*="play-button"]:active { transform: scale(0.9); }
