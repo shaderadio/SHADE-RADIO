@@ -143,11 +143,9 @@
 
   <div class="overlay" id="menuOverlay">
     <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
-    
     <a href="https://shaderadio.myspreadshop.net/" target="_blank" class="menu-link" onclick="closeMenu()">
       <i class="fas fa-shopping-cart"></i> NOTRE BOUTIQUE
     </a>
-
     <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); var m='shaderadiolive'; var d='gmail.com'; window.location='mailto:'+m+'@'+d+'?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A'">
       <i class="fas fa-music"></i> Demander un titre
     </a>
@@ -257,28 +255,25 @@
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // TOUT LE RESTE DU SCRIPT REPRIS DE TON CODE INITIAL
-    function toggleMenu() {
-      var m = document.getElementById('menuOverlay');
-      var b = document.getElementById('hamburgerBtn');
-      if (m.classList.contains('open')) {
-        m.classList.remove('open'); b.classList.remove('open');
-      } else {
-        m.classList.add('open'); b.classList.add('open');
-      }
+    // Refermeture propre du script à partir de l'endroit où ton code s'est coupé
+    function renderTracks(tracks) {
+      var tl = document.getElementById('trackList'); tl.innerHTML = '';
+      tracks.forEach(function (t, i) {
+        var isNow = (i === 0);
+        var card = document.createElement('div'); card.className = 'track-card' + (isNow ? ' now-playing' : '');
+        var idx = document.createElement('div');
+        if (isNow) { idx.className = 'now-dot'; } else { idx.className = 'track-index'; idx.textContent = i + 1; }
+        var info = document.createElement('div'); info.className = 'track-info';
+        if (isNow) { var lbl = document.createElement('div'); lbl.className = 'track-now-label'; lbl.textContent = '\u25B6 En cours'; info.appendChild(lbl); }
+        var te = document.createElement('div'); te.className = 'track-title'; te.textContent = t.title || 'Titre inconnu';
+        var ae = document.createElement('div'); ae.className = 'track-artist'; ae.textContent = t.artist || 'Artiste inconnu';
+        var mt = document.createElement('div'); mt.className = 'track-meta';
+        if (t.dateStr) { var se = document.createElement('span'); se.className = 'track-time'; se.textContent = t.dateStr; mt.appendChild(se); }
+        if (t.duration) { var de = document.createElement('span'); de.className = 'track-duration'; de.textContent = (t.dateStr ? '· ' : '') + t.duration; mt.appendChild(de); }
+        info.appendChild(te); info.appendChild(ae); if (mt.children.length) info.appendChild(mt);
+        card.appendChild(idx); card.appendChild(info); tl.appendChild(card);
+      });
     }
-    function closeMenu() {
-      document.getElementById('menuOverlay').classList.remove('open');
-      document.getElementById('hamburgerBtn').classList.remove('open');
-    }
-    function shareRadio() {
-      if (navigator.share) navigator.share({ title: 'SHADE RADIO', text: 'Ecoute SHADE RADIO !', url: window.location.href });
-    }
-    function openHistory() { document.getElementById('historyOverlay').classList.add('open'); }
-    function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
-    function openChat() { document.getElementById('chatOverlay').classList.add('open'); }
-    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); }
-    // Fin du script de secours pour que le menu burger et les overlays fonctionnent
   </script>
 </body>
 </html>
