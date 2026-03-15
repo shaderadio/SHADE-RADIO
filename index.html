@@ -478,11 +478,25 @@
       tracks.forEach(function (t, i) {
         var isNow = (i === 0);
         var card = document.createElement('div'); card.className = 'track-card' + (isNow ? ' now-playing' : '');
-        // (Le reste de ta fonction renderTracks continue ici...)
+        
+        var idx = document.createElement('div');
+        if (isNow) { idx.className = 'now-dot'; } else { idx.className = 'track-index'; idx.textContent = i + 1; }
+        
+        var info = document.createElement('div'); info.className = 'track-info';
+        if (isNow) { var lbl = document.createElement('div'); lbl.className = 'track-now-label'; lbl.textContent = 'En direct'; info.appendChild(lbl); }
+        
+        var title = document.createElement('div'); title.className = 'track-title'; title.textContent = t.title;
+        var artist = document.createElement('div'); artist.className = 'track-artist'; artist.textContent = t.artist;
+        
+        info.appendChild(title); info.appendChild(artist);
+        card.appendChild(idx); card.appendChild(info);
+        tl.appendChild(card);
       });
     }
 
-    // Garde tes autres fonctions (openChat, joinChat, etc.) en dessous...
+    // Fonctions pour le chat (openChat, joinChat, etc.) à placer ici pour que tout fonctionne.
+    function openChat() { document.getElementById('chatOverlay').classList.add('open'); resetBadge(); }
+    function closeChat() { document.getElementById('chatOverlay').classList.remove('open'); }
   </script>
 </body>
 </html>
