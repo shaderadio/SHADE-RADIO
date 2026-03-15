@@ -12,6 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="SHADE RADIO">
   <meta name="theme-color" content="#000000">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="https://manager11.streamradio.fr:1700/media/static/css/request_track_widget/request_widget.css" />
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { background: #000; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow: hidden; padding-top: env(safe-area-inset-top, 10px); position: relative; perspective: 1200px; }
@@ -38,27 +39,9 @@
     .player-container { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 15px; }
     .player-container::after { content: ""; position: absolute; top: -8px; width: 221px; height: 221px; border-radius: 32px; background: linear-gradient(110deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%); background-size: 200% 100%; pointer-events: none; z-index: 10; animation: gloss 4s linear infinite; }
     @keyframes gloss { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-  /* Style par défaut (Mobile) */
-#sc-player { 
-    background: transparent !important; 
-    transform: scale(0.65); 
-    transform-origin: top center; 
-    height: 300px; 
-    position: relative; 
-    z-index: 2; 
-    width: 100%;
-}
-
-/* Ajustement pour Ordinateur (écrans > 768px) */
-@media (min-width: 768px) {
-    #sc-player {
-        transform: scale(0.20); /* Réduit encore plus la taille sur PC */
-        transform-origin: center center; /* Centre le point de réduction */
-        margin-top: -80px; /* Remonte le bouton pour compenser le vide */
-        display: flex;
-        justify-content: center;
-    }
-}    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
+    #sc-player { background: transparent !important; transform: scale(0.65); transform-origin: top center; height: 300px; position: relative; z-index: 2; width: 100%; }
+    @media (min-width: 768px) { #sc-player { transform: scale(0.20); transform-origin: center center; margin-top: -80px; display: flex; justify-content: center; } }
+    #sc-player, #sc-player * { background: transparent !important; box-shadow: none !important; border: none !important; }
     #sc-player img { width: 100% !important; border-radius: 40px !important; box-shadow: 0 15px 35px rgba(0,0,0,0.8) !important; }
     #sc-player [class*="play-button"] { background: #001f3f !important; border-radius: 50% !important; border: 2px solid rgba(255,255,255,0.8) !important; box-shadow: 0 0 20px rgba(0,31,63,0.6), 0 0 10px rgba(255,255,255,0.2) !important; z-index: 5; transition: transform 0.2s; }
     #sc-player [class*="play-button"]:active { transform: scale(0.9); }
@@ -150,6 +133,12 @@
     .history-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 40px 0; line-height: 1.6; }
     .history-refresh-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 25px; color: rgba(255,255,255,0.5); font-size: 13px; padding: 10px; cursor: pointer; margin-top: 4px; transition: background 0.2s; }
     .history-refresh-btn:active { background: rgba(255,255,255,0.14); }
+    /* Track Request Overlay */
+    #trackRequestOverlay { z-index: 250; justify-content: flex-start; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0.4s; padding-top: env(safe-area-inset-top, 10px); }
+    #trackRequestOverlay.open { transform: translateY(0); transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0), visibility 0s 0s; }
+    .track-request-body { flex: 1; overflow-y: auto; width: 100%; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .track-request-body::-webkit-scrollbar { display: none; }
+    .sc-track-request-widget { width: 100%; max-width: 380px; }
     #updateToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #ff0000, #8b0000); color: #fff; padding: 14px 22px; border-radius: 50px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 20px rgba(255,0,0,0.5); display: none; align-items: center; gap: 14px; z-index: 9999; cursor: pointer; white-space: nowrap; }
     #updateToast.show { display: flex; animation: pop-in 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
   </style>
@@ -160,18 +149,18 @@
     &#128260; Mise a jour disponible ! <span style="text-decoration:underline;opacity:0.9;">Recharger</span>
   </div>
 
+  <!-- MENU OVERLAY -->
   <div class="overlay" id="menuOverlay">
-   <button class="close-btn" onclick="toggleMenu()" style="position: absolute; top: 60px; right: 25px; z-index: 1000;">&#10005;</button>
-    
-    <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo"> 
+    <button class="close-btn" onclick="toggleMenu()" style="position: absolute; top: 60px; right: 25px; z-index: 1000;">&#10005;</button>
+    <img src="assets/logo2.PNG" alt="SHADE RADIO" class="menu-logo">
     <a href="https://shaderadio.myspreadshop.net/" target="_blank" class="menu-link">
-  <i class="fas fa-shopping-basket"></i> NOTRE BOUTIQUE
-</a> 
+      <i class="fas fa-shopping-basket"></i> NOTRE BOUTIQUE
+    </a>
     <a href="https://ko-fi.com/shaderadio" target="_blank" class="menu-link" style="background: rgba(255, 255, 255, 0.15); border-color: #ffdd00;">
-  <i class="fas fa-heart" style="color: #ffdd00;"></i> DONS POUR LA RADIO
-</a>
-    
-    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); var m='shaderadiolive'; var d='gmail.com'; window.location='mailto:'+m+'@'+d+'?subject=DEMANDE%20DE%20TITRE&body=TITRE%3A%0A%0AARTISTE%3A'">
+      <i class="fas fa-heart" style="color: #ffdd00;"></i> DONS POUR LA RADIO
+    </a>
+    <!-- DEMANDER UN TITRE : ouvre le widget au lieu du mail -->
+    <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); setTimeout(openTrackRequest, 450);">
       <i class="fas fa-music"></i> Demander un titre
     </a>
     <a href="javascript:void(0)" class="menu-link" onclick="closeMenu(); var m='shaderadiolive'; var d='gmail.com'; window.location='mailto:'+m+'@'+d+'?subject=DEMANDE%20DE%20PUB'">
@@ -192,6 +181,50 @@
     </a>
   </div>
 
+  <!-- TRACK REQUEST OVERLAY -->
+  <div class="overlay" id="trackRequestOverlay">
+    <div class="history-header">
+      <div class="history-header-left">
+        <div class="chat-avatar" style="font-size:16px;">&#127925;</div>
+        <div>
+          <div class="history-title">Demander un titre</div>
+          <div class="history-sub">Faites votre requête en direct</div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeTrackRequest()">&#10005;</button>
+    </div>
+    <div class="track-request-body">
+      <div class="sc-track-request-widget">
+        <div is="track-request-widget"
+          lang="fr"
+          api-base="https://manager11.streamradio.fr:1700/api/v2"
+          server-id="1"
+          ip-timeout="0"
+          track-timeout="0"
+          bgcolor="#111111"
+          bgopacity="1"
+          tracks_num="20"
+          track_width="180"
+          track_image_default="https://manager11.streamradio.fr:1700/media/tracks/default_track_img.png"
+          meta_font_size="14"
+          meta_font_style="normal"
+          meta_font_color="#ffffff"
+          meta_opacity="1"
+          button_color="#8b0000"
+          button_color_active="#ff0000"
+          button_font_color="#ffffff"
+          button_font_size="14"
+          ordering="1"
+          allow_person_and_message="true"
+          modal_background_color="#1a1a1a"
+          modal_font_color="#ffffff"
+          modal_background_opacity="1">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY OVERLAY -->
   <div class="overlay" id="historyOverlay">
     <div class="history-header">
       <div class="history-header-left">
@@ -212,6 +245,7 @@
     </div>
   </div>
 
+  <!-- CHAT OVERLAY -->
   <div class="overlay" id="chatOverlay">
     <div class="chat-header">
       <div class="chat-header-left">
@@ -243,6 +277,7 @@
     </div>
   </div>
 
+  <!-- APP PRINCIPALE -->
   <div id="app">
     <div class="top-bar">
       <div class="header-container">
@@ -279,6 +314,7 @@
 
   <script src="https://manager11.streamradio.fr:1700/media/static/js/sc_player/sc_player.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="text/javascript" src="https://manager11.streamradio.fr:1700/media/static/js/request_track_widget/request_widget.js"></script>
   <script>
     var SUPA_URL   = 'https://rxhyapahjaypeudletdy.supabase.co';
     var SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4aHlhcGFoamF5cGV1ZGxldGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzQ5MjYsImV4cCI6MjA4NzYxMDkyNn0.tkvyJVBP1PW5UKh8Kewwft0L-iTZzddx6QXBiNbvB_0';
@@ -400,6 +436,9 @@
 
     function openHistory() { document.getElementById('historyOverlay').classList.add('open'); loadHistory(); }
     function closeHistory() { document.getElementById('historyOverlay').classList.remove('open'); }
+
+    function openTrackRequest() { document.getElementById('trackRequestOverlay').classList.add('open'); }
+    function closeTrackRequest() { document.getElementById('trackRequestOverlay').classList.remove('open'); }
 
     async function loadHistory() {
       var loading = document.getElementById('historyLoading');
