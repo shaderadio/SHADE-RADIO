@@ -33,30 +33,28 @@
     #chatBadge { position: absolute; top: -6px; right: -6px; background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #000; z-index: 10; }
     @keyframes badge-pop { from { transform: scale(0); } to { transform: scale(1); } }
     .chat-menu-badge { background: #ff0000; color: #fff; font-size: 10px; font-weight: bold; min-width: 18px; height: 18px; border-radius: 9px; display: none; align-items: center; justify-content: center; padding: 0 4px; margin-left: 6px; }
-    .main-frame { background: linear-gradient(180deg, rgba(120,0,0,0.75) 0%, rgba(40,0,0,0.95) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 220px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: none; box-shadow:
-      /* épaisseur verre haut-gauche : lumière franche */
+    .main-frame { background: linear-gradient(180deg, rgba(100,0,0,0.82) 0%, rgba(25,0,0,0.98) 100%); backdrop-filter: blur(20px); border-radius: 50px; padding: 25px 10px 220px 10px; margin-top: 5px; width: 92%; max-width: 340px; position: relative; border: none; box-shadow:
       inset 3px 3px 0px 0px rgba(255,255,255,0.55),
-      /* épaisseur verre bas-droit : ombre profonde */
       inset -3px -3px 0px 0px rgba(0,0,0,0.75),
-      /* reflet intérieur haut : liseré lumineux */
       inset 0px 6px 12px 0px rgba(255,255,255,0.12),
-      /* ombre intérieure bas : profondeur */
       inset 0px -8px 20px 0px rgba(0,0,0,0.5),
-      /* liseré externe clair tout autour */
       0 0 0 1.5px rgba(255,255,255,0.35),
-      /* liseré externe sombre en décalage = effet d'épaisseur */
       3px 4px 0 2px rgba(0,0,0,0.55),
-      /* halo rouge externe doux */
       0 0 35px 4px rgba(160,0,0,0.3),
-      /* ombre portée globale */
       0 40px 80px rgba(0,0,0,0.9),
-      /* lueurs internes rouges */
-      inset 0 0 40px rgba(180,0,0,0.3),
-      inset 0 0 80px rgba(40,0,0,0.6); }
-    .main-frame::before { content: ""; position: absolute; inset: 0; border-radius: 48px; background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px), radial-gradient(circle, rgba(0,0,0,0.25) 1px, transparent 1px); background-size: 6px 6px, 12px 12px; background-position: 0 0, 3px 3px; pointer-events: none; z-index: 1; }
-    .main-frame::after { content: ""; position: absolute; inset: 0; border-radius: 48px; background: linear-gradient(155deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 25%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%); pointer-events: none; z-index: 2; }
+      inset 0 0 60px rgba(180,0,0,0.55),
+      inset 0 0 120px rgba(20,0,0,0.85); }
+    .main-frame::before { content: ""; position: absolute; inset: 0; border-radius: 48px; pointer-events: none; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='600'%3E%3Cg stroke='rgba(0,0,0,0.55)' stroke-width='1' fill='none' stroke-linecap='round'%3E%3Cpath d='M30 10 L45 28 L38 52 L55 80 L42 110'/%3E%3Cpath d='M55 80 L70 95 L65 120'/%3E%3Cpath d='M120 5 L108 30 L125 58 L112 90 L130 130 L118 165'/%3E%3Cpath d='M125 58 L140 72 L135 95'/%3E%3Cpath d='M220 15 L235 40 L225 70 L240 100 L228 140'/%3E%3Cpath d='M240 100 L258 118 L250 145 L265 172'/%3E%3Cpath d='M290 30 L278 55 L295 85 L280 115 L300 148'/%3E%3Cpath d='M10 180 L28 200 L18 230 L35 260 L22 295'/%3E%3Cpath d='M35 260 L50 278 L44 305'/%3E%3Cpath d='M80 170 L95 195 L85 225 L100 258 L88 290 L105 325'/%3E%3Cpath d='M100 258 L118 272 L112 300'/%3E%3Cpath d='M160 185 L148 210 L165 240 L152 272 L168 308 L155 340'/%3E%3Cpath d='M165 240 L180 255 L175 282'/%3E%3Cpath d='M250 175 L265 198 L255 228 L272 260 L258 295'/%3E%3Cpath d='M272 260 L288 278 L280 308 L295 335'/%3E%3Cpath d='M305 165 L292 192 L308 222 L295 255 L312 288'/%3E%3Cpath d='M40 355 L55 375 L45 405 L62 435 L48 468'/%3E%3Cpath d='M62 435 L78 450 L72 478 L88 505'/%3E%3Cpath d='M130 345 L118 370 L135 400 L120 432 L138 465 L125 498'/%3E%3Cpath d='M135 400 L152 415 L145 442'/%3E%3Cpath d='M200 360 L215 382 L205 412 L222 442 L210 475 L228 508'/%3E%3Cpath d='M222 442 L238 458 L232 485'/%3E%3Cpath d='M275 350 L262 375 L278 405 L265 438 L282 470'/%3E%3Cpath d='M278 405 L295 420 L288 448 L305 475'/%3E%3C/g%3E%3Cg stroke='rgba(255,255,255,0.06)' stroke-width='0.5' fill='none' stroke-linecap='round'%3E%3Cpath d='M31 9 L46 27 L39 51 L56 79 L43 109'/%3E%3Cpath d='M121 4 L109 29 L126 57 L113 89 L131 129'/%3E%3Cpath d='M221 14 L236 39 L226 69 L241 99 L229 139'/%3E%3Cpath d='M11 179 L29 199 L19 229 L36 259 L23 294'/%3E%3Cpath d='M161 184 L149 209 L166 239 L153 271 L169 307'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 320px 600px;
+      background-repeat: repeat; }
+    .main-frame::after { content: ""; position: absolute; inset: 0; border-radius: 48px; background:
+      radial-gradient(ellipse at 50% 0%, rgba(200,0,0,0.45) 0%, transparent 65%),
+      radial-gradient(ellipse at 20% 100%, rgba(120,0,0,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 60%, rgba(80,0,0,0.35) 0%, transparent 50%),
+      linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 22%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.38) 100%);
+      pointer-events: none; z-index: 2; }
     .frame-gloss { position: absolute; inset: 0; border-radius: 48px; background: linear-gradient(110deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.13) 50%, rgba(255,255,255,0) 70%); background-size: 250% 100%; animation: frame-gloss 4s ease-in-out infinite; pointer-events: none; z-index: 3; }
-    /* Contour verre épais simulé par outline superposé */
     .frame-border { position: absolute; inset: -1px; border-radius: 51px; border: 2px solid rgba(255,255,255,0.18); box-shadow: 0 0 0 1px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.08); pointer-events: none; z-index: 4; }
     .frame-border-inner { position: absolute; inset: 4px; border-radius: 46px; border: 1px solid rgba(255,255,255,0.10); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4); pointer-events: none; z-index: 4; }
     @keyframes frame-gloss { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
