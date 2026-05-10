@@ -798,5 +798,254 @@
       }, 450);
     };
   </script>
+  <!--
+=======================================================
+  SHADE RADIO — POP-UP LIVE TIKTOK
+  À coller juste avant la balise </body> de votre site
+=======================================================
+-->
+
+<style>
+  #sr-tiktok-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  #sr-tiktok-overlay.visible {
+    display: flex;
+  }
+  #sr-tiktok-popup {
+    background: linear-gradient(160deg, #1a0000 0%, #3d0000 50%, #1a0000 100%);
+    border: 2px solid #c9a227;
+    border-radius: 18px;
+    max-width: 360px;
+    width: 100%;
+    padding: 28px 24px 24px;
+    box-shadow: 0 0 40px rgba(201, 162, 39, 0.35), 0 0 80px rgba(180, 0, 0, 0.3);
+    position: relative;
+    text-align: center;
+    font-family: 'Arial Black', Arial, sans-serif;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  #sr-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: #c9a227;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  #sr-close-btn:hover { opacity: 1; }
+
+  #sr-tiktok-popup .sr-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #cc0000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .sr-live-dot {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.2; }
+  }
+  #sr-tiktok-popup .sr-logo-text {
+    color: #c9a227;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(201,162,39,0.5);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  #sr-tiktok-popup .sr-subtitle {
+    color: #fff;
+    font-size: 13px;
+    margin-bottom: 18px;
+    opacity: 0.85;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+  }
+  #sr-tiktok-popup .sr-message {
+    background: rgba(201, 162, 39, 0.12);
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  #sr-tiktok-popup .sr-message p {
+    color: #fff;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    margin: 0 0 6px;
+    line-height: 1.5;
+    font-weight: normal;
+  }
+  #sr-tiktok-popup .sr-message .sr-time {
+    color: #c9a227;
+    font-size: 26px;
+    font-weight: 900;
+    display: block;
+    margin-top: 4px;
+    text-shadow: 0 0 10px rgba(201,162,39,0.4);
+  }
+  #sr-tiktok-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    background: #010101;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1.5px solid #c9a227;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.5px;
+    box-sizing: border-box;
+  }
+  #sr-tiktok-btn:hover {
+    background: #222;
+    transform: scale(1.02);
+  }
+  #sr-tiktok-btn svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  #sr-tiktok-popup .sr-dismiss {
+    margin-top: 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    padding: 4px;
+  }
+  #sr-tiktok-popup .sr-dismiss:hover { color: rgba(255,255,255,0.7); }
+</style>
+
+<!-- Overlay du pop-up -->
+<div id="sr-tiktok-overlay" role="dialog" aria-modal="true" aria-label="Notification Live TikTok">
+  <div id="sr-tiktok-popup">
+    <button id="sr-close-btn" onclick="srClosePopup()" aria-label="Fermer">✕</button>
+
+    <div class="sr-live-badge">
+      <span class="sr-live-dot"></span>
+      Live dans quelques minutes
+    </div>
+
+    <div class="sr-logo-text">Shade Radio</div>
+    <div class="sr-subtitle">100% Hip-Hop Classic</div>
+
+    <div class="sr-message">
+      <p>🎙️ Le live TikTok commence à</p>
+      <span class="sr-time">21h00 ce soir !</span>
+      <p style="margin-top:8px; font-size:13px; opacity:0.75;">Rejoins-nous pour une session 100% Hip-Hop Classic en direct !</p>
+    </div>
+
+    <a id="sr-tiktok-btn"
+       href="https://www.tiktok.com/@shaderadio?_r=1&_t=ZN-96FEskrkzZ8"
+       target="_blank"
+       rel="noopener">
+      <!-- Icône TikTok -->
+      <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.56V6.79a4.85 4.85 0 0 1-1.07-.1z"/>
+      </svg>
+      Rejoindre le Live TikTok
+    </a>
+
+    <button class="sr-dismiss" onclick="srClosePopup()">Ne plus afficher ce soir</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Jours de live : 2=mardi, 4=jeudi, 6=samedi, 0=dimanche
+  var LIVE_DAYS    = [0, 2, 4, 6];
+  var START_HOUR   = 20;
+  var START_MIN    = 45;
+  var END_HOUR     = 21;
+  var END_MIN      = 45;
+
+  function srShouldShow() {
+    var now      = new Date();
+    var day      = now.getDay();
+    var hour     = now.getHours();
+    var min      = now.getMinutes();
+    var nowMins  = hour * 60 + min;
+    var startMin = START_HOUR * 60 + START_MIN;
+    var endMin   = END_HOUR   * 60 + END_MIN;
+
+    if (LIVE_DAYS.indexOf(day) === -1) return false;
+    if (nowMins < startMin || nowMins >= endMin) return false;
+
+    // Vérifier si déjà fermé aujourd'hui
+    var dismissed = localStorage.getItem('sr_popup_dismissed');
+    if (dismissed) {
+      var dismissedDate = new Date(parseInt(dismissed));
+      if (dismissedDate.toDateString() === now.toDateString()) return false;
+    }
+    return true;
+  }
+
+  function srCheckAndShow() {
+    if (srShouldShow()) {
+      document.getElementById('sr-tiktok-overlay').classList.add('visible');
+    }
+  }
+
+  window.srClosePopup = function() {
+    document.getElementById('sr-tiktok-overlay').classList.remove('visible');
+    localStorage.setItem('sr_popup_dismissed', Date.now().toString());
+  };
+
+  // Fermer en cliquant sur l'overlay
+  document.getElementById('sr-tiktok-overlay').addEventListener('click', function(e) {
+    if (e.target === this) srClosePopup();
+  });
+
+  // Vérifier au chargement de la page
+  srCheckAndShow();
+
+  // Vérifier toutes les minutes (au cas où la page est laissée ouverte)
+  setInterval(srCheckAndShow, 60000);
+})();
+</script>
 </body>
 </html>
